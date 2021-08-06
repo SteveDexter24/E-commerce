@@ -87,6 +87,8 @@ module.exports = {
         return t.token !== token
       })
 
+      console.log(filteredTokens)
+
       user.tokens = filteredTokens
       user.save()
       res.send({ message: 'Successfully logged user out' })
