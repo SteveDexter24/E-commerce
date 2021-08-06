@@ -1,4 +1,4 @@
-# Channels R Us API
+# Wishing Tree Limited Online Store API
 
 ## Prerequisites
 
