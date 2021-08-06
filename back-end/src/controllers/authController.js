@@ -45,9 +45,7 @@ module.exports = {
     })
   },
   async signUp(req, res) {
-    const { name, surname, username, password, email } = req.body
-
-    console.log(req.body)
+    const { name, surname, username, password, email, address } = req.body
 
     var hashedPassword = bcrypt.hashSync(password, 8)
 
@@ -58,6 +56,7 @@ module.exports = {
         email: email,
         name: name,
         surname: surname,
+        address,
       },
       (err, user) => {
         if (err) {
@@ -67,7 +66,6 @@ module.exports = {
             message: err.keyValue,
           })
         }
-
         res.status(200).send({ signedUp: true })
       },
     )

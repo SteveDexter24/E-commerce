@@ -47,8 +47,8 @@ const userSchema = new mongoose.Schema(
     },
     memberShip: {
       type: String,
-      required: true,
       default: 'member',
+      required: true,
     },
     language: {
       type: String,
