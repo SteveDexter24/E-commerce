@@ -1,4 +1,4 @@
-# Channels R Us API
+# Wishing Tree Limited Online Store API
 
 ## Prerequisites
 
@@ -68,6 +68,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: 'user',
+    },
+    memberShip: {
+      type: String,
+      required: true,
+      default: 'member',
     },
     language: {
       type: String,
