@@ -82,6 +82,11 @@ const userSchema = new mongoose.Schema(
     orderHistory: {
       type: Schema.Types.ObjectId,
     },
+    likedProducts: [
+      {
+        type: Schema.Types.ObjectId,
+      },
+    ],
     createdAt: {
       type: Date,
       default: Date.now(),
