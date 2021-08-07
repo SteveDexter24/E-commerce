@@ -115,3 +115,119 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 )
 ```
+
+### Product Schema
+
+```
+const productSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  category: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  image: {
+    type: String,
+    required: true,
+    default: '/random_path',
+  },
+  feature: {
+    type: String,
+    required: true,
+  },
+  color: {
+    type: String,
+  },
+  price: {
+    type: String,
+  },
+  discount: {
+    type: String,
+  },
+  stock: {
+    type: Number,
+  },
+  size: {
+    small: {
+      type: String,
+      stock: {
+        type: Number,
+      },
+    },
+    medium: {
+      type: String,
+      stock: {
+        type: Number,
+      },
+    },
+    large: {
+      type: String,
+      stock: {
+        type: Number,
+      },
+    },
+    extra_large: {
+      type: String,
+      stock: {
+        type: Number,
+      },
+    },
+  },
+})
+```
+
+### Order Schema
+
+```
+const orderSchema = new mongoose.Schema({
+  first_name: {
+    type: String,
+    required: true,
+  },
+  last_name: {
+    type: String,
+    required: true,
+  },
+  delivery_address: {
+    type: String,
+    required: true,
+  },
+  delivery_method: {
+    type: String,
+    required: true,
+  },
+  phoneNumber: {
+    type: String,
+    required: true,
+  },
+  payment: {
+    payment_type: {
+      type: String,
+    },
+    cardNumber: {
+      type: String,
+    },
+  },
+  billingAddress: {
+    type: String,
+    required: true,
+  },
+  products: [
+    {
+      type: Schema.Types.ObjectId,
+    },
+  ],
+  totalPrice: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  discounted: {
+    type: String,
+  },
+})
+```
