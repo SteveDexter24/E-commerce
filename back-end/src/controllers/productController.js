@@ -68,4 +68,28 @@ module.exports = {
             }
         });
     },
+    async updateProductAsync(req, res, next) {
+        const productId = req.params.id;
+        const propsToUpdate = Object.keys(req.body);
+        try {
+            const product = await Product.findById(productId);
+            propsToUpdate.forEach((prop) => {
+                product[prop] = req.body[prop];
+            });
+            const updatedProduct = await product.save();
+            if (updatedProduct) {
+                res.send({
+                    updated_product: updatedProduct,
+                    message: "successfully updated product",
+                });
+            } else {
+                res.send({ message: "failed to update product" });
+            }
+        } catch (err) {
+            res.send({
+                error: err.message,
+                message: "failed to update product",
+            });
+        }
+    },
 };

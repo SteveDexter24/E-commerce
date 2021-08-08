@@ -11,11 +11,13 @@ const productSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    image: {
-        type: String,
-        required: true,
-        default: "/random_path",
-    },
+    image: [
+        {
+            type: String,
+            required: true,
+            default: "/random_path",
+        },
+    ],
     feature: {
         type: String,
         required: true,
