@@ -3,16 +3,35 @@ const { Product } = require("../models/products");
 module.exports = {
     // list all product
     async listAllProductsAsync(req, res, next) {
-        Product.find({}, (err, foundProducts) => {
+        const { page, limit } = req.query;
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        var queries = req.body;
+
+        const { minPrice, maxPrice } = req.body;
+
+        delete queries.minPrice;
+        delete queries.maxPrice;
+
+        if (minPrice !== undefined || maxPrice !== undefined) {
+            queries.price = { $gte: minPrice, $lte: maxPrice };
+        }
+
+        Product.find(queries, (err, foundProducts) => {
             if (err) {
-                res.send({ error: "error occurred while fetching products" });
+                res.send({
+                    error: "error occurred while fetching products",
+                });
             }
             if (foundProducts) {
-                res.status(200).send(foundProducts);
+                res.status(200).send(foundProducts.slice(startIndex, endIndex));
             } else {
                 res.send({ error: "no products found" });
             }
-        });
+        })
+            .sort({ createdAt: -1 })
+            .exec();
     },
     // get product by Id
     async getProductAsync(req, res, next) {
@@ -32,6 +51,7 @@ module.exports = {
             }
         });
     },
+    // create a new product
     async createProductAsync(req, res, next) {
         const productObject = req.body;
 

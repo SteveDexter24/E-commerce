@@ -1,95 +1,99 @@
-const { User } = require('../models/user')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const { User } = require("../models/user");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
-  async login(req, res) {
-    const { username, password } = req.body
+    async login(req, res) {
+        const { username, password } = req.body;
 
-    if (password === null || password === undefined) {
-      res.send({ auth: false, error: 'invalid password' })
-      return
-    }
-
-    User.findOne({ username: username }, function (err, founduser) {
-      if (err) {
-        res.status(500).send({
-          auth: false,
-          error: 'user not found',
-        })
-        return
-      }
-      if (founduser === null) {
-        res.send({
-          auth: false,
-          token: undefined,
-          error: 'user not found',
-        })
-        return
-      }
-
-      var isPasswordValid = bcrypt.compareSync(password, founduser.password)
-
-      if (!isPasswordValid) {
-        console.log('wrong password')
-        res.send({ auth: false, error: 'Incorrect Password' })
-        return
-      }
-
-      const token = jwt.sign({ id: founduser._id }, 'secret')
-      founduser.tokens = founduser.tokens.concat({ token })
-      founduser.save()
-      var user = founduser
-
-      res.status(200).send({ auth: true, user, token: token })
-    })
-  },
-  async signUp(req, res) {
-    const { name, surname, username, password, email, address } = req.body
-
-    var hashedPassword = bcrypt.hashSync(password, 8)
-
-    User.create(
-      {
-        username: username,
-        password: hashedPassword,
-        email: email,
-        name: name,
-        surname: surname,
-        address,
-      },
-      (err, user) => {
-        if (err) {
-          console.log(err)
-          return res.send({
-            signedUp: false,
-            message: err.keyValue,
-          })
+        if (password === null || password === undefined) {
+            res.send({ auth: false, error: "invalid password" });
+            return;
         }
-        res.status(200).send({ signedUp: true })
-      },
-    )
-  },
 
-  async logout(req, res) {
-    const { token, userId } = req.body
-    User.findById({ _id: userId }, (err, user) => {
-      if (err) {
-        return res.status(500).send({ error: 'Failed to logout' })
-      }
-      if (!user) {
-        return res.status(404).send({ error: 'User not found' })
-      }
+        User.findOne({ username: username }, function (err, founduser) {
+            if (err) {
+                res.status(500).send({
+                    auth: false,
+                    error: "user not found",
+                });
+                return;
+            }
+            if (founduser === null) {
+                res.send({
+                    auth: false,
+                    token: undefined,
+                    error: "user not found",
+                });
+                return;
+            }
 
-      var filteredTokens = user.tokens.filter((t) => {
-        return t.token !== token
-      })
+            var isPasswordValid = bcrypt.compareSync(
+                password,
+                founduser.password
+            );
 
-      console.log(filteredTokens)
+            if (!isPasswordValid) {
+                console.log("wrong password");
+                res.send({ auth: false, error: "Incorrect Password" });
+                return;
+            }
 
-      user.tokens = filteredTokens
-      user.save()
-      res.send({ message: 'Successfully logged user out' })
-    })
-  },
-}
+            const token = jwt.sign({ id: founduser._id }, "secret");
+            founduser.tokens = founduser.tokens.concat({ token });
+            founduser.save();
+            var user = founduser;
+
+            res.status(200).send({ auth: true, user, token: token });
+        });
+    },
+    async signUp(req, res) {
+        var newUser = req.body;
+
+        var hashedPassword = bcrypt.hashSync(newUser.password, 8);
+        newUser.password = hashedPassword;
+
+        User.create(newUser, (err, user) => {
+            if (err) {
+                return res.send({
+                    signedUp: false,
+                    message: err.keyValue,
+                });
+            }
+            if (user) {
+                const token = jwt.sign({ id: user._id }, "secret");
+                user.tokens = user.tokens.concat({ token });
+                user.save();
+                res.status(200).send({
+                    signedUp: true,
+                    auth: true,
+                    token: token,
+                });
+            } else {
+                res.send({ error: "Failed to create new user" });
+            }
+        });
+    },
+
+    async logout(req, res) {
+        const { token, userId } = req.body;
+        User.findById({ _id: userId }, (err, user) => {
+            if (err) {
+                return res.status(500).send({ error: "Failed to logout" });
+            }
+            if (!user) {
+                return res.status(404).send({ error: "User not found" });
+            }
+
+            var filteredTokens = user.tokens.filter((t) => {
+                return t.token !== token;
+            });
+
+            console.log(filteredTokens);
+
+            user.tokens = filteredTokens;
+            user.save();
+            res.send({ message: "Successfully logged user out" });
+        });
+    },
+};

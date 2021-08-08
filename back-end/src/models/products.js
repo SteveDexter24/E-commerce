@@ -20,6 +20,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    style: {
+        type: String,
+        required: true,
+    },
     color: [
         {
             type: String,
@@ -47,6 +51,11 @@ const productSchema = new mongoose.Schema({
     extra_large: {
         type: Number,
         default: 0,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+        required: true,
     },
 });
 
