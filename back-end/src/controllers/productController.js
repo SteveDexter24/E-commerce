@@ -55,9 +55,16 @@ module.exports = {
     async createProductAsync(req, res, next) {
         const productObject = req.body;
 
+        //productObject.productName = req.body.productNameEn;
+
+        console.log(req.body);
+
         Product.create(productObject, (err, newProduct) => {
             if (err) {
-                res.send({ error: "problem creating new product" });
+                res.send({
+                    error: err.message,
+                    message: "problem creating new product",
+                });
             }
 
             if (newProduct) {
