@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
+const helper = require("./helper/productHelper");
 
 const productSchema = new mongoose.Schema({
     productName: {
-        type: String,
-        required: true,
-        trim: true,
+        en: helper.productNameObj,
+        cn: helper.productNameObj,
+        jpn: helper.productNameObj,
     },
     category: {
-        type: String,
-        required: true,
-        trim: true,
+        en: helper.categoryObj,
+        cn: helper.categoryObj,
+        jpn: helper.categoryObj,
     },
     image: [
         {
@@ -19,21 +20,26 @@ const productSchema = new mongoose.Schema({
         },
     ],
     feature: {
-        type: String,
-        required: true,
+        en: helper.featureObj,
+        cn: helper.featureObj,
+        jpn: helper.featureObj,
     },
     style: {
-        type: String,
-        required: true,
+        en: helper.styleObject,
+        cn: helper.styleObject,
+        jpn: helper.styleObject,
     },
     color: [
         {
-            type: String,
+            en: helper.colorObject,
+            cn: helper.colorObject,
+            jpn: helper.colorObject,
         },
     ],
     price: {
-        type: String,
-        required: true,
+        en: helper.priceObject,
+        cn: helper.priceObject,
+        jpn: helper.priceObject,
     },
     discount: {
         type: String,
