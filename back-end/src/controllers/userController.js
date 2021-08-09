@@ -10,7 +10,8 @@ module.exports = {
     }
   },
   async getUserAsync(req, res, next) {
-    const { userId, username, name, surname } = req.body
+    const { username, name, surname } = req.body
+    const userId = req.params.id
 
     const query = {
       $or: [{ _id: userId }, username, name, surname],
@@ -27,8 +28,8 @@ module.exports = {
     }).sort({ createdAt: -1 })
   },
 
-  async editUserAsync(err, req, next) {
+  async editUserAsync(req, res, next) {
+    const userId = req.params.id
     const itemsToEdit = req.body
-    
   },
 }
