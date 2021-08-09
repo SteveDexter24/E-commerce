@@ -18,7 +18,9 @@ npm install
 In the Backend directory, run this command to start the node.js server
 
 ```
-node index.js
+node index.js or
+nodemon index.js
+
 ```
 
 ## Data Schema
@@ -27,157 +29,166 @@ node index.js
 
 ```
 const userSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    surname: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    username: {
-      type: String,
-      required: true,
-      minlength: 4,
-      maxlength: 20,
-      trim: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      trim: true,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    tokens: [
-      {
-        token: {
-          type: String,
-          required: true,
+    {
+        name: {
+            type: String,
+            required: true,
+            trim: true,
         },
-      },
-    ],
-    role: {
-      type: String,
-      required: true,
-      default: 'user',
+        surname: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        username: {
+            type: String,
+            required: true,
+            minlength: 4,
+            maxlength: 20,
+            trim: true,
+            unique: true,
+        },
+        password: {
+            type: String,
+            trim: true,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        tokens: [
+            {
+                token: {
+                    type: String,
+                    required: true,
+                },
+            },
+        ],
+        role: {
+            type: String,
+            required: true,
+            default: "user",
+        },
+        memberShip: {
+            type: String,
+            default: "member",
+            required: true,
+        },
+        language: {
+            type: String,
+            required: true,
+            default: "en",
+        },
+        location: {
+            type: Array,
+        },
+        address: {
+            type: String,
+            trim: true,
+        },
+        billingAddress: {
+            type: String,
+            trim: true,
+        },
+        creditCardNum: {
+            type: String,
+            trim: true,
+        },
+        creditCardName: {
+            type: String,
+            trim: true,
+        },
+        cart: {
+            type: Schema.Types.ObjectId,
+        },
+        orderHistory: {
+            type: Schema.Types.ObjectId,
+        },
+        likedProducts: [
+            {
+                type: Schema.Types.ObjectId,
+            },
+        ],
+        createdAt: {
+            type: Date,
+            default: Date.now(),
+            required: true,
+        },
     },
-    memberShip: {
-      type: String,
-      required: true,
-      default: 'member',
-    },
-    language: {
-      type: String,
-      required: true,
-      default: 'en',
-    },
-    location: {
-      type: Array,
-    },
-    address: {
-      type: String,
-      trim: true,
-    },
-    billingAddress: {
-      type: String,
-      trim: true,
-    },
-    creditCard: {
-      cardNum: {
-        type: String,
-        trim: true,
-      },
-      cardName: {
-        type: String,
-        trim: true,
-      },
-    },
-    cart: {
-      type: Schema.Types.ObjectId,
-    },
-    orderHistory: {
-      type: Schema.Types.ObjectId,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-      required: true,
-    },
-  },
-  { timestamps: true },
-)
+    { timestamps: true }
+);
 ```
 
 ### Product Schema
 
 ```
 const productSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  category: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  image: {
-    type: String,
-    required: true,
-    default: '/random_path',
-  },
-  feature: {
-    type: String,
-    required: true,
-  },
-  color: {
-    type: String,
-  },
-  price: {
-    type: String,
-  },
-  discount: {
-    type: String,
-  },
-  stock: {
-    type: Number,
-  },
-  size: {
+    productName: {
+        en: helper.productNameObj,
+        cn: helper.productNameObj,
+        jpn: helper.productNameObj,
+    },
+    category: {
+        en: helper.categoryObj,
+        cn: helper.categoryObj,
+        jpn: helper.categoryObj,
+    },
+    image: [
+        {
+            type: String,
+            required: true,
+            default: "/random_path",
+        },
+    ],
+    feature: {
+        en: helper.featureObj,
+        cn: helper.featureObj,
+        jpn: helper.featureObj,
+    },
+    style: {
+        en: helper.styleObject,
+        cn: helper.styleObject,
+        jpn: helper.styleObject,
+    },
+    color: [
+        {
+            en: helper.colorObject,
+            cn: helper.colorObject,
+            jpn: helper.colorObject,
+        },
+    ],
+    price: {
+        en: helper.priceObject,
+        cn: helper.priceObject,
+        jpn: helper.priceObject,
+    },
+    discount: {
+        type: String,
+    },
     small: {
-      type: String,
-      stock: {
         type: Number,
-      },
+        default: 0,
     },
     medium: {
-      type: String,
-      stock: {
         type: Number,
-      },
+        default: 0,
     },
     large: {
-      type: String,
-      stock: {
         type: Number,
-      },
+        default: 0,
     },
     extra_large: {
-      type: String,
-      stock: {
         type: Number,
-      },
+        default: 0,
     },
-  },
-})
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+        required: true,
+    },
+});
 ```
 
 ### Order Schema
