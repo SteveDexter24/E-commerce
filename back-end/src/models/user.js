@@ -77,9 +77,11 @@ const userSchema = new mongoose.Schema(
         cart: {
             type: Schema.Types.ObjectId,
         },
-        orderHistory: {
-            type: Schema.Types.ObjectId,
-        },
+        orderHistory: [
+            {
+                type: Schema.Types.ObjectId,
+            },
+        ],
         likedProducts: [
             {
                 type: Schema.Types.ObjectId,
