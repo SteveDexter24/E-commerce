@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
-    async login(req, res) {
+    async signIn(req, res) {
         const { username, password } = req.body;
 
         if (password === null || password === undefined) {
@@ -74,8 +74,7 @@ module.exports = {
             }
         });
     },
-
-    async logout(req, res) {
+    async signOut(req, res) {
         const { token, userId } = req.body;
         User.findById({ _id: userId }, (err, user) => {
             if (err) {
@@ -88,9 +87,6 @@ module.exports = {
             var filteredTokens = user.tokens.filter((t) => {
                 return t.token !== token;
             });
-
-            console.log(filteredTokens);
-
             user.tokens = filteredTokens;
             user.save();
             res.send({ message: "Successfully logged user out" });
