@@ -6,8 +6,7 @@ const adminAuth = async (req, res, next) => {
         next();
     } catch (error) {
         res.status(401).send({
-            error: error.message,
-            message: "admin access only",
+            error: "admin access only",
         });
     }
 };

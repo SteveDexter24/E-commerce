@@ -4,14 +4,18 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
     async signIn(req, res) {
-        const { username, password } = req.body;
+        const { username, password, email } = req.body;
 
         if (password === null || password === undefined) {
             res.send({ auth: false, error: "invalid password" });
             return;
         }
 
-        User.findOne({ username: username }, function (err, founduser) {
+        const authentiate = {
+            $or: [{ username: username }, { email: email }],
+        };
+
+        User.findOne(authentiate, (err, founduser) => {
             if (err) {
                 res.status(500).send({
                     auth: false,
