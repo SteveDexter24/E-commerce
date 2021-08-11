@@ -12,6 +12,10 @@ const productSchema = new mongoose.Schema({
         cn: helper.categoryObj,
         jpn: helper.categoryObj,
     },
+    gender: {
+        type: String,
+        required: true,
+    },
     image: [
         {
             type: String,
