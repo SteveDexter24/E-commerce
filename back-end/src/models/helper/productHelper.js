@@ -1,33 +1,38 @@
 module.exports = {
-    featureObj: {
-        type: String,
-        required: true,
-    },
+  featureObj: {
+    type: String,
+    required: true,
+  },
 
-    productNameObj: {
-        type: String,
-        required: true,
-        trim: true,
-    },
+  descriptionObj: {
+    type: String,
+    required: true,
+  },
 
-    categoryObj: {
-        type: String,
-        required: true,
-        trim: true,
-    },
+  productNameObj: {
+    type: String,
+    required: true,
+    trim: true,
+  },
 
-    styleObject: {
-        type: String,
-        required: true,
-    },
+  categoryObj: {
+    type: String,
+    required: true,
+    trim: true,
+  },
 
-    colorObject: {
-        type: String,
-        required: true,
-    },
+  styleObject: {
+    type: String,
+    required: true,
+  },
 
-    priceObject: {
-        type: String,
-        requierd: true,
-    },
-};
+  colorObject: {
+    type: String,
+    required: true,
+  },
+
+  priceObject: {
+    type: String,
+    requierd: true,
+  },
+}
