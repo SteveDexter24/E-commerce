@@ -49,10 +49,6 @@ module.exports = {
       }
       if (foundProduct) {
         res.status(200).send(foundProduct)
-      } else {
-        res.send({
-          error: `Could not find product with Id: ${productId}`,
-        })
       }
     })
   },
