@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { fetchProduct } from "../actions/product";
 import {
     Row,
     Col,
@@ -10,7 +12,6 @@ import {
     ButtonGroup,
 } from "react-bootstrap";
 import Rating from "../components/rating";
-import axios from "axios";
 
 const styles = {
     btn_circle: {
@@ -24,25 +25,15 @@ const styles = {
     },
 };
 
-const ProductScreen = ({ match }) => {
-    const [product, setProduct] = useState([]);
-    //const [isLoading, setIsLoading] = useState(true);
-    const [isLoaded, setIsLoaded] = useState(false);
+const ProductScreen = (props) => {
     const [selectedSize, setSelectedSize] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     useEffect(() => {
-        const fetchProduct = async () => {
-            const { data } = await axios.get(
-                `http://localhost:3001/api/product/${match.params.id}`
-            );
-            setProduct(data);
-            setIsLoaded(true);
-        };
-        fetchProduct();
-    }, [match]);
+        props.fetchProduct(props.match.params.id);
+    }, [props.match]);
 
-    if (isLoaded) {
+    if (props.product) {
         return (
             <>
                 <Link className="btn my-3" to="/">
@@ -51,8 +42,8 @@ const ProductScreen = ({ match }) => {
                 <Row>
                     <Col md={6}>
                         <Image
-                            src={product.image[0]}
-                            alt={product.productName["en"]}
+                            src={props.product.image[0]}
+                            alt={props.product.productName["en"]}
                             fluid
                             style={{ objectFit: "contain" }}
                         />
@@ -61,12 +52,12 @@ const ProductScreen = ({ match }) => {
                         {/*flush takes out the border */}
                         <ListGroup variant="flush">
                             <ListGroup.Item>
-                                <h2>{product.productName["en"]}</h2>
+                                <h2>{props.product.productName["en"]}</h2>
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <ButtonGroup>
                                     <Row>
-                                        {product.size.map((s, i) => {
+                                        {props.product.size.map((s, i) => {
                                             return (
                                                 <Col
                                                     md={1}
@@ -99,15 +90,15 @@ const ProductScreen = ({ match }) => {
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <Rating
-                                    value={product.ratings}
-                                    text={`${product.ratings} reviews`}
+                                    value={props.product.ratings}
+                                    text={`${props.product.ratings} reviews`}
                                 />
                             </ListGroup.Item>
                             <ListGroup.Item>
-                                Price: ${product.price["hkd"]}
+                                Price: ${props.product.price["hkd"]}
                             </ListGroup.Item>
                             <ListGroup.Item>
-                                Description: {product.feature["en"]}
+                                Description: {props.product.feature["en"]}
                             </ListGroup.Item>
                         </ListGroup>
                     </Col>
@@ -119,7 +110,7 @@ const ProductScreen = ({ match }) => {
                                         <Col>Price:</Col>
                                         <Col>
                                             <strong>
-                                                ${product.price["hkd"]}
+                                                ${props.product.price["hkd"]}
                                             </strong>
                                         </Col>
                                     </Row>
@@ -128,7 +119,7 @@ const ProductScreen = ({ match }) => {
                                     <Row>
                                         <Col>Status:</Col>
                                         <Col>
-                                            {product.size[selectedIndex]
+                                            {props.product.size[selectedIndex]
                                                 .sizeRemaining > 0
                                                 ? "In Stock"
                                                 : "Out of Stock"}
@@ -140,7 +131,7 @@ const ProductScreen = ({ match }) => {
                                         className="btn"
                                         type="button"
                                         disabled={
-                                            product.size[selectedIndex]
+                                            props.product.size[selectedIndex]
                                                 .sizeRemaining <= 0
                                         }
                                     >
@@ -158,4 +149,10 @@ const ProductScreen = ({ match }) => {
     }
 };
 
-export default ProductScreen;
+const mapStateToProps = (state) => {
+    return {
+        product: state.product.product,
+    };
+};
+
+export default connect(mapStateToProps, { fetchProduct })(ProductScreen);

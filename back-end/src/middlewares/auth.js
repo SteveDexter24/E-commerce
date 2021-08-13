@@ -8,7 +8,7 @@ const auth = async (req, res, next) => {
             throw new Error();
         }
         const token = header.replace("Bearer ", "");
-        const tokenPayload = await verifyToken(token, "secret");
+        const tokenPayload = await verifyToken(token, process.env.JWT_SECRET);
         const user = await User.findOne({
             _id: tokenPayload.id,
             "tokens.token": token,

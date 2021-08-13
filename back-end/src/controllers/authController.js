@@ -43,7 +43,10 @@ module.exports = {
                 return;
             }
 
-            const token = jwt.sign({ id: founduser._id }, "secret");
+            const token = jwt.sign(
+                { id: founduser._id },
+                process.env.JWT_SECRET
+            );
             founduser.tokens = founduser.tokens.concat({ token });
             founduser.save();
             var user = founduser;
@@ -65,7 +68,10 @@ module.exports = {
                 });
             }
             if (user) {
-                const token = jwt.sign({ id: user._id }, "secret");
+                const token = jwt.sign(
+                    { id: user._id },
+                    process.env.JWT_SECRET
+                );
                 user.tokens = user.tokens.concat({ token });
                 user.save();
                 res.status(200).send({
