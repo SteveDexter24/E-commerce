@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
-const db =
-    "mongodb+srv://Steve:Steve1234@cluster0.nho9r.mongodb.net/Wishing-Tree-Limited";
+const db = process.env.MONGODB_SECRET;
 
 mongoose
     .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })

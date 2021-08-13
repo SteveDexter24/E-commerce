@@ -60,7 +60,8 @@ const productSchema = new mongoose.Schema({
         type: String,
     },
     discount: {
-        type: String,
+        hkd: helper.discountObject,
+        jpn: helper.discountObject,
     },
     size: [
         {
