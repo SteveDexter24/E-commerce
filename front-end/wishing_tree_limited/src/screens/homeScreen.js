@@ -9,9 +9,12 @@ import Message from '../components/message'
 const HomeScreen = () => {
   const dispatch = useDispatch()
   const productList = useSelector((state) => state.productList)
+  const settings = useSelector((state) => state.settings)
+  const { language, country, currency } = settings
   const { loading, error, products } = productList
   useEffect(() => {
     dispatch(fetchAllProducts())
+    console.log(language)
   }, [dispatch])
 
   return (
@@ -22,7 +25,11 @@ const HomeScreen = () => {
           {products.map((product, i) => {
             return (
               <Col key={i} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
+                <Product
+                  product={product}
+                  lang={language}
+                  currency={currency}
+                />
               </Col>
             )
           })}
