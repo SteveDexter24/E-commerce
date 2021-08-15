@@ -1,6 +1,5 @@
 {
   "name": "wishing_tree_limited",
-  "proxy": "http://127.0.0.1:3001",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

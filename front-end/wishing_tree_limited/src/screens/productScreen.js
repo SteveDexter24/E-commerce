@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { connect, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { listProductDetails } from '../actions/product'
 import Loader from '../components/loader'
 import Message from '../components/message'
@@ -12,6 +12,7 @@ import {
   Card,
   Button,
   ButtonGroup,
+  Form,
 } from 'react-bootstrap'
 import Rating from '../components/rating'
 
@@ -27,17 +28,25 @@ const styles = {
   },
 }
 
-const ProductScreen = ({ match }) => {
+const ProductScreen = ({ history, match }) => {
   const [selectedSize, setSelectedSize] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [qty, setQty] = useState(0)
 
   const dispatch = useDispatch()
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
 
+  const settings = useSelector((state) => state.settings)
+  const { language, country, currency } = settings
+
   useEffect(() => {
     dispatch(listProductDetails(match.params.id))
   }, [dispatch, match])
+
+  const addToCartHandler = () => {
+    history.push(`/cart/${match.params.id}?qty=${qty}`)
+  }
 
   return (
     <>
@@ -49,7 +58,7 @@ const ProductScreen = ({ match }) => {
           <Col md={6}>
             <Image
               src={product.image[0]}
-              alt={product.productName['en']}
+              alt={product.productName[language]}
               fluid
             />
           </Col>
@@ -57,7 +66,7 @@ const ProductScreen = ({ match }) => {
             {/*flush takes out the border */}
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <h2>{product.productName['en']}</h2>
+                <h2>{product.productName[language]}</h2>
               </ListGroup.Item>
               <ListGroup.Item>
                 <ButtonGroup>
@@ -91,9 +100,9 @@ const ProductScreen = ({ match }) => {
                   text={`${product.ratings} reviews`}
                 />
               </ListGroup.Item>
-              <ListGroup.Item>Price: ${product.price['hkd']}</ListGroup.Item>
+              <ListGroup.Item>Price: ${product.price[currency]}</ListGroup.Item>
               <ListGroup.Item>
-                Description: {product.feature['en']}
+                Description: {product.feature[language]}
               </ListGroup.Item>
             </ListGroup>
           </Col>
@@ -104,7 +113,7 @@ const ProductScreen = ({ match }) => {
                   <Row>
                     <Col>Price:</Col>
                     <Col>
-                      <strong>${product.price['hkd']}</strong>
+                      <strong>${product.price[currency]}</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -118,8 +127,35 @@ const ProductScreen = ({ match }) => {
                     </Col>
                   </Row>
                 </ListGroup.Item>
+                {product.size[selectedIndex].sizeRemaining > 0 && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Quanity</Col>
+                      <Col>
+                        <Form.Control
+                          as="select"
+                          value={qty}
+                          onChange={(e) => {
+                            setQty(e.target.value)
+                          }}
+                        >
+                          {[
+                            ...Array(
+                              product.size[selectedIndex].sizeRemaining,
+                            ).keys(),
+                          ].map((x) => (
+                            <option key={x + 1} value={x + 1}>
+                              {x + 1}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                )}
                 <ListGroup.Item className="d-grid gap-2">
                   <Button
+                    onClick={addToCartHandler}
                     className="btn"
                     type="button"
                     disabled={product.size[selectedIndex].sizeRemaining <= 0}
