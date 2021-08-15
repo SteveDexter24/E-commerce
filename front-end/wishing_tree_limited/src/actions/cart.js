@@ -6,6 +6,9 @@ export const addToCart = (productId, qty, sizeType) => async (
   getState,
 ) => {
   const { data } = await product.get(`/product/${productId}`)
+
+  const size = data.size.filter((s) => s.sizeType === sizeType)
+
   dispatch({
     type: CART_ADD_ITEM,
     payload: {
@@ -13,7 +16,7 @@ export const addToCart = (productId, qty, sizeType) => async (
       name: data.productName[getState().settings.language],
       image: data.image,
       price: data.price[getState().settings.currency],
-      size: data.size[sizeType],
+      size: size ? size[0].sizeType : sizeType,
       qty: qty,
     },
   })
