@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-- Node.js
-- npm
+-   Node.js
+-   npm
 
 ## Install npm modules
 
@@ -135,11 +135,15 @@ const productSchema = new mongoose.Schema({
         cn: helper.categoryObj,
         jpn: helper.categoryObj,
     },
+    gender: {
+        type: String,
+        required: true,
+    },
     image: [
         {
             type: String,
             required: true,
-            default: "/random_path",
+            default: "https://semantic-ui.com/images/wireframe/image.png",
         },
     ],
     feature: {
@@ -147,42 +151,69 @@ const productSchema = new mongoose.Schema({
         cn: helper.featureObj,
         jpn: helper.featureObj,
     },
+    description: {
+        en: helper.descriptionObj,
+        cn: helper.descriptionObj,
+        jpn: helper.descriptionObj,
+    },
     style: {
         en: helper.styleObject,
         cn: helper.styleObject,
         jpn: helper.styleObject,
     },
-    color: [
-        {
-            en: helper.colorObject,
-            cn: helper.colorObject,
-            jpn: helper.colorObject,
-        },
-    ],
+
     price: {
-        en: helper.priceObject,
-        cn: helper.priceObject,
+        hkd: helper.priceObject,
         jpn: helper.priceObject,
     },
-    discount: {
+    ratings: {
+        type: Number,
+        default: 0,
+    },
+    material: {
         type: String,
     },
-    small: {
-        type: Number,
-        default: 0,
+    washing_care: {
+        type: String,
     },
-    medium: {
-        type: Number,
-        default: 0,
+    discount: {
+        hkd: helper.discountObject,
+        jpn: helper.discountObject,
     },
-    large: {
-        type: Number,
-        default: 0,
-    },
-    extra_large: {
-        type: Number,
-        default: 0,
-    },
+
+    size: [
+        {
+            sizeType: {
+                type: String,
+                required: true,
+            },
+            color_size: {
+                colors: [
+                    {
+                        colorHex: {
+                            type: String,
+                        },
+                        color: {
+                            en: helper.colorObject,
+                            cn: helper.colorObject,
+                            jpn: helper.colorObject,
+                        },
+                        count: {
+                            type: Number,
+                            required: true,
+                        },
+                        image: {
+                            type: String,
+                            required: true,
+                            default:
+                                "https://semantic-ui.com/images/wireframe/image.png",
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+
     createdAt: {
         type: Date,
         default: Date.now(),
