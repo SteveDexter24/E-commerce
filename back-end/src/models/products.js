@@ -57,7 +57,6 @@ const productSchema = new mongoose.Schema({
         hkd: helper.discountObject,
         jpn: helper.discountObject,
     },
-    // XS : {colors: [{color: "blue", count: 6 }, {color: "red", count 8}]}
 
     size: [
         {
@@ -68,6 +67,9 @@ const productSchema = new mongoose.Schema({
             color_size: {
                 colors: [
                     {
+                        colorHex: {
+                            type: String,
+                        },
                         color: {
                             en: helper.colorObject,
                             cn: helper.colorObject,
@@ -76,6 +78,12 @@ const productSchema = new mongoose.Schema({
                         count: {
                             type: Number,
                             required: true,
+                        },
+                        image: {
+                            type: String,
+                            required: true,
+                            default:
+                                "https://semantic-ui.com/images/wireframe/image.png",
                         },
                     },
                 ],

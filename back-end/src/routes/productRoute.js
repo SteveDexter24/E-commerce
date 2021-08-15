@@ -18,17 +18,22 @@ router.get("/api/product/:id", productController.getProductAsync);
 // Admin access only
 router.post(
     "/api/product",
-    //   auth,
-    //   adminAuth,
+    auth,
+    adminAuth,
     productController.createProductAsync
 );
 router.patch(
     "/api/product/:id",
-    //   auth,
-    //   adminAuth,
+    auth,
+    adminAuth,
     productController.updateProductAsync
 );
 
-router.delete("/api/product/:id", productController.deleteProductAsync);
+router.delete(
+    "/api/product/:id",
+    auth,
+    adminAuth,
+    productController.deleteProductAsync
+);
 
 module.exports = router;
