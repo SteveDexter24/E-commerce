@@ -20,7 +20,7 @@ export const productListReducer = (state = { products: [] }, action) => {
     }
 };
 
-export const fetchProduct = (state = {}, action) => {
+export const productDetailsReducer = (state = {}, action) => {
     switch (action.type) {
         case FETCH_PRODUCT_REQUEST:
             return { loading: true, product: action.payload };
