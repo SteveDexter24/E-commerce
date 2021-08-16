@@ -7,7 +7,7 @@ export const addToCart =
 
         const getSize = data.size.filter((s) => s.sizeType === sizeType);
 
-        const colorRemaining = getSize[0].color_size.colors.filter(
+        const colorRemaining = getSize[0].colors.filter(
             (s) => s.color[getState().settings.language] === color
         );
         dispatch({
