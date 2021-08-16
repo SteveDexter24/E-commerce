@@ -4,8 +4,7 @@ import { ButtonGroup, Col, Row, Button } from "react-bootstrap";
 const ColorButtons = ({
     product,
     language,
-
-    color,
+    colors,
     buttonClick,
     selectedIndex,
 }) => {
@@ -21,7 +20,7 @@ const ColorButtons = ({
                         <Col key={i} md={1} className="mx-2 my-1">
                             <Button
                                 variant={
-                                    s.color[language] === color
+                                    s.color[language] === colors
                                         ? "primary"
                                         : "secondary"
                                 }
@@ -35,10 +34,8 @@ const ColorButtons = ({
                                     fontSize: "12px",
                                     lineHeight: "1.42857",
                                 }}
-                                onClick={onTrigger(s.color[language], i)}
-                            >
-                                {/* {s.color[language]} */}
-                            </Button>
+                                onClick={() => onTrigger(s.color[language], i)}
+                            ></Button>
                         </Col>
                     );
                 })}
