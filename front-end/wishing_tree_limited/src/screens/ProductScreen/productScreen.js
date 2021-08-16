@@ -32,7 +32,7 @@ const styles = {
 }
 
 const ProductScreen = ({ history, match }) => {
-  const [selectedSize, setSelectedSize] = useState('')
+  const [selectedSize, setSelectedSize] = useState('None')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [colorIndex, setColorIndex] = useState(0)
   const [color, setColor] = useState('None')
@@ -172,7 +172,7 @@ const ProductScreen = ({ history, match }) => {
                   <OverlayTrigger
                     placement="bottom"
                     overlay={
-                      <Tooltip id="tooltip-disabled">
+                      <Tooltip>
                         Please select an avaliable size and color
                       </Tooltip>
                     }
@@ -180,13 +180,14 @@ const ProductScreen = ({ history, match }) => {
                     <span className="d-grid gap-2">
                       <Button
                         onClick={addToCartHandler}
+                        style={{ pointerEvents: 'none' }}
                         className="btn"
                         type="button"
                         disabled={
                           product.size[selectedIndex].colors[colorIndex]
-                            .count === 0 ||
+                            .count <= 0 ||
                           color === 'None' ||
-                          selectedSize === ''
+                          selectedSize === 'None'
                         }
                       >
                         ADD TO CART

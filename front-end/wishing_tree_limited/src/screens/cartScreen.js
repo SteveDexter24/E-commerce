@@ -12,7 +12,7 @@ import {
   Card,
 } from 'react-bootstrap'
 import Message from '../components/message'
-import { addToCart } from '../actions/cart'
+import { addToCart, updateCart } from '../actions/cart'
 import { sizeTypeToInfo } from '../Utils/size'
 
 const CartScreen = ({ match, location, history }) => {
@@ -52,7 +52,7 @@ const CartScreen = ({ match, location, history }) => {
           </Message>
         ) : (
           <ListGroup variant="flush">
-            {cartItems.map((item, i) => {
+            {cartItems.map((item, index) => {
               return (
                 <ListGroup.Item key={`${item.productId}cart`}>
                   <Row>
@@ -80,11 +80,12 @@ const CartScreen = ({ match, location, history }) => {
                           value={item.qty}
                           onChange={(e) =>
                             dispatch(
-                              addToCart(
+                              updateCart(
                                 item.productId,
                                 Number(e.target.value),
                                 item.size,
                                 item.color,
+                                index,
                               ),
                             )
                           }
