@@ -7,6 +7,7 @@ import {
     ListGroup,
     Image,
     Form,
+    FloatingLabel,
     Button,
     Card,
 } from "react-bootstrap";
@@ -75,35 +76,37 @@ const CartScreen = ({ match, location, history }) => {
                                         </Col>
                                         <Col md={2}>${item.price}</Col>
                                         <Col md={2}>
-                                            <Form.Control
-                                                as="select"
-                                                value={item.qty}
-                                                onChange={(e) =>
-                                                    dispatch(
-                                                        addToCart(
-                                                            item.productId,
-                                                            Number(
-                                                                e.target.value
-                                                            ),
-                                                            item.size,
-                                                            item.color
+                                            <FloatingLabel label="Quantity">
+                                                <Form.Select
+                                                    value={item.qty}
+                                                    onChange={(e) =>
+                                                        dispatch(
+                                                            addToCart(
+                                                                item.productId,
+                                                                Number(
+                                                                    e.target
+                                                                        .value
+                                                                ),
+                                                                item.size,
+                                                                item.color
+                                                            )
                                                         )
-                                                    )
-                                                }
-                                            >
-                                                {[
-                                                    ...Array(
-                                                        item.totalSize
-                                                    ).keys(),
-                                                ].map((x) => (
-                                                    <option
-                                                        key={x + 1}
-                                                        value={x + 1}
-                                                    >
-                                                        {x + 1}
-                                                    </option>
-                                                ))}
-                                            </Form.Control>
+                                                    }
+                                                >
+                                                    {[
+                                                        ...Array(
+                                                            item.totalSize
+                                                        ).keys(),
+                                                    ].map((x) => (
+                                                        <option
+                                                            key={x + 1}
+                                                            value={x + 1}
+                                                        >
+                                                            {x + 1}
+                                                        </option>
+                                                    ))}
+                                                </Form.Select>
+                                            </FloatingLabel>
                                         </Col>
                                         <Col md={1}>
                                             <Button

@@ -1,5 +1,13 @@
 import React from "react";
-import { ButtonGroup, Col, Row, Button } from "react-bootstrap";
+import {
+    ButtonGroup,
+    Col,
+    Row,
+    Button,
+    OverlayTrigger,
+    Tooltip,
+} from "react-bootstrap";
+import { sizeTypeToInfo } from "../../Utils/size";
 
 const SizeButtons = ({ product, styles, buttonClick, selectedSize }) => {
     const onTrigger = (s, i) => {
@@ -13,17 +21,26 @@ const SizeButtons = ({ product, styles, buttonClick, selectedSize }) => {
                     {product.size.map((s, i) => {
                         return (
                             <Col key={i} md={1} className="mx-2 my-1">
-                                <Button
-                                    variant={
-                                        s.sizeType === selectedSize
-                                            ? "primary"
-                                            : "secondary"
+                                <OverlayTrigger
+                                    placement="top"
+                                    overlay={
+                                        <Tooltip id="button-tooltip">
+                                            {sizeTypeToInfo(s.sizeType)}
+                                        </Tooltip>
                                     }
-                                    style={styles.btn_circle}
-                                    onClick={() => onTrigger(s.sizeType, i)}
                                 >
-                                    {s.sizeType}
-                                </Button>
+                                    <Button
+                                        variant={
+                                            s.sizeType === selectedSize
+                                                ? "primary"
+                                                : "secondary"
+                                        }
+                                        style={styles.btn_circle}
+                                        onClick={() => onTrigger(s.sizeType, i)}
+                                    >
+                                        {s.sizeType}
+                                    </Button>
+                                </OverlayTrigger>
                             </Col>
                         );
                     })}

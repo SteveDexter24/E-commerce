@@ -13,6 +13,8 @@ import {
     ListGroup,
     Card,
     Button,
+    Tooltip,
+    OverlayTrigger,
     Form,
 } from "react-bootstrap";
 import Rating from "../../components/rating";
@@ -174,18 +176,30 @@ const ProductScreen = ({ history, match }) => {
                                     </ListGroup.Item>
                                 )}
                                 <ListGroup.Item className="d-grid gap-2">
-                                    <Button
-                                        onClick={addToCartHandler}
-                                        className="btn"
-                                        type="button"
-                                        disabled={
-                                            product.size[selectedIndex].colors[
-                                                colorIndex
-                                            ].count <= 0 || color === ""
+                                    <OverlayTrigger
+                                        placement="bottom"
+                                        overlay={
+                                            <Tooltip id="tooltip-disabled">
+                                                Please select a size and color
+                                            </Tooltip>
                                         }
                                     >
-                                        ADD TO CART
-                                    </Button>
+                                        <span className="d-grid gap-2">
+                                            <Button
+                                                onClick={addToCartHandler}
+                                                className="btn"
+                                                type="button"
+                                                disabled={
+                                                    product.size[selectedIndex]
+                                                        .colors[colorIndex]
+                                                        .count <= 0 ||
+                                                    color === ""
+                                                }
+                                            >
+                                                ADD TO CART
+                                            </Button>
+                                        </span>
+                                    </OverlayTrigger>
                                 </ListGroup.Item>
                             </ListGroup>
                         </Card>
