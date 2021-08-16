@@ -14,8 +14,6 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
             // TODO: If same productId and same size and same color, then append the quantity
             // else just add as a seperate product
             if (existItem) {
-                // console.log(existItem);
-                const qty_exist = existItem.qty;
                 const existIndex = state.cartItems.findIndex(
                     (x) =>
                         x.productId === existItem.productId &&
@@ -26,7 +24,8 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
                 let cartList = [...state.cartItems];
                 cartList[existIndex] = {
                     ...cartList[existIndex],
-                    qty: cartList[existIndex].qty + item.qty,
+                    // qty: cartList[existIndex].qty + item.qty,
+                    qty: item.qty,
                 };
 
                 return {
