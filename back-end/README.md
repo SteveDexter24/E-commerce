@@ -187,30 +187,30 @@ const productSchema = new mongoose.Schema({
                 type: String,
                 required: true,
             },
-            color_size: {
-                colors: [
-                    {
-                        colorHex: {
-                            type: String,
-                        },
-                        color: {
-                            en: helper.colorObject,
-                            cn: helper.colorObject,
-                            jpn: helper.colorObject,
-                        },
-                        count: {
-                            type: Number,
-                            required: true,
-                        },
-                        image: {
-                            type: String,
-                            required: true,
-                            default:
-                                "https://semantic-ui.com/images/wireframe/image.png",
-                        },
+
+            colors: [
+                {
+                    colorHex: {
+                        type: String,
                     },
-                ],
-            },
+                    color: {
+                        en: helper.colorObject,
+                        cn: helper.colorObject,
+                        jpn: helper.colorObject,
+                    },
+                    count: {
+                        type: Number,
+                        required: true,
+                    },
+                    image: {
+                        type: String,
+                        required: true,
+                        default:
+                            "https://semantic-ui.com/images/wireframe/image.png",
+                    },
+                },
+            ],
+
         },
     ],
 
