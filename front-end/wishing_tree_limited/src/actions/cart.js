@@ -1,25 +1,31 @@
-import product from '../apis/api'
-import { CART_ADD_ITEM, CART_REMOVE_ITEM } from './types'
+import product from "../apis/api";
+import { CART_ADD_ITEM, CART_REMOVE_ITEM } from "./types";
 
-export const addToCart = (productId, qty, sizeType) => async (
-  dispatch,
-  getState,
-) => {
-  const { data } = await product.get(`/product/${productId}`)
+export const addToCart =
+    (productId, qty, sizeType, color) => async (dispatch, getState) => {
+        const { data } = await product.get(`/product/${productId}`);
 
-  const size = data.size.filter((s) => s.sizeType === sizeType)
+        const getSize = data.size.filter((s) => s.sizeType === sizeType);
 
-  dispatch({
-    type: CART_ADD_ITEM,
-    payload: {
-      product: data._id,
-      name: data.productName[getState().settings.language],
-      image: data.image,
-      price: data.price[getState().settings.currency],
-      size: size ? size[0].sizeType : sizeType,
-      qty: qty,
-    },
-  })
+        const colorRemaining = getSize[0].color_size.colors.filter(
+            (s) => s.color[getState().settings.language] === color
+        );
+        dispatch({
+            type: CART_ADD_ITEM,
+            payload: {
+                productId: data._id,
+                name: data.productName[getState().settings.language],
+                image: data.image,
+                price: data.price[getState().settings.currency],
+                size: sizeType,
+                qty: Number(qty),
+                color: color,
+                totalSize: colorRemaining ? colorRemaining[0].count : 1,
+            },
+        });
 
-  localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
-}
+        localStorage.setItem(
+            "cartItems",
+            JSON.stringify(getState().cart.cartItems)
+        );
+    };

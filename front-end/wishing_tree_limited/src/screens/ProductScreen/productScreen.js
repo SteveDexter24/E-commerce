@@ -49,7 +49,7 @@ const ProductScreen = ({ history, match }) => {
 
     const addToCartHandler = () => {
         history.push(
-            `/cart/${match.params.id}?qty=${qty}&size=${selectedSize}`
+            `/cart/${match.params.id}?qty=${qty}&size=${selectedSize}&=${color}`
         );
     };
 
@@ -59,7 +59,6 @@ const ProductScreen = ({ history, match }) => {
     };
 
     const setColorButton = (c) => {
-        console.log(c);
         setColorIndex(c.index);
         setColor(c.color);
     };
@@ -98,7 +97,7 @@ const ProductScreen = ({ history, match }) => {
                                     styles={styles}
                                     buttonClick={setColorButton}
                                     language={language}
-                                    color={color}
+                                    colors={color}
                                     selectedIndex={selectedIndex}
                                 />
                             </ListGroup.Item>
@@ -184,7 +183,7 @@ const ProductScreen = ({ history, match }) => {
                                         disabled={
                                             product.size[selectedIndex]
                                                 .color_size.colors[colorIndex]
-                                                .count <= 0
+                                                .count <= 0 || color === ""
                                         }
                                     >
                                         ADD TO CART
