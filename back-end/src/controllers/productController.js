@@ -51,6 +51,8 @@ module.exports = {
             }
             if (foundProduct) {
                 res.status(200).send(foundProduct);
+            } else {
+                res.status(400).send({ error: "Could not find product" });
             }
         });
     },

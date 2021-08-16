@@ -132,17 +132,16 @@ const ProductScreen = ({ history, match }) => {
                                     <Row>
                                         <Col>Status:</Col>
                                         <Col>
-                                            {product.size[selectedIndex]
-                                                .color_size.colors[colorIndex]
-                                                .count > 0
+                                            {product.size[selectedIndex].colors[
+                                                colorIndex
+                                            ].count > 0
                                                 ? "In Stock"
                                                 : "Out of Stock"}
                                         </Col>
                                     </Row>
                                 </ListGroup.Item>
-                                {product.size[selectedIndex].color_size.colors[
-                                    colorIndex
-                                ].count > 0 && (
+                                {product.size[selectedIndex].colors[colorIndex]
+                                    .count > 0 && (
                                     <ListGroup.Item>
                                         <Row>
                                             <Col>Quanity</Col>
@@ -158,9 +157,8 @@ const ProductScreen = ({ history, match }) => {
                                                         ...Array(
                                                             product.size[
                                                                 selectedIndex
-                                                            ].color_size.colors[
-                                                                colorIndex
-                                                            ].count
+                                                            ].colors[colorIndex]
+                                                                .count
                                                         ).keys(),
                                                     ].map((x) => (
                                                         <option
@@ -181,9 +179,9 @@ const ProductScreen = ({ history, match }) => {
                                         className="btn"
                                         type="button"
                                         disabled={
-                                            product.size[selectedIndex]
-                                                .color_size.colors[colorIndex]
-                                                .count <= 0 || color === ""
+                                            product.size[selectedIndex].colors[
+                                                colorIndex
+                                            ].count <= 0 || color === ""
                                         }
                                     >
                                         ADD TO CART

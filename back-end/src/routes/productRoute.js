@@ -18,8 +18,8 @@ router.get("/api/product/:id", productController.getProductAsync);
 // Admin access only
 router.post(
     "/api/product",
-    auth,
-    adminAuth,
+    // auth,
+    // adminAuth,
     productController.createProductAsync
 );
 router.patch(

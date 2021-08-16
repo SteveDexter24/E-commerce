@@ -15,7 +15,7 @@ const ColorButtons = ({
     return (
         <ButtonGroup>
             <Row>
-                {product.size[selectedIndex].color_size.colors.map((s, i) => {
+                {product.size[selectedIndex].colors.map((s, i) => {
                     return (
                         <Col key={i} md={1} className="mx-2 my-1">
                             <Button
