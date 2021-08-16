@@ -19,6 +19,7 @@ export const DELETE_PRODUCT = 'DELETE_PRODUCT'
 // Cart
 export const CART_ADD_ITEM = 'CART_ADD_ITEM'
 export const CART_REMOVE_ITEM = 'CART_REMOVE_ITEM'
+export const UPDATE_CART_ITEM = 'UPDATE_CART_ITEM'
 
 // Settings
 export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE'
