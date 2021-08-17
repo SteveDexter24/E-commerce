@@ -7,6 +7,7 @@ import HomeScreen from './screens/homeScreen'
 import ProductScreen from './screens/ProductScreen/productScreen'
 import LoginScreen from './screens/loginScreen'
 import CartScreen from './screens/cartScreen'
+import RegisterScreen from './screens/registerScreen'
 import './index.css'
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
       <main className="py-3">
         <Container>
           <Route path="/login" exact component={LoginScreen} />
+          <Route path="/register" exact component={RegisterScreen} />
           <Route path="/product/:id" exact component={ProductScreen} />
           <Route path="/cart/:id?" exact component={CartScreen} />
           <Route path="/" exact component={HomeScreen} />
