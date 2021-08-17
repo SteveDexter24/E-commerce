@@ -22,7 +22,7 @@ module.exports = {
         Product.find(queries, (err, foundProducts) => {
             if (err) {
                 res.send({
-                    error: "error occurred while fetching products",
+                    message: "error occurred while fetching products",
                 });
             }
             if (foundProducts) {
@@ -34,7 +34,7 @@ module.exports = {
                     res.status(200).send(foundProducts);
                 }
             } else {
-                res.send({ error: "no products found" });
+                res.send({ message: "no products found" });
             }
         })
             .sort({ createdAt: -1 })
@@ -45,14 +45,12 @@ module.exports = {
         const productId = req.params.id;
         Product.findById(productId, (err, foundProduct) => {
             if (err) {
-                res.send({
-                    error: `error found while looking for product with ID ${productId}`,
+                res.status(404).send({
+                    message: `error found while looking for product with ID ${productId}`,
                 });
             }
             if (foundProduct) {
                 res.status(200).send(foundProduct);
-            } else {
-                res.status(400).send({ error: "Could not find product" });
             }
         });
     },
@@ -62,7 +60,7 @@ module.exports = {
 
         Product.create(productObject, (err, newProduct) => {
             if (err) {
-                res.send({
+                res.status(409).send({
                     error: err.message,
                     message: "problem creating new product",
                 });

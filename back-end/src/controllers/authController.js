@@ -4,55 +4,55 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
     async signIn(req, res) {
-        const { username, password, email } = req.body;
+        const { password, email } = req.body;
 
-        if (password === null || password === undefined) {
-            res.send({ auth: false, error: "invalid password" });
-            return;
+        try {
+            const founduser = await User.findOne({ email });
+
+            if (!founduser) {
+                throw new Error();
+            }
+
+            try {
+                var isPasswordValid = bcrypt.compareSync(
+                    password,
+                    founduser.password
+                );
+                if (!isPasswordValid) {
+                    throw new Error();
+                }
+                const token = jwt.sign(
+                    { id: founduser._id },
+                    process.env.JWT_SECRET
+                );
+                founduser.tokens = founduser.tokens.concat({ token });
+                founduser.save();
+                var user = founduser;
+
+                res.status(200).send({
+                    _id: user._id,
+                    name: user.name,
+                    surname: user.surname,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role,
+                    memberShip: user.memberShip,
+                    language: user.language,
+                    token: token,
+                });
+            } catch (error) {
+                res.status(409).send({
+                    auth: false,
+                    message: "Incorrect Password",
+                });
+            }
+        } catch (err) {
+            res.status(500).send({
+                auth: false,
+                token: undefined,
+                message: "User not found",
+            });
         }
-
-        const authentiate = {
-            $or: [{ username: username }, { email: email }],
-        };
-
-        User.findOne(authentiate, (err, founduser) => {
-            if (err) {
-                res.status(500).send({
-                    auth: false,
-                    error: "user not found",
-                });
-                return;
-            }
-            if (founduser === null) {
-                res.send({
-                    auth: false,
-                    token: undefined,
-                    error: "user not found",
-                });
-                return;
-            }
-
-            var isPasswordValid = bcrypt.compareSync(
-                password,
-                founduser.password
-            );
-
-            if (!isPasswordValid) {
-                console.log("wrong password");
-                res.send({ auth: false, error: "Incorrect Password" });
-                return;
-            }
-
-            const token = jwt.sign(
-                { id: founduser._id },
-                process.env.JWT_SECRET
-            );
-            founduser.tokens = founduser.tokens.concat({ token });
-            founduser.save();
-            var user = founduser;
-
-            res.status(200).send({ auth: true, user, token: token });
-        });
     },
     async signUp(req, res) {
         var newUser = req.body;
@@ -62,7 +62,7 @@ module.exports = {
 
         User.create(newUser, (err, user) => {
             if (err) {
-                return res.send({
+                return res.status(409).send({
                     signedUp: false,
                     message: err.keyValue,
                 });
@@ -80,19 +80,15 @@ module.exports = {
                     token: token,
                 });
             } else {
-                res.send({ error: "Failed to create new user" });
+                res.send({ message: "Failed to create new user" });
             }
         });
     },
     async signOut(req, res) {
         const { token, userId } = req.body;
-        User.findById({ _id: userId }, (err, user) => {
-            if (err) {
-                return res.status(500).send({ error: "Failed to logout" });
-            }
-            if (!user) {
-                return res.status(404).send({ error: "User not found" });
-            }
+
+        try {
+            const user = await User.findById(userId);
 
             var filteredTokens = user.tokens.filter((t) => {
                 return t.token !== token;
@@ -100,6 +96,8 @@ module.exports = {
             user.tokens = filteredTokens;
             user.save();
             res.send({ message: "Successfully logged user out" });
-        });
+        } catch (error) {
+            res.status(500).send({ message: "Failed to logout" });
+        }
     },
 };

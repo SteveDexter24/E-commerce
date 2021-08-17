@@ -1,8 +1,18 @@
 import React from "react";
+import { logout } from "../actions/user";
+import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
-import { Nav, Navbar, Container } from "react-bootstrap";
+import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
 
 const Header = () => {
+    const dispatch = useDispatch();
+    const userAuth = useSelector((state) => state.userAuth);
+    const { userInfo } = userAuth;
+
+    const handleLogout = (userId, token) => {
+        dispatch(logout(userId, token));
+    };
+
     return (
         <header>
             <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
@@ -21,11 +31,40 @@ const Header = () => {
                                     <i className="fas fa-shopping-cart" /> Cart
                                 </Nav.Link>
                             </LinkContainer>
-                            <LinkContainer to="/login">
-                                <Nav.Link>
-                                    <i className="fas fa-user" /> Sign In
-                                </Nav.Link>
-                            </LinkContainer>
+                            {userInfo ? (
+                                <NavDropdown
+                                    title={userInfo.username}
+                                    id="username"
+                                >
+                                    <LinkContainer
+                                        to="/profile"
+                                        style={{
+                                            textDecoration: "none",
+                                        }}
+                                    >
+                                        <NavDropdown.Item>
+                                            Profile
+                                        </NavDropdown.Item>
+                                    </LinkContainer>
+
+                                    <NavDropdown.Item
+                                        onClick={() =>
+                                            handleLogout(
+                                                userInfo._id,
+                                                userInfo.token
+                                            )
+                                        }
+                                    >
+                                        Logout
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            ) : (
+                                <LinkContainer to="/login">
+                                    <Nav.Link>
+                                        <i className="fas fa-user" /> Sign In
+                                    </Nav.Link>
+                                </LinkContainer>
+                            )}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
