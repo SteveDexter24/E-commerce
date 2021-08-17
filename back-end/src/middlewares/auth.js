@@ -22,7 +22,7 @@ const auth = async (req, res, next) => {
         req.tokenPayload = tokenPayload;
         next();
     } catch (err) {
-        res.status(401).send({ error: "Use not logged in or unthorized" });
+        res.status(401).send({ message: "Use not logged in or unthorized" });
     }
 };
 
