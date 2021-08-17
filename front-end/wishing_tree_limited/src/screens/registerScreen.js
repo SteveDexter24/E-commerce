@@ -24,7 +24,9 @@ const RegisterScreen = ({ location, history }) => {
     const dispatch = useDispatch();
 
     const userRegister = useSelector((state) => state.userRegister);
-    const { loading, error, userInfo } = userRegister;
+    const { loading, error } = userRegister;
+    const userAuth = useSelector((state) => state.userAuth);
+    const { userInfo } = userAuth;
 
     useEffect(() => {
         if (userInfo) {
@@ -34,11 +36,14 @@ const RegisterScreen = ({ location, history }) => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        console.log(username, email, password, language);
-
-        // if (passwordMessage) {
-        //     dispatch(register(username, email, password, language));
-        // }
+        if (
+            username !== "" &&
+            email !== "" &&
+            validPassword &&
+            validConfirmPassword
+        ) {
+            dispatch(register(username, email, password, language));
+        }
     };
 
     const passwordOnChangeHandler = (e) => {
