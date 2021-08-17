@@ -7,10 +7,10 @@ import {
 
 import user from '../apis/api'
 
-export const login = (username, password) => async (dispatch) => {
+export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: USER_LOGIN_REQUEST })
-    const { data } = await user.post('/signin', { username, password })
+    const { data } = await user.post('/signin', { email, password })
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data })
     localStorage.setItem('userInfo', JSON.stringify(data))
   } catch (error) {
