@@ -57,32 +57,37 @@ module.exports = {
     async signUp(req, res) {
         var newUser = req.body;
 
-        var hashedPassword = bcrypt.hashSync(newUser.password, 8);
-        newUser.password = hashedPassword;
+        try {
+            if (newUser.password === null || newUser.password === undefined) {
+                throw new Error();
+            }
+            var hashedPassword = bcrypt.hashSync(newUser.password, 8);
+            newUser.password = hashedPassword;
+        } catch (error) {
+            res.status(409).send({ message: "Please enter your password" });
+        }
 
-        User.create(newUser, (err, user) => {
-            if (err) {
-                return res.status(409).send({
-                    signedUp: false,
-                    message: err.keyValue,
-                });
-            }
-            if (user) {
-                const token = jwt.sign(
-                    { id: user._id },
-                    process.env.JWT_SECRET
-                );
-                user.tokens = user.tokens.concat({ token });
-                user.save();
-                res.status(200).send({
-                    signedUp: true,
-                    auth: true,
-                    token: token,
-                });
-            } else {
-                res.send({ message: "Failed to create new user" });
-            }
-        });
+        try {
+            const user = await User.create(newUser);
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+            user.tokens = user.tokens.concat({ token });
+            user.save();
+            res.status(200).send({
+                _id: user._id,
+                name: user.name,
+                surname: user.surname,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                memberShip: user.memberShip,
+                language: user.language,
+                token: token,
+            });
+        } catch (error) {
+            res.status(409).send({
+                message: "Problems occured when registering new user",
+            });
+        }
     },
     async signOut(req, res) {
         const { token, userId } = req.body;
