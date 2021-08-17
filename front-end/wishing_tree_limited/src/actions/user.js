@@ -61,8 +61,7 @@ export const logout = (userId, token) => async (dispatch) => {
 
 // Register
 export const register =
-    (name, surname, username, email, password, language) =>
-    async (dispatch) => {
+    (username, email, password, language) => async (dispatch) => {
         try {
             dispatch({ type: USER_REGISTER_REQUEST });
             const config = {
@@ -72,7 +71,7 @@ export const register =
             };
             const { data } = await user.post(
                 "/signup",
-                { name, surname, username, email, password, language },
+                { username, email, password, language },
                 config
             );
             dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
