@@ -26,9 +26,13 @@ const FormComponent = ({
                 <Form.Control.Feedback type="invalid">
                     {errorMessage}
                 </Form.Control.Feedback>
-            ) : (
+            ) : valid ? (
                 <Form.Control.Feedback type="valid">
                     Looks good!
+                </Form.Control.Feedback>
+            ) : (
+                <Form.Control.Feedback type="invalid">
+                    {errorMessage}
                 </Form.Control.Feedback>
             )}
         </Form.Group>

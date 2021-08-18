@@ -53,15 +53,22 @@ const RegisterScreen = ({ location, history }) => {
             setPasswordErrorMessage(
                 "Password length must be greater than 8 character"
             );
+            setValidPassword(false);
         } else {
             setPasswordErrorMessage(null);
             setValidPassword(true);
         }
     };
     const passwordConfirmOnChangeHandler = (e) => {
-        setConfirmPassword(e.target.value);
-        if (password !== e.target.value) {
+        const cPassword = e.target.value;
+        setConfirmPassword(cPassword);
+        if (password !== cPassword) {
             setPasswordMessage("Passwords does not match");
+            setValidConfirmPassword(false);
+        } else if (cPassword.length < 8) {
+            setPasswordMessage(
+                "Password length must be greater than 8 character"
+            );
             setValidConfirmPassword(false);
         } else {
             setPasswordMessage(null);
