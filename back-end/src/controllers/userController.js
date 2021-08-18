@@ -15,16 +15,25 @@ module.exports = {
     },
     async getUserAsync(req, res, next) {
         const userId = req.params.id;
-
+        console.log(userId);
         try {
-            const foundUser = await User.findById(userId);
-            res.status(200).send(foundUser);
+            const user = await User.findById(userId);
+            res.status(200).send({
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                memberShip: user.memberShip,
+                language: user.language,
+                token: user.tokens,
+            });
         } catch (error) {
             res.status(404).send({ message: error.message });
         }
     },
 
     async editUserAsync(req, res, next) {
+        console.log("edit user");
         const userId = req.params.id;
         var itemsToEdit = Object.keys(req.body);
         itemsToEdit = itemsToEdit.filter((x) => x !== "token");

@@ -5,48 +5,74 @@ import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/formContainer";
 import Message from "../components/message";
 import Loader from "../components/loader";
-import { register } from "../actions/user";
+import { getUserInfo, updateUserInfo } from "../actions/user";
 import { selLang } from "../Utils/setlang";
 import FormComponent from "../components/formComponent";
 
-const RegisterScreen = ({ location, history }) => {
-    const [language, setLanguage] = useState("en");
-    const [username, setUsername] = useState();
+const ProfileScreen = ({ history }) => {
+    // Form items states
+    const [language, setLanguage] = useState("");
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [currentPassword, setCurrentPassword] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
     const [passwordMessage, setPasswordMessage] = useState(null);
+
     const [passwordErrorMessage, setPasswordErrorMessage] = useState(null);
+
     const [validPassword, setValidPassword] = useState(false);
     const [validConfirmPassword, setValidConfirmPassword] = useState(false);
 
-    const redirect = location.search ? location.search.split("=")[1] : "/";
     const dispatch = useDispatch();
 
-    const userRegister = useSelector((state) => state.userRegister);
-    const { loading, error } = userRegister;
+    // Get states
+    const userDetails = useSelector((state) => state.userDetails);
+    const { loading, error, user } = userDetails;
     const userAuth = useSelector((state) => state.userAuth);
     const { userInfo } = userAuth;
 
     useEffect(() => {
-        if (userInfo) {
-            history.push(redirect);
+        if (!userInfo) {
+            history.push("/login");
+        } else {
+            if (!user) {
+                dispatch(getUserInfo(userInfo._id));
+            } else {
+                setUsername(user.username);
+                setEmail(user.email);
+                setLanguage(user.langauge);
+            }
         }
-    }, [history, userInfo, redirect]);
+    }, [dispatch, history, userInfo, user]);
 
     const submitHandler = (e) => {
         e.preventDefault();
         if (
             username !== "" &&
             email !== "" &&
+            currentPassword !== "" &&
             validPassword &&
             validConfirmPassword
         ) {
-            dispatch(register(username, email, password, language));
+            // dispatch(
+            //     updateUserInfo(
+            //         username,
+            //         email,
+            //         currentPassword,
+            //         password,
+            //         language
+            //     )
+            // );
+            console.log(username, email, currentPassword, password, language);
         }
     };
 
     const passwordOnChangeHandler = (e) => {
+        setCurrentPassword(e.target.value);
+    };
+    const newPasswordOnChangeHandler = (e) => {
         let p = e.target.value;
         setPassword(p);
         if (p.length < 8) {
@@ -59,7 +85,7 @@ const RegisterScreen = ({ location, history }) => {
             setValidPassword(true);
         }
     };
-    const passwordConfirmOnChangeHandler = (e) => {
+    const newPasswordConfirmOnChangeHandler = (e) => {
         const cPassword = e.target.value;
         setConfirmPassword(cPassword);
         if (password !== cPassword) {
@@ -78,7 +104,7 @@ const RegisterScreen = ({ location, history }) => {
 
     return (
         <FormContainer>
-            <h1>REGISTER</h1>
+            <h1>YOUR PROFILE</h1>
             {error && <Message variant="danger">{error}</Message>}
             {loading && <Loader />}
             <Form onSubmit={submitHandler} autoComplete="on">
@@ -86,53 +112,56 @@ const RegisterScreen = ({ location, history }) => {
                     label="Username"
                     type="text"
                     value={username}
-                    placeholder="Enter your username"
                     onChange={(e) => setUsername(e.target.value)}
                 />
                 <FormComponent
                     label="Email address"
                     type="email"
                     value={email}
-                    placeholder="Enter your email address"
                     onChange={(e) => setEmail(e.target.value)}
                 />
                 <FormComponent
-                    label="Password"
+                    label="Old Password"
                     type="password"
-                    value={password}
-                    placeholder="Enter your password"
-                    errorMessage={passwordErrorMessage}
-                    valid={validPassword}
+                    value={currentPassword}
                     onChange={passwordOnChangeHandler}
                 />
                 <FormComponent
-                    label="Confirm Password"
+                    label="New Password"
+                    type="password"
+                    value={password}
+                    errorMessage={passwordErrorMessage}
+                    valid={validPassword}
+                    onChange={newPasswordOnChangeHandler}
+                />
+                <FormComponent
+                    label="Confirm New Password"
                     type="password"
                     value={confirmPassword}
-                    placeholder="Enter your password again to confirm"
                     errorMessage={passwordMessage}
                     valid={validConfirmPassword}
-                    onChange={passwordConfirmOnChangeHandler}
+                    onChange={newPasswordConfirmOnChangeHandler}
                 />
                 <Form.Group controlId={"radio"} className="py-2">
                     <Form.Label>Select preferred langauge: </Form.Label>
-                    {selLang.map((l) => {
-                        return (
-                            <Col md={4}>
-                                <Form.Check
-                                    id={l.lang}
-                                    key={`${l.lang}-radio`}
-                                    type="radio"
-                                    label={l.label}
-                                    value={l.lang}
-                                    checked={l.lang === language}
-                                    onChange={(e) =>
-                                        setLanguage(e.target.value)
-                                    }
-                                />
-                            </Col>
-                        );
-                    })}
+                    <Row>
+                        {selLang.map((l) => {
+                            return (
+                                <Col md={4} key={`${l.lang}-radio`}>
+                                    <Form.Check
+                                        id={l.lang}
+                                        type="radio"
+                                        label={l.label}
+                                        value={l.lang}
+                                        checked={l.lang === language}
+                                        onChange={(e) =>
+                                            setLanguage(e.target.value)
+                                        }
+                                    />
+                                </Col>
+                            );
+                        })}
+                    </Row>
                 </Form.Group>
                 <div className="py-3">
                     <Button
@@ -145,23 +174,12 @@ const RegisterScreen = ({ location, history }) => {
                             !validConfirmPassword
                         }
                     >
-                        Register
+                        Update Profile
                     </Button>
                 </div>
             </Form>
-
-            <Row className="py-3">
-                <Col>
-                    Already have an account?{" "}
-                    <Link
-                        to={redirect ? `/login?redirect=${redirect}` : "/login"}
-                    >
-                        login
-                    </Link>
-                </Col>
-            </Row>
         </FormContainer>
     );
 };
 
-export default RegisterScreen;
+export default ProfileScreen;
