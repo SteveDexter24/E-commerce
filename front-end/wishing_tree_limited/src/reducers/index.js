@@ -2,7 +2,12 @@ import { combineReducers } from "redux";
 import { productListReducer, productDetailsReducer } from "./productReducers";
 import { cartReducer } from "./cartReducers";
 import { changeSettingsReducer } from "./settingsReducers";
-import { userAuthenticationReducer, userRegisterReducer } from "./userReducers";
+import {
+    userAuthenticationReducer,
+    userRegisterReducer,
+    userDetailsReducer,
+    // userUpdateReducer,
+} from "./userReducers";
 
 export default combineReducers({
     productList: productListReducer,
@@ -11,6 +16,8 @@ export default combineReducers({
     settings: changeSettingsReducer,
     userAuth: userAuthenticationReducer,
     userRegister: userRegisterReducer,
+    userDetails: userDetailsReducer,
+    // userUpdate: userUpdateReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem("cartItems")
