@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const secret = 'secret'
+const secret = process.env.JWT_SECRET
 
 const generateToken = async (user) => {
   const token = jwt.sign(
