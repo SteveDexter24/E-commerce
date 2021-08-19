@@ -1,40 +1,50 @@
-const { verifyToken } = require("../services/authServices");
-const { User } = require("../models/user");
-const bcrypt = require("bcrypt");
+const { verifyToken } = require('../services/authServices')
+const { User } = require('../models/user')
+const bcrypt = require('bcrypt')
 
 const matchPassword = async (req, res, next) => {
-    const { currentPassword, password } = req.body;
+  const { currentPassword, password } = req.body
+  console.log('match password middleware')
+  console.log(req.body)
 
+  if (currentPassword === '' && password === '') {
+    console.log('user did not update password')
+    delete req.body.currentPassword
+    delete req.body.password
+    next()
+  } else {
+    console.log('user wants update password')
     try {
-        const user = await User.findById(req.params.id);
-        if (!user) {
-            throw new Error("User not found");
-        }
+      const user = await User.findById(req.params.id)
+      if (!user) {
+        throw new Error('User not found')
+      }
 
-        const tokenPayload = bcrypt.compareSync(currentPassword, user.password);
+      const tokenPayload = bcrypt.compareSync(currentPassword, user.password)
 
-        if (!tokenPayload) {
-            throw new Error("Current password is incorrect");
-        }
+      if (!tokenPayload) {
+        throw new Error('Current password is incorrect')
+      }
 
-        // old password is same as the new one
-        const validPassword = bcrypt.compareSync(password, user.password);
+      // old password is same as the new one
+      const validPassword = bcrypt.compareSync(password, user.password)
 
-        console.log(`Same password as old one: ${validPassword}`);
+      console.log(`Same password as old one: ${validPassword}`)
 
-        if (validPassword) {
-            throw new Error("New password same as the old one");
-        }
+      if (validPassword) {
+        throw new Error('New password same as the old one')
+      }
 
-        // if passwords match and valid password
-        var hashedPassword = bcrypt.hashSync(password, 8);
+      // if passwords match and valid password
+      var hashedPassword = bcrypt.hashSync(password, 8)
 
-        req.body.password = hashedPassword;
+      req.body.password = hashedPassword
 
-        next();
+      next()
     } catch (err) {
-        res.status(401).send({ message: err.message });
+      res.status(401).send({ message: err.message })
     }
-};
+  }
+}
 
-module.exports = { matchPassword };
+module.exports = { matchPassword }
