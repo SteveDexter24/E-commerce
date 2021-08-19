@@ -19,6 +19,7 @@ const ProfileScreen = ({ history }) => {
   const [address1, setAddress1] = useState('')
   const [address2, setAddress2] = useState('')
   const [country, setCountry] = useState('')
+  const [city, setCity] = useState('')
 
   // States: Show Error or success message
   const [passwordMessage, setPasswordMessage] = useState(null)
@@ -48,12 +49,13 @@ const ProfileScreen = ({ history }) => {
       if (!user) {
         dispatch(getUserInfo(userInfo._id))
       } else {
-        setUsername(user.username)
-        setEmail(user.email)
-        setLanguage(user.language)
-        setAddress1(user.addressLine1)
-        setAddress2(user.addressLine2)
-        setCountry(user.country)
+        setUsername(user.username ? user.username : '')
+        setEmail(user.email ? user.email : '')
+        setLanguage(user.language ? user.language : '')
+        setAddress1(user.address1 ? user.address1 : '')
+        setAddress2(user.address2 ? user.address2 : '')
+        setCountry(user.country ? user.country : '')
+        setCity(user.city ? user.city : '')
       }
     }
   }, [dispatch, history, userInfo, user])
@@ -67,6 +69,7 @@ const ProfileScreen = ({ history }) => {
           user._id,
           username,
           email,
+          city,
           currentPassword,
           password,
           language,
@@ -74,16 +77,6 @@ const ProfileScreen = ({ history }) => {
           address2,
           country,
         ),
-      )
-      console.log(
-        username,
-        email,
-        currentPassword,
-        password,
-        language,
-        address1,
-        address2,
-        country,
       )
     }
   }
@@ -123,7 +116,7 @@ const ProfileScreen = ({ history }) => {
     <FormContainer>
       <h1>YOUR PROFILE</h1>
       {error && <Message variant="danger">{error}</Message>}
-      {success && <Message variant="success">{success}</Message>}
+      {success && <Message variant="success">{'Profile Updated'}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler} autoComplete="on">
         <FormComponent
@@ -160,6 +153,14 @@ const ProfileScreen = ({ history }) => {
             <option value="Japan">Japan</option>
           </Form.Select>
         </Form.Group>
+
+        <FormComponent
+          label="City (optional)"
+          type="text"
+          placeholder={'Enter City'}
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
 
         <FormComponent
           label="Old Password"

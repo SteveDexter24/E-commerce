@@ -10,6 +10,9 @@ import CartScreen from './screens/cartScreen'
 import RegisterScreen from './screens/registerScreen'
 import EditProfile from './screens/editProfile'
 import OrderHistoryScreen from './screens/orderHistoryScreen'
+import ShippingScreen from './screens/shippingScreen'
+import PaymentScreen from './screens/paymentScreen'
+import PlaceOrderScreen from './screens/placeOrderScreen'
 import './index.css'
 
 const App = () => {
@@ -24,6 +27,9 @@ const App = () => {
           <Route path="/orderHistory" exact component={OrderHistoryScreen} />
           <Route path="/product/:id" exact component={ProductScreen} />
           <Route path="/cart/:id?" exact component={CartScreen} />
+          <Route path="/shipping" exact component={ShippingScreen} />
+          <Route path="/payment" exact component={PaymentScreen} />
+          <Route path="/placeorder" exact component={PlaceOrderScreen} />
           <Route path="/" exact component={HomeScreen} />
         </Container>
       </main>

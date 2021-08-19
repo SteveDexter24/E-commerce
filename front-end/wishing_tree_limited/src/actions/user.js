@@ -127,6 +127,7 @@ export const updateUserProfile = (
   id,
   username,
   email,
+  city,
   currentPassword,
   password,
   language,
@@ -149,6 +150,7 @@ export const updateUserProfile = (
       {
         username,
         email,
+        city,
         currentPassword,
         password,
         language,
