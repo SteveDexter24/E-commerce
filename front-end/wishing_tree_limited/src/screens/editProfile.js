@@ -110,7 +110,7 @@ const ProfileScreen = ({ history }) => {
     if (password !== cPassword) {
       setPasswordMessage('Passwords does not match')
       setValidConfirmPassword(false)
-    } else if (cPassword.length < 8) {
+    } else if (cPassword.length < 8 && currentPassword !== '') {
       setPasswordMessage('Password length must be greater than 8 character')
       setValidConfirmPassword(false)
     } else {
