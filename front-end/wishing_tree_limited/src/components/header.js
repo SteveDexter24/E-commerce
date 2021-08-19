@@ -18,9 +18,22 @@ const Header = () => {
       <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>Wishing Tree Limited Online Shop</Navbar.Brand>
+            <Navbar.Brand>Wishing Tree Limited</Navbar.Brand>
           </LinkContainer>
-
+          <Nav className="me-auto">
+            <LinkContainer to="/new-arrivals">
+              <Nav.Link>New Arrivals</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/mens">
+              <Nav.Link>Men</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/women">
+              <Nav.Link>Women</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/about-us">
+              <Nav.Link>Kids</Nav.Link>
+            </LinkContainer>
+          </Nav>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
