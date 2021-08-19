@@ -209,14 +209,7 @@ const ProfileScreen = ({ history }) => {
           <Button
             type="submit"
             variant="primary"
-            disabled={
-              username === '' || email === '' || language === ''
-              //  || !(
-              //   currentPassword === '' &&
-              //   password === '' &&
-              //   confirmPassword === ''
-              // )
-            }
+            disabled={username === '' || email === '' || language === ''}
           >
             Update Profile
           </Button>
