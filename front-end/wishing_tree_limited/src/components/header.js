@@ -20,22 +20,23 @@ const Header = () => {
           <LinkContainer to="/">
             <Navbar.Brand>Wishing Tree Limited</Navbar.Brand>
           </LinkContainer>
-          <Nav className="me-auto">
-            <LinkContainer to="/new-arrivals">
-              <Nav.Link>NEW ARRIVALS</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/mens">
-              <Nav.Link>MEN</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/women">
-              <Nav.Link>WOMEN</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/about-us">
-              <Nav.Link>KIDS</Nav.Link>
-            </LinkContainer>
-          </Nav>
+
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <LinkContainer to="/new-arrivals">
+                <Nav.Link>NEW ARRIVALS</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/mens">
+                <Nav.Link>MEN</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/women">
+                <Nav.Link>WOMEN</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/about-us">
+                <Nav.Link>KIDS</Nav.Link>
+              </LinkContainer>
+            </Nav>
             <Nav className="ms-auto">
               <LinkContainer to="/cart">
                 <Nav.Link>
