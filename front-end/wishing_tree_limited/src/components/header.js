@@ -15,23 +15,23 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar bg="light" variant="light" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand>Wishing Tree Limited</Navbar.Brand>
           </LinkContainer>
           <Nav className="me-auto">
             <LinkContainer to="/new-arrivals">
-              <Nav.Link>New Arrivals</Nav.Link>
+              <Nav.Link>NEW ARRIVALS</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/mens">
-              <Nav.Link>Men</Nav.Link>
+              <Nav.Link>MEN</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/women">
-              <Nav.Link>Women</Nav.Link>
+              <Nav.Link>WOMEN</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/about-us">
-              <Nav.Link>Kids</Nav.Link>
+              <Nav.Link>KIDS</Nav.Link>
             </LinkContainer>
           </Nav>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
