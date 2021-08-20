@@ -17,6 +17,7 @@ const ShippingScreen = ({ history }) => {
   // Local states
   const [name, setName] = useState('')
   const [surname, setSurname] = useState('')
+  const [email, setEmail] = useState('')
   const [address1, setAddress1] = useState('')
   const [address2, setAddress2] = useState('')
   const [city, setCity] = useState('')
@@ -24,19 +25,41 @@ const ShippingScreen = ({ history }) => {
   const [contactNum, setContactNum] = useState('')
 
   // Get States from Redux
+  // authentication redux store
   const userAuth = useSelector((state) => state.userAuth)
   const { userInfo } = userAuth
 
+  // shipping address redux store
+  const cart = useSelector((state) => state.cart)
+  const { shippingAddress } = cart
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
     } else {
-      setAddress1(userInfo.address1 ? userInfo.address1 : '')
-      setAddress2(userInfo.address2 ? userInfo.address2 : '')
-      setCountry(userInfo.country ? userInfo.country : '')
-      setCity(userInfo.city ? userInfo.city : '')
+      if (shippingAddress) {
+        setAddress1(shippingAddress.address1 ? shippingAddress.address1 : '')
+        setAddress2(shippingAddress.address2 ? shippingAddress.address2 : '')
+        setCountry(shippingAddress.country ? shippingAddress.country : '')
+        setCity(shippingAddress.city ? shippingAddress.city : '')
+        setEmail(shippingAddress.email ? shippingAddress.email : '')
+        setName(shippingAddress.name ? shippingAddress.name : '')
+        setSurname(shippingAddress.surname ? shippingAddress.surname : '')
+        setContactNum(
+          shippingAddress.contactNum ? shippingAddress.contactNum : '',
+        )
+      } else {
+        console.log(userInfo)
+        setAddress1(userInfo.address1 ? userInfo.address1 : '')
+        setAddress2(userInfo.address2 ? userInfo.address2 : '')
+        setCountry(userInfo.country ? userInfo.country : '')
+        setCity(userInfo.city ? userInfo.city : '')
+        setEmail(userInfo.email ? userInfo.email : '')
+        setName(userInfo.name ? userInfo.name : '')
+        setSurname(userInfo.surname ? userInfo.surname : '')
+        setContactNum(userInfo.contactNum ? userInfo.contactNum : '')
+      }
     }
   }, [dispatch, history])
 
@@ -47,6 +70,7 @@ const ShippingScreen = ({ history }) => {
       saveShippingAddress({
         name,
         surname,
+        email,
         address1,
         address2,
         contactNum,
@@ -84,6 +108,14 @@ const ShippingScreen = ({ history }) => {
             />
           </Col>
         </Row>
+        <FormComponent
+          label="Email"
+          type="email"
+          value={email}
+          required={true}
+          placeholder="Enter your email address"
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
         <FormComponent
           label="Address Line 1"
@@ -103,7 +135,11 @@ const ShippingScreen = ({ history }) => {
         />
         <Form.Group className="py-2">
           <Form.Label>Country or Region</Form.Label>
-          <Form.Select onChange={(e) => setCountry(e.target.value)} required>
+          <Form.Select
+            onChange={(e) => setCountry(e.target.value)}
+            required
+            value={country}
+          >
             <option value="">Select a Country or Region</option>
             <option value="Hong Kong">Hong Kong</option>
             <option value="Japan">Japan</option>
@@ -136,6 +172,7 @@ const ShippingScreen = ({ history }) => {
             disabled={
               name === '' ||
               surname === '' ||
+              email === '' ||
               address1 === '' ||
               address2 === '' ||
               contactNum === '' ||

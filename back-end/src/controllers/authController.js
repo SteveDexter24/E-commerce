@@ -26,6 +26,8 @@ module.exports = {
         res.status(200).send({
           _id: user._id,
           username: user.username,
+          name: user.name,
+          surname: user.surname,
           email: user.email,
           address1: user.address1,
           address2: user.address2,
@@ -34,6 +36,7 @@ module.exports = {
           role: user.role,
           memberShip: user.memberShip,
           language: user.language,
+          contactNum: user.contactNum,
           token: token,
         })
       } catch (error) {
@@ -55,15 +58,16 @@ module.exports = {
 
     try {
       if (newUser.password === null || newUser.password === undefined) {
-        throw new Error()
+        throw new Error('Please enter your password')
       }
       var hashedPassword = bcrypt.hashSync(
         newUser.password,
-        process.env.HASH_SALT,
+        8,
+        // process.env.HASH_SALT,
       )
       newUser.password = hashedPassword
     } catch (error) {
-      res.status(409).send({ message: 'Please enter your password' })
+      res.status(409).send({ message: error.message })
     }
 
     try {
@@ -108,7 +112,7 @@ module.exports = {
       })
       user.tokens = filteredTokens
       await user.save()
-      res.send({ message: 'Successfully logged user out' })
+      res.send({ message: 'Successfully logged user out', logout: true })
     } catch (error) {
       res.status(500).send({ message: 'Failed to logout' })
     }

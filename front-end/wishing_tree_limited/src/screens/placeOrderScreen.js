@@ -16,9 +16,9 @@ const PlaceOrderScreen = ({ history }) => {
       cart.cartItems.reduce((acc, curr) => curr.price * curr.qty + acc, 0),
     ),
   )
-  cart.shippingPrice = Number(addDecimals(100))
-  cart.taxPrice = Number(addDecimals(40))
-  cart.totalPrice = Number(cart.itemsPrice + cart.shippingPrice + cart.taxPrice)
+  cart.shippingCost = Number(addDecimals(100))
+  cart.tax = Number(addDecimals(40))
+  cart.totalPrice = Number(cart.itemsPrice + cart.shippingCost + cart.tax)
 
   const dispatch = useDispatch()
 
@@ -109,13 +109,13 @@ const PlaceOrderScreen = ({ history }) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>${cart.shippingPrice}</Col>
+                  <Col>${cart.shippingCost}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${cart.taxPrice}</Col>
+                  <Col>${cart.tax}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>

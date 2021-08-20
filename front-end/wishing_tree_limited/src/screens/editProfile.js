@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  InputGroup,
+  FormControl,
+} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/formContainer'
 import Message from '../components/message'
@@ -20,6 +27,7 @@ const ProfileScreen = ({ history }) => {
   const [address2, setAddress2] = useState('')
   const [country, setCountry] = useState('')
   const [city, setCity] = useState('')
+  const [contactNum, setContactNum] = useState('')
 
   // States: Show Error or success message
   const [passwordMessage, setPasswordMessage] = useState(null)
@@ -56,6 +64,7 @@ const ProfileScreen = ({ history }) => {
         setAddress2(user.address2 ? user.address2 : '')
         setCountry(user.country ? user.country : '')
         setCity(user.city ? user.city : '')
+        setContactNum(user.contactNum ? user.contactNum : '')
       }
     }
   }, [dispatch, history, userInfo, user])
@@ -69,6 +78,7 @@ const ProfileScreen = ({ history }) => {
           user._id,
           username,
           email,
+          contactNum,
           city,
           currentPassword,
           password,
@@ -136,6 +146,7 @@ const ProfileScreen = ({ history }) => {
           type="text"
           placeholder={'Enter floor, Block and Room'}
           value={address1}
+          required={false}
           onChange={(e) => setAddress1(e.target.value)}
         />
         <FormComponent
@@ -143,11 +154,15 @@ const ProfileScreen = ({ history }) => {
           type="text"
           placeholder={'Enter Steet and District'}
           value={address2}
+          required={false}
           onChange={(e) => setAddress2(e.target.value)}
         />
         <Form.Group className="py-2">
           <Form.Label>Country or Region (optional)</Form.Label>
-          <Form.Select onChange={(e) => setCountry(e.target.value)}>
+          <Form.Select
+            onChange={(e) => setCountry(e.target.value)}
+            value={country}
+          >
             <option value="">Select a Country or Region</option>
             <option value="Hong Kong">Hong Kong</option>
             <option value="Japan">Japan</option>
@@ -159,8 +174,22 @@ const ProfileScreen = ({ history }) => {
           type="text"
           placeholder={'Enter City'}
           value={city}
+          required={false}
           onChange={(e) => setCity(e.target.value)}
         />
+
+        <Form.Group className="py-2">
+          <Form.Label>{'Contact Number'}</Form.Label>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>
+              {country === 'Hong Kong' ? '+852' : '+81'}
+            </InputGroup.Text>
+            <FormControl
+              value={contactNum}
+              onChange={(e) => setContactNum(e.target.value)}
+            />
+          </InputGroup>
+        </Form.Group>
 
         <FormComponent
           label="Old Password"

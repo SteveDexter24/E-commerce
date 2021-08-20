@@ -9,6 +9,7 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAIL,
+  USER_DETAILS_RESET,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
@@ -40,7 +41,7 @@ export const login = (email, password) => async (dispatch) => {
   }
 }
 
-export const logout = (userId, token) => async (dispatch, getState) => {
+export const logout = (userId) => async (dispatch, getState) => {
   const { token } = getState().userAuth.userInfo
   try {
     const config = {
@@ -48,7 +49,7 @@ export const logout = (userId, token) => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`,
       },
     }
-    await user.post(
+    const { data } = await user.post(
       '/signout',
       {
         userId: userId,
@@ -57,8 +58,13 @@ export const logout = (userId, token) => async (dispatch, getState) => {
       config,
     )
 
-    dispatch({ type: USER_LOGOUT })
+    dispatch({ type: USER_LOGOUT, payload: data })
     localStorage.removeItem('userInfo')
+    localStorage.removeItem('shippingAddress')
+    localStorage.removeItem('paymentMethod')
+
+    dispatch({ type: USER_DETAILS_RESET })
+
     // history.push('/login')
   } catch (error) {
     console.log(error)
@@ -127,6 +133,7 @@ export const updateUserProfile = (
   id,
   username,
   email,
+  contactNum,
   city,
   currentPassword,
   password,
@@ -149,6 +156,7 @@ export const updateUserProfile = (
       `/user/${id}`,
       {
         username,
+        contactNum,
         email,
         city,
         currentPassword,

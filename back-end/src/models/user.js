@@ -84,6 +84,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    contactNum: {
+      type: String,
+      trim: true,
+    },
     cart: {
       type: Schema.Types.ObjectId,
     },
