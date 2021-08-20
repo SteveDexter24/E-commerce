@@ -1,104 +1,106 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
 const orderSchema = new mongoose.Schema(
-  {
-    user: {
-      username: { type: String },
-      userId: { type: Schema.Types.ObjectId },
-      name: { type: String, required: true },
-      surname: { type: String, required: true },
-      email: { type: String, required: true },
-      contactNum: { type: String, required: true },
-    },
-
-    orderItems: [
-      {
-        productName: { type: String, required: true },
-        qty: { type: Number, required: true },
-        image: { type: String, required: true },
-        size: { type: String, required: true },
-        color: { type: String, required: true },
-        product: {
-          type: Schema.Types.ObjectId,
-          required: true,
-          ref: 'products',
+    {
+        user: {
+            username: { type: String },
+            userId: { type: Schema.Types.ObjectId },
+            name: { type: String, required: true },
+            surname: { type: String, required: true },
+            email: { type: String, required: true },
+            contactNum: { type: String, required: true },
         },
-      },
-    ],
 
-    shippingAddress: {
-      address1: { type: String, required: true },
-      address2: { type: String, required: true },
-      city: { type: String, required: true },
-      country: { type: String, required: true },
-    },
+        orderItems: [
+            {
+                name: { type: String, required: true },
+                qty: { type: Number, required: true },
+                image: [{ type: String, required: true }],
+                size: { type: String, required: true },
+                color: { type: String, required: true },
+                price: { type: String, required: true },
+                productId: {
+                    type: Schema.Types.ObjectId,
+                    required: true,
+                    ref: "products",
+                },
+            },
+        ],
 
-    paymentMethod: {
-      type: String,
-      required: true,
-    },
+        shippingAddress: {
+            address1: { type: String, required: true },
+            address2: { type: String, required: true },
+            city: { type: String, required: true },
+            country: { type: String, required: true },
+        },
 
-    paymentResult: {
-      id: { type: String },
-      status: { type: String },
-      update_items: { type: String },
-      email_address: { type: String },
-    },
+        paymentMethod: {
+            type: String,
+            required: true,
+        },
 
-    shippingCost: {
-      type: Number,
-      required: true,
-      default: 0.0,
-    },
+        paymentResult: {
+            id: { type: String },
+            status: { type: String },
+            update_items: { type: String },
+            email_address: { type: String },
+        },
 
-    tax: {
-      type: Number,
-      required: true,
-      default: 0.0,
-    },
+        shippingCost: {
+            type: Number,
+            required: true,
+            default: 0.0,
+        },
 
-    totalPrice: {
-      type: Number,
-      required: true,
-      default: 0.0,
-    },
+        tax: {
+            type: Number,
+            required: true,
+            default: 0.0,
+        },
 
-    isPaid: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
+        totalPrice: {
+            type: Number,
+            required: true,
+            default: 0.0,
+        },
 
-    paidAt: {
-      type: Data,
-    },
+        isPaid: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
 
-    isDelivered: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
+        paidAt: {
+            type: Date,
+        },
 
-    deliveredAt: {
-      type: Date,
-    },
+        isDelivered: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
 
-    deliveryMethod: {
-      type: String,
-      required: true,
-    },
+        deliveredAt: {
+            type: Date,
+        },
 
-    creditCardNum: {
-      type: String,
-    },
-    discounted: {
-      type: String,
-    },
-  },
-  { timestamps: true },
-)
+        deliveryMethod: {
+            type: String,
+            required: true,
+            default: "Deliver",
+        },
 
-const Order = mongoose.model('orders', orderSchema)
-module.exports = { orderSchema, Order }
+        creditCardNum: {
+            type: String,
+        },
+        discounted: {
+            type: String,
+        },
+    },
+    { timestamps: true }
+);
+
+const Order = mongoose.model("orders", orderSchema);
+module.exports = { orderSchema, Order };
