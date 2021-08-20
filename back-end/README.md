@@ -29,96 +29,112 @@ nodemon index.js
 
 ```
 const userSchema = new mongoose.Schema(
-    {
-        name: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        surname: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        username: {
-            type: String,
-            required: true,
-            minlength: 4,
-            maxlength: 20,
-            trim: true,
-            unique: true,
-        },
-        password: {
-            type: String,
-            trim: true,
-            required: true,
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        tokens: [
-            {
-                token: {
-                    type: String,
-                    required: true,
-                },
-            },
-        ],
-        role: {
-            type: String,
-            required: true,
-            default: "user",
-        },
-        memberShip: {
-            type: String,
-            default: "member",
-            required: true,
-        },
-        language: {
-            type: String,
-            required: true,
-            default: "en",
-        },
-        location: {
-            type: Array,
-        },
-        address: {
-            type: String,
-            trim: true,
-        },
-        billingAddress: {
-            type: String,
-            trim: true,
-        },
-        creditCardNum: {
-            type: String,
-            trim: true,
-        },
-        creditCardName: {
-            type: String,
-            trim: true,
-        },
-        cart: {
-            type: Schema.Types.ObjectId,
-        },
-        orderHistory: {
-            type: Schema.Types.ObjectId,
-        },
-        likedProducts: [
-            {
-                type: Schema.Types.ObjectId,
-            },
-        ],
-        createdAt: {
-            type: Date,
-            default: Date.now(),
-            required: true,
-        },
+  {
+    name: {
+      type: String,
+      trim: true,
     },
-    { timestamps: true }
-);
+    surname: {
+      type: String,
+      trim: true,
+    },
+    username: {
+      type: String,
+      required: true,
+      minlength: 4,
+      maxlength: 20,
+      trim: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    role: {
+      type: String,
+      required: true,
+      default: 'user',
+    },
+    memberShip: {
+      type: String,
+      default: 'member',
+      required: true,
+    },
+    language: {
+      type: String,
+      required: true,
+      default: 'en',
+    },
+    location: {
+      type: Array,
+    },
+    address1: {
+      type: String,
+      trim: true,
+    },
+    address2: {
+      type: String,
+      trim: true,
+    },
+    city: {
+      type: String,
+      trim: true,
+    },
+    country: {
+      type: String,
+      trim: true,
+    },
+    billingAddress: {
+      type: String,
+      trim: true,
+    },
+    creditCardNum: {
+      type: String,
+      trim: true,
+    },
+    creditCardName: {
+      type: String,
+      trim: true,
+    },
+    contactNum: {
+      type: String,
+      trim: true,
+    },
+    cart: {
+      type: Schema.Types.ObjectId,
+    },
+    orderHistory: [
+      {
+        type: Schema.Types.ObjectId,
+      },
+    ],
+    likedProducts: [
+      {
+        type: Schema.Types.ObjectId,
+      },
+    ],
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+      required: true,
+    },
+  },
+  { timestamps: true },
+)
 ```
 
 ### Product Schema
@@ -225,51 +241,101 @@ const productSchema = new mongoose.Schema({
 ### Order Schema
 
 ```
-const orderSchema = new mongoose.Schema({
-  first_name: {
-    type: String,
-    required: true,
-  },
-  last_name: {
-    type: String,
-    required: true,
-  },
-  delivery_address: {
-    type: String,
-    required: true,
-  },
-  delivery_method: {
-    type: String,
-    required: true,
-  },
-  phoneNumber: {
-    type: String,
-    required: true,
-  },
-  payment: {
-    payment_type: {
+const orderSchema = new mongoose.Schema(
+  {
+    user: {
+      username: { type: String },
+      userId: { type: Schema.Types.ObjectId },
+      name: { type: String, required: true },
+      surname: { type: String, required: true },
+      email: { type: String, required: true },
+      contactNum: { type: String, required: true },
+    },
+
+    orderItems: [
+      {
+        productName: { type: String, required: true },
+        qty: { type: Number, required: true },
+        image: { type: String, required: true },
+        size: { type: String, required: true },
+        color: { type: String, required: true },
+        product: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: 'products',
+        },
+      },
+    ],
+
+    shippingAddress: {
+      address1: { type: String, required: true },
+      address2: { type: String, required: true },
+      city: { type: String, required: true },
+      country: { type: String, required: true },
+    },
+
+    paymentMethod: {
+      type: String,
+      required: true,
+    },
+
+    paymentResult: {
+      id: { type: String },
+      status: { type: String },
+      update_items: { type: String },
+      email_address: { type: String },
+    },
+
+    shippingCost: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+
+    tax: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+
+    totalPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
+    },
+
+    isPaid: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+
+    paidAt: {
+      type: Data,
+    },
+
+    isDelivered: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+
+    deliveredAt: {
+      type: Date,
+    },
+
+    deliveryMethod: {
+      type: String,
+      required: true,
+    },
+
+    creditCardNum: {
       type: String,
     },
-    cardNumber: {
+    discounted: {
       type: String,
     },
   },
-  billingAddress: {
-    type: String,
-    required: true,
-  },
-  products: [
-    {
-      type: Schema.Types.ObjectId,
-    },
-  ],
-  totalPrice: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  discounted: {
-    type: String,
-  },
-})
+  { timestamps: true },
+)
 ```
