@@ -9,9 +9,14 @@ import { createOrder } from '../actions/order'
 
 const PlaceOrderScreen = ({ history }) => {
   // Get states from redux
+  // Cart Reducer
   const cart = useSelector((state) => state.cart)
   const { cartItems, shippingAddress, paymentMethod, userShippingInfo } = cart
   const { address1, address2, city, country } = shippingAddress
+
+  // Order Reducer
+  const orderCreate = useSelector((state) => state.orderCreate)
+  const { order, success, error } = orderCreate
 
   cart.itemsPrice = Number(
     addDecimals(
@@ -28,17 +33,23 @@ const PlaceOrderScreen = ({ history }) => {
     if (!shippingAddress || !userShippingInfo) {
       history.push('/shipping')
     }
-  }, [dispatch, history, cart])
+    if (success) {
+      setTimeout(() => {
+        history.push(`/order/${order._id}`)
+      }, 2000)
+    }
+  }, [dispatch, history, cart, success])
 
   const placeOrderHandler = () => {
-    console.log('place order')
-    // console.log(cart, userInfo._id)
     dispatch(
       createOrder({
+        user: userShippingInfo,
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
-        user: userShippingInfo,
         paymentMethod: paymentMethod,
+        shippingCost: cart.shippingCost,
+        tax: cart.tax,
+        totalPrice: cart.totalPrice,
       }),
     )
   }
@@ -46,7 +57,12 @@ const PlaceOrderScreen = ({ history }) => {
   return (
     <>
       <CheckoutSteps step1 step2 step3 step4 />
-
+      {error && <Message variant="danger">{error}</Message>}
+      {success && (
+        <Message variant="success">
+          {'Shipping Information checks out! Proceed to payment'}
+        </Message>
+      )}
       <Row>
         <Col md={9}>
           <ListGroup variant="flush">
@@ -139,10 +155,10 @@ const PlaceOrderScreen = ({ history }) => {
                 <span className="d-grid gap-2">
                   <Button
                     type="button"
-                    disabled={cartItems.length === 0}
+                    disabled={cartItems.length === 0 || success}
                     onClick={placeOrderHandler}
                   >
-                    Order
+                    Proceed to Payment
                   </Button>
                 </span>
               </ListGroup.Item>

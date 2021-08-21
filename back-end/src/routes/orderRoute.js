@@ -1,13 +1,23 @@
-const express = require("express");
+const express = require('express')
 
 // Import auth middleware
-const auth = require("../middlewares/auth");
+const auth = require('../middlewares/auth')
+
+// Import Admin auth middleware
+const adminAuth = require('../middlewares/adminAuth')
 
 // Import Order Controller
-const OrderController = require("../controllers/orderController");
+const OrderController = require('../controllers/orderController')
+const { Order } = require('../models/orders')
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/api/order", auth, OrderController.addOrderItems);
+// User and Admin access only
+router.post('/api/order', auth, OrderController.addOrderItems)
+router.get('/api/order/:id', auth, OrderController.getOrder)
 
-module.exports = router;
+// Admin access only
+// Get all the orders from the database
+//router.get('/api/orders', auth, adminAuth, OrderController.getAllOrders)
+
+module.exports = router
