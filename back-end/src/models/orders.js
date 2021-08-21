@@ -41,10 +41,15 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    currency: {
+      type: String,
+      required: true,
+    },
+
     paymentResult: {
       id: { type: String },
       status: { type: String },
-      update_items: { type: String },
+      update_time: { type: String },
       email_address: { type: String },
     },
 
@@ -64,6 +69,10 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
       default: 0.0,
+    },
+    itemsPrice: {
+      type: Number,
+      required: true,
     },
 
     isPaid: {
