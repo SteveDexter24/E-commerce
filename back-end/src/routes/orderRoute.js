@@ -15,6 +15,7 @@ const router = express.Router()
 // User and Admin access only
 router.post('/api/order', auth, OrderController.addOrderItems)
 router.get('/api/order/:id', auth, OrderController.getOrder)
+router.patch('/api/order/:id/pay', auth, OrderController.updateOrderToPaid)
 
 // Admin access only
 // Get all the orders from the database

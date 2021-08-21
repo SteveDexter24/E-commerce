@@ -26,10 +26,10 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
       <Nav.Item>
         {step3 ? (
           <LinkContainer to="/payment">
-            <Nav.Link>Payment</Nav.Link>
+            <Nav.Link>Select Payment</Nav.Link>
           </LinkContainer>
         ) : (
-          <Nav.Link disabled>Payment</Nav.Link>
+          <Nav.Link disabled>Select Payment</Nav.Link>
         )}
       </Nav.Item>
       <Nav.Item>
@@ -41,6 +41,15 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
           <Nav.Link disabled>Place order</Nav.Link>
         )}
       </Nav.Item>
+      {/* <Nav.Item>
+        {step5 ? (
+          <LinkContainer to="/order/">
+            <Nav.Link>Pay</Nav.Link>
+          </LinkContainer>
+        ) : (
+          <Nav.Link disabled>Pay</Nav.Link>
+        )}
+      </Nav.Item> */}
     </Nav>
   )
 }

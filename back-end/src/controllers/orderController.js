@@ -12,6 +12,7 @@ module.exports = {
       shippingCost,
       tax,
       totalPrice,
+      itemsPrice,
     } = cart
 
     try {
@@ -32,7 +33,13 @@ module.exports = {
         throw new Error('Shipping address is required')
       }
 
-      if (!paymentMethod || !shippingCost || !tax || !totalPrice) {
+      if (
+        !paymentMethod ||
+        !shippingCost ||
+        !tax ||
+        !totalPrice ||
+        !itemsPrice
+      ) {
         throw new Error(
           'Some shipping information such as payment methods, shipping fees are missing',
         )
@@ -55,10 +62,31 @@ module.exports = {
     }
   },
   async getOrder(req, res) {
+    console.log('get order')
     const orderId = req.params.id
     try {
       const order = await Order.findById(orderId)
       res.send(order)
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  },
+  // update order to paid
+  async updateOrderToPaid(req, res) {
+    const orderId = req.params.id
+    try {
+      const order = await Order.findById(orderId)
+      order.isPaid = true
+      order.paidAt = Date.now()
+      // from paypal
+      order.paymentResult = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_address: req.body.pair.email_address,
+      }
+      const updatedOrder = await order.save()
+      res.send(updatedOrder)
     } catch (error) {
       res.status(404).send({ message: error.message })
     }
