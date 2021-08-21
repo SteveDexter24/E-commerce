@@ -5,6 +5,7 @@ import {
   CART_REMOVE_ITEM,
   CART_SAVE_SHIPPING_ADDRESS,
   CART_SAVE_PAYMENT_METHOD,
+  CART_SAVE_USER_SHIPPING_INFO,
 } from './types'
 
 export const addToCart = (productId, qty, sizeType, color) => async (
@@ -76,6 +77,14 @@ export const saveShippingAddress = (data) => async (dispatch) => {
     payload: data,
   })
   localStorage.setItem('shippingAddress', JSON.stringify(data))
+}
+
+export const saveUserShippingInfo = (data) => async (dispatch) => {
+  dispatch({
+    type: CART_SAVE_USER_SHIPPING_INFO,
+    payload: data,
+  })
+  localStorage.setItem('userShippingInfo', JSON.stringify(data))
 }
 
 export const savePaymentMethod = (paymentMethod) => async (dispatch) => {

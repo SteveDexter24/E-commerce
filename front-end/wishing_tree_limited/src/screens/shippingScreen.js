@@ -8,7 +8,7 @@ import {
   FormControl,
 } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { saveShippingAddress } from '../actions/cart'
+import { saveShippingAddress, saveUserShippingInfo } from '../actions/cart'
 import FormContainer from '../components/formContainer'
 import FormComponent from '../components/formComponent'
 import CheckoutSteps from '../components/checkoutSteps'
@@ -50,7 +50,6 @@ const ShippingScreen = ({ history }) => {
           shippingAddress.contactNum ? shippingAddress.contactNum : '',
         )
       } else {
-        console.log(userInfo)
         setAddress1(userInfo.address1 ? userInfo.address1 : '')
         setAddress2(userInfo.address2 ? userInfo.address2 : '')
         setCountry(userInfo.country ? userInfo.country : '')
@@ -68,16 +67,14 @@ const ShippingScreen = ({ history }) => {
 
     dispatch(
       saveShippingAddress({
-        name,
-        surname,
-        email,
         address1,
         address2,
-        contactNum,
         country,
         city,
       }),
     )
+
+    dispatch(saveUserShippingInfo({ name, surname, email, contactNum }));
     history.push('/payment')
   }
 
