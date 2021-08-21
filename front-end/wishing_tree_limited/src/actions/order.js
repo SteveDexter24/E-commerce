@@ -6,7 +6,7 @@ import {
 import orders from '../apis/api'
 
 // Update user Info
-export const createOrder = (cart, id) => async (dispatch, getState) => {
+export const createOrder = (cart) => async (dispatch, getState) => {
   const { userInfo } = getState().userAuth
   const { token } = userInfo
   try {
@@ -21,7 +21,6 @@ export const createOrder = (cart, id) => async (dispatch, getState) => {
       `/order`,
       {
         cart,
-        id,
       },
       config,
     )

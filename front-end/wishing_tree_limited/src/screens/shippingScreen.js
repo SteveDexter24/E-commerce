@@ -31,29 +31,31 @@ const ShippingScreen = ({ history }) => {
 
   // shipping address redux store
   const cart = useSelector((state) => state.cart)
-  const { shippingAddress } = cart
+  const { shippingAddress, userShippingInfo } = cart
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
     } else {
-      if (shippingAddress) {
+      if (shippingAddress && userShippingInfo) {
         setAddress1(shippingAddress.address1 ? shippingAddress.address1 : '')
         setAddress2(shippingAddress.address2 ? shippingAddress.address2 : '')
         setCountry(shippingAddress.country ? shippingAddress.country : '')
         setCity(shippingAddress.city ? shippingAddress.city : '')
-        setEmail(shippingAddress.email ? shippingAddress.email : '')
-        setName(shippingAddress.name ? shippingAddress.name : '')
-        setSurname(shippingAddress.surname ? shippingAddress.surname : '')
+
+        setEmail(userShippingInfo.email ? userShippingInfo.email : '')
+        setName(userShippingInfo.name ? userShippingInfo.name : '')
+        setSurname(userShippingInfo.surname ? userShippingInfo.surname : '')
         setContactNum(
-          shippingAddress.contactNum ? shippingAddress.contactNum : '',
+          userShippingInfo.contactNum ? userShippingInfo.contactNum : '',
         )
       } else {
         setAddress1(userInfo.address1 ? userInfo.address1 : '')
         setAddress2(userInfo.address2 ? userInfo.address2 : '')
         setCountry(userInfo.country ? userInfo.country : '')
         setCity(userInfo.city ? userInfo.city : '')
+
         setEmail(userInfo.email ? userInfo.email : '')
         setName(userInfo.name ? userInfo.name : '')
         setSurname(userInfo.surname ? userInfo.surname : '')
@@ -74,7 +76,15 @@ const ShippingScreen = ({ history }) => {
       }),
     )
 
-    dispatch(saveUserShippingInfo({ name, surname, email, contactNum }));
+    dispatch(
+      saveUserShippingInfo({
+        name,
+        surname,
+        email,
+        contactNum,
+        userId: userInfo._id,
+      }),
+    )
     history.push('/payment')
   }
 
