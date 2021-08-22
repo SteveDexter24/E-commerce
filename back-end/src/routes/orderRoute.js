@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 
 // Import auth middleware
 const auth = require('../middlewares/auth')
@@ -19,6 +20,12 @@ router.post(
   '/api/order/:id/create-checkout-session',
   auth,
   OrderController.createCheckOutSessionWithStripe,
+)
+// Webhook Endpoint
+router.post(
+  '/webhook',
+  bodyParser.raw({ type: 'application/json' }),
+  OrderController.webhook,
 )
 
 // Admin access only
