@@ -9,6 +9,9 @@ import {
   ORDER_PAY_SUCCESS,
   ORDER_PAY_FAIL,
   ORDER_PAY_RESET,
+  ORDER_SESSION_REQUEST,
+  ORDER_SESSION_SUCCESS,
+  ORDER_SESSION_FAIL,
 } from '../actions/types'
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -50,6 +53,22 @@ export const orderPayReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case ORDER_PAY_RESET:
       return {}
+    default:
+      return state
+  }
+}
+
+export const checkoutWithStripeReducer = (
+  state = { session: false },
+  action,
+) => {
+  switch (action.type) {
+    case ORDER_SESSION_REQUEST:
+      return { session: true }
+    case ORDER_SESSION_SUCCESS:
+      return { session: false, sessionId: action.payload }
+    case ORDER_SESSION_FAIL:
+      return { session: false, error: action.payload }
     default:
       return state
   }

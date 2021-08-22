@@ -7,17 +7,17 @@ export const acceptablePaymentMethods = [
     imageClass: 'fab fa-cc-paypal',
   },
   {
-    label: 'Apple Pay',
+    label: 'Apple Pay (Only on Safari)',
     id: 'Apple Pay',
     name: 'paymentMethod',
     value: 'Apple Pay',
     imageClass: 'fab fa-cc-apple-pay',
   },
   {
-    label: 'Google Wallet',
-    id: 'Google Wallet',
+    label: 'Google Pay (Only on Google Chrome)',
+    id: 'Google Pay',
     name: 'paymentMethod',
-    value: 'Google Wallet',
+    value: 'Google Pay',
     imageClass: 'fab fa-google-wallet',
   },
   {

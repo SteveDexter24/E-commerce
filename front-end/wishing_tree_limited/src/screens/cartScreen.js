@@ -99,6 +99,7 @@ const CartScreen = ({ match, location, history }) => {
                                 item.size,
                                 item.color,
                                 index,
+                                item.description,
                               ),
                             )
                           }

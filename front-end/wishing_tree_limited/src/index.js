@@ -8,11 +8,18 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import reduxThunk from 'redux-thunk'
 import reducers, { initialState } from './reducers'
 
+// Stripe
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+
 // App component
 import App from './app'
 
 // Redux Dev Tools
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+// Stripe Promise
+const stripePromise = loadStripe(process.env.REACT_APP_PUBLISHABLE_KEY)
 
 const store = createStore(
   reducers,
@@ -22,7 +29,9 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Elements stripe={stripePromise}>
+      <App />
+    </Elements>
   </Provider>,
   document.getElementById('root'),
 )

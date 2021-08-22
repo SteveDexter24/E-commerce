@@ -9,6 +9,9 @@ import {
   ORDER_PAY_SUCCESS,
   ORDER_PAY_FAIL,
   ORDER_PAY_RESET,
+  ORDER_SESSION_REQUEST,
+  ORDER_SESSION_SUCCESS,
+  ORDER_SESSION_FAIL,
 } from './types'
 import orders from '../apis/api'
 
@@ -90,6 +93,46 @@ export const payOrder = (orderId, paymentResult) => async (
   } catch (error) {
     dispatch({
       type: ORDER_PAY_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const createSessionCheckoutWithStripe = (
+  line_items,
+  email,
+  payment_method_types,
+  orderId,
+  shippingCost,
+  tax,
+) => async (dispatch, getState) => {
+  const { userInfo } = getState().userAuth
+  const { token } = userInfo
+
+  dispatch({ type: ORDER_SESSION_REQUEST })
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const { data } = await orders.post(
+    `/order/${orderId}/create-checkout-session`,
+    { line_items, email, payment_method_types, shippingCost, tax },
+    config,
+  )
+
+  dispatch({ type: ORDER_SESSION_SUCCESS, payload: data })
+
+  try {
+  } catch (error) {
+    dispatch({
+      type: ORDER_SESSION_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -4,18 +4,37 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Message from '../components/message'
 import Loader from '../components/loader'
-import { getOrderDetails } from '../actions/order'
+import {
+  getOrderDetails,
+  createSessionCheckoutWithStripe,
+} from '../actions/order'
 import { addDecimals } from '../Utils/addDecimals'
+import { paymentDecode } from '../Utils/paymentDecode'
+import { useStripe } from '@stripe/react-stripe-js'
 
 const OrderScreen = ({ history, match }) => {
   const orderId = match.params.id
+
+  // State
+  const [message, setMessage] = useState('')
+  const [buttonLoading, setButtonLoading] = useState(false)
+  const [stripeError, setStripeError] = useState(false)
 
   // Get states from redux
   // Order Reducer
   const orderDetails = useSelector((state) => state.orderDetails)
   const { order, loading, error } = orderDetails
 
+  // Stripe Order Session
+  const checkoutWithStripe = useSelector((state) => state.checkoutWithStripe)
+  const { session, sessionId } = checkoutWithStripe
+
+  // UserAuth Reducer;
+  const userAuth = useSelector((state) => state.userAuth)
+  const { userInfo } = userAuth
+
   const dispatch = useDispatch()
+  const stripe = useStripe()
 
   useEffect(() => {
     if (!order || order._id !== orderId) {
@@ -24,14 +43,59 @@ const OrderScreen = ({ history, match }) => {
     if (!orderId) {
       history.push('/place-order')
     }
-  }, [dispatch, order, orderId])
+    if (!userInfo) {
+      history.push('/login')
+    }
+
+    if (session) {
+      setButtonLoading(true)
+    }
+    if (sessionId) {
+      console.log(sessionId)
+      const { error } = stripe.redirectToCheckout({
+        sessionId,
+      })
+      if (error) {
+        setStripeError(true)
+      }
+    }
+  }, [dispatch, order, orderId, sessionId, session, userAuth])
 
   const placeOrderHandler = () => {
-    console.log('to pay')
+    const line_items = order.orderItems.map((item) => {
+      return {
+        price_data: {
+          currency: 'hkd',
+          product_data: {
+            name: item.name,
+            description: item.description
+              ? item.description
+              : 'No description available',
+            //images: 'item.image', // need to have a valid image url
+          },
+          unit_amount: item.price * 100,
+        },
+        quantity: item.qty,
+      }
+    })
+
+    dispatch(
+      createSessionCheckoutWithStripe(
+        line_items,
+        order.user.email,
+        [paymentDecode(order.paymentMethod)],
+        orderId,
+        order.shippingCost,
+        order.tax,
+      ),
+    )
   }
 
   return order ? (
     <>
+      {stripeError && (
+        <Message variant="danger">Could not create Payment Session</Message>
+      )}
       <h1>Order Number: #{order._id}</h1>
       <Row>
         <Col md={9}>
@@ -147,10 +211,14 @@ const OrderScreen = ({ history, match }) => {
                 <span className="d-grid gap-2">
                   <Button
                     type="button"
-                    disabled={order.orderItems.length === 0}
+                    disabled={
+                      order.orderItems.length === 0 ||
+                      order.isPaid ||
+                      buttonLoading
+                    }
                     onClick={placeOrderHandler}
                   >
-                    Pay
+                    {'Proceed to Payment'}
                   </Button>
                 </span>
               </ListGroup.Item>

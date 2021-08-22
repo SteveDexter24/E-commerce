@@ -14,6 +14,7 @@ import ShippingScreen from './screens/shippingScreen'
 import PaymentScreen from './screens/paymentScreen'
 import PlaceOrderScreen from './screens/placeOrderScreen'
 import OrderScreen from './screens/orderScreen'
+import OrderSuccessScreen from './screens/orderSuccessScreen'
 import './index.css'
 
 const App = () => {
@@ -32,6 +33,11 @@ const App = () => {
           <Route path="/payment" exact component={PaymentScreen} />
           <Route path="/placeorder" exact component={PlaceOrderScreen} />
           <Route path="/order/:id" exact component={OrderScreen} />
+          <Route
+            path="/order/:id/success"
+            exact
+            component={OrderSuccessScreen}
+          />
           <Route path="/" exact component={HomeScreen} />
         </Container>
       </main>
