@@ -171,7 +171,7 @@ module.exports = {
       })
     }
   },
-  async webhook(req, res) {
+  async webhookStripe(req, res) {
     const event = req.body
     switch (event.type) {
       case 'checkout.session.completed':
@@ -207,7 +207,8 @@ module.exports = {
           updateUser.orderHistory.push(client_reference_id)
           await updateUser.save()
 
-          // res.send({ message: 'successfully updated user info' })
+          // Future email support
+
         } catch (error) {
           res.send({ message: error.message })
         }

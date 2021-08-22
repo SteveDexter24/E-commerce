@@ -25,7 +25,7 @@ router.post(
 router.post(
   '/webhook',
   bodyParser.raw({ type: 'application/json' }),
-  OrderController.webhook,
+  OrderController.webhookStripe,
 )
 
 // Admin access only
