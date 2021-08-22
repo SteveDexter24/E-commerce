@@ -24,6 +24,7 @@ export const addToCart = (productId, qty, sizeType, color) => async (
     payload: {
       productId: data._id,
       name: data.productName[getState().settings.language],
+      description: data.description[getState().settings.language],
       image: data.image,
       price: data.price[getState().settings.currency],
       size: sizeType,
@@ -42,6 +43,7 @@ export const updateCart = (
   sizeType,
   color,
   cartIndex,
+  description,
 ) => async (dispatch, getState) => {
   dispatch({
     type: UPDATE_CART_ITEM,
@@ -51,6 +53,7 @@ export const updateCart = (
       size: sizeType,
       color: color,
       cartIndex: cartIndex,
+      description: description,
     },
   })
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))

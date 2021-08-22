@@ -21,6 +21,7 @@ const orderSchema = new mongoose.Schema(
         size: { type: String, required: true },
         color: { type: String, required: true },
         price: { type: String, required: true },
+        description: { type: String, required: true },
         productId: {
           type: Schema.Types.ObjectId,
           required: true,

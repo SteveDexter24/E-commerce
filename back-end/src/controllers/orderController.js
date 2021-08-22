@@ -1,5 +1,6 @@
 const { Order } = require('../models/orders')
 const { User } = require('../models/user')
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 module.exports = {
   async addOrderItems(req, res) {
@@ -89,6 +90,85 @@ module.exports = {
       res.send(updatedOrder)
     } catch (error) {
       res.status(404).send({ message: error.message })
+    }
+  },
+  // Checkout session with Stripe
+  async createCheckOutSessionWithStripe(req, res) {
+    const {
+      line_items,
+      email,
+      payment_method_types,
+      tax,
+      shippingCost,
+    } = req.body
+    const orderId = req.params.id
+    console.log(line_items)
+    // add Shipping
+    line_items.push({
+      price_data: {
+        currency: 'hkd',
+        product_data: {
+          name: 'Shipping Fee',
+          description: 'standard shipping',
+        },
+        unit_amount: shippingCost * 100,
+      },
+      quantity: 1,
+    })
+
+    // add tax
+    line_items.push({
+      price_data: {
+        currency: 'hkd',
+        product_data: {
+          name: 'Tax',
+          description: 'Tax',
+        },
+        unit_amount: tax * 100,
+      },
+      quantity: 1,
+    })
+
+    let session
+
+    try {
+      if (!email || !payment_method_types) {
+        throw new Error('Email or payment method is required')
+      }
+      if (!shippingCost) {
+        throw new Error('Shipping cost is missing')
+      }
+      session = await stripe.checkout.sessions.create({
+        line_items: line_items,
+        customer_email: email,
+        payment_method_types,
+        payment_method_options: {
+          wechat_pay: {
+            client: 'web',
+          },
+        },
+
+        // for guest checkout
+        // shipping_rates: [process.env.STRIPE_SHIPPING_RATE_ID],
+        // shipping_address_collection: {
+        //   allowed_countries: ['HK', 'JP'],
+        // },
+
+        mode: 'payment',
+        success_url: `${process.env.WEB_APP_URL}/order/${orderId}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.WEB_APP_URL}/order/${orderId}`,
+      })
+
+      if (!session) {
+        console.log('error')
+        throw new Error()
+      }
+
+      res.status(200).send(session.id)
+    } catch (error) {
+      res.status(400).send({
+        message: 'An error occured, unable to create a checkout session',
+      })
     }
   },
 }

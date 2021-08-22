@@ -8,7 +8,6 @@ const adminAuth = require('../middlewares/adminAuth')
 
 // Import Order Controller
 const OrderController = require('../controllers/orderController')
-const { Order } = require('../models/orders')
 
 const router = express.Router()
 
@@ -16,6 +15,11 @@ const router = express.Router()
 router.post('/api/order', auth, OrderController.addOrderItems)
 router.get('/api/order/:id', auth, OrderController.getOrder)
 router.patch('/api/order/:id/pay', auth, OrderController.updateOrderToPaid)
+router.post(
+  '/api/order/:id/create-checkout-session',
+  auth,
+  OrderController.createCheckOutSessionWithStripe,
+)
 
 // Admin access only
 // Get all the orders from the database
