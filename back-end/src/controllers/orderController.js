@@ -153,7 +153,7 @@ module.exports = {
         // shipping_address_collection: {
         //   allowed_countries: ['HK', 'JP'],
         // },
-
+        client_reference_id: orderId,
         mode: 'payment',
         success_url: `${process.env.WEB_APP_URL}/order/${orderId}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.WEB_APP_URL}/order/${orderId}`,
@@ -170,5 +170,53 @@ module.exports = {
         message: 'An error occured, unable to create a checkout session',
       })
     }
+  },
+  async webhook(req, res) {
+    const event = req.body
+    switch (event.type) {
+      case 'checkout.session.completed':
+        const checkoutSession = event.data.object
+        // Update the order
+        console.log(checkoutSession)
+        const {
+          id,
+          client_reference_id, // orderId
+          customer_email,
+          payment_status,
+        } = checkoutSession
+
+        try {
+          const updateOrder = await Order.findById(client_reference_id)
+
+          // update order info
+          updateOrder.paymentResult = {
+            id: id,
+            status: payment_status,
+            update_time: Date.now(),
+            email_address: customer_email,
+            provider: 'Stripe',
+          }
+
+          updateOrder.isPaid = true ? payment_status === 'paid' : false
+          updateOrder.paidAt = Date.now()
+          await updateOrder.save()
+
+          console.log(updateOrder.user.userId)
+
+          const updateUser = await User.findById(updateOrder.user.userId)
+          updateUser.orderHistory.push(client_reference_id)
+          await updateUser.save()
+
+          // res.send({ message: 'successfully updated user info' })
+        } catch (error) {
+          res.send({ message: error.message })
+        }
+
+        console.log('Checkout session was successful')
+        break
+      default:
+        console.log(`Unhandled event type ${event.type}`)
+    }
+    res.json({ received: true })
   },
 }

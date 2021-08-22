@@ -25,10 +25,5 @@ app.use(authRoute)
 app.use(productRoute)
 app.use(userRoute)
 app.use(orderRoute)
-app.use(
-  express.json({
-    verify: (req, res, buffer) => (req['body'] = buffer),
-  }),
-)
 
 module.exports = app
