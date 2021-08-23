@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -38,7 +38,15 @@ const PlaceOrderScreen = ({ history }) => {
         history.push(`/order/${order._id}`)
       }, 2000)
     }
-  }, [dispatch, history, cart, success])
+  }, [
+    dispatch,
+    history,
+    cart,
+    success,
+    shippingAddress,
+    userShippingInfo,
+    order,
+  ])
 
   const placeOrderHandler = () => {
     dispatch(
@@ -51,7 +59,7 @@ const PlaceOrderScreen = ({ history }) => {
         tax: cart.tax,
         totalPrice: cart.totalPrice,
         itemsPrice: cart.itemsPrice,
-        currency: 'hkd'
+        currency: 'hkd',
       }),
     )
   }
@@ -66,6 +74,7 @@ const PlaceOrderScreen = ({ history }) => {
         </Message>
       )}
       <Row>
+        <h1>Order Summary</h1>
         <Col md={9}>
           <ListGroup variant="flush">
             <ListGroup.Item>
