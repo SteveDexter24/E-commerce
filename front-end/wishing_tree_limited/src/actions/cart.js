@@ -45,13 +45,25 @@ export const addToCart = (productId, qty, sizeType, color) => async (
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
-    const { data } = await product.post(
+    const response = await product.post(
       `/user/${userInfo._id}/cart`,
-      { cartItems: getState().cart.cartItems },
+      {
+        item: {
+          productId: data._id,
+          name: data.productName[getState().settings.language],
+          description: data.description[getState().settings.language],
+          image: data.image,
+          price: data.price[getState().settings.currency],
+          size: sizeType,
+          qty: Number(qty),
+          color: color,
+          totalSize: colorRemaining ? colorRemaining[0].count : 1,
+        },
+      },
       config,
     )
 
-    console.log(data)
+    console.log(response.data)
   } catch (error) {
     console.log(error)
   }
