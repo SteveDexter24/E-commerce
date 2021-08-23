@@ -3,7 +3,7 @@ const { User } = require('../models/user')
 module.exports = {
   async addToCart(req, res, next) {
     const userId = req.params.id
-    const { cartItems } = req.body
+    //const { cartItems } = req.body
     // cartItems is an array
     return
 

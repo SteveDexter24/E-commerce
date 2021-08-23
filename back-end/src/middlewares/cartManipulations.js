@@ -1,31 +1,28 @@
 const { User } = require('../models/user')
 
 const cartManipulation = (req, res, next) => {
-  const { cartItem } = req.body
-  const userId = req.params.id;
+  const userId = req.params.id
+  //console.log(userId)
+  const item = req.body.item
 
-  try {
+  //   try {
 
-    const foundUser = await User.findById(userId);
+  //     const foundUser = await User.findById(userId);
 
-    const 
+  //     const
 
-    const existItem = cartItems.find(
-    (x) =>
-      x.productId === item.productId &&
-      x.size === item.size &&
-      x.color === item.color,
-  )
+  //     const existItem = cartItems.find(
+  //     (x) =>
+  //       x.productId === item.productId &&
+  //       x.size === item.size &&
+  //       x.color === item.color,
+  //   )
 
+  //   }catch(error){
 
+  //   }
 
-  }catch(error){
-
-  }
-
-  
-
-  console.log(existItem)
+  // console.log(existItem)
   next()
 }
 
