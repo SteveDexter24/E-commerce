@@ -7,18 +7,24 @@ import Loader from '../components/loader'
 import {
   getOrderDetails,
   createSessionCheckoutWithStripe,
+  payOrder,
 } from '../actions/order'
 import { addDecimals } from '../Utils/addDecimals'
 import { paymentDecode } from '../Utils/paymentDecode'
+// Handling Stripe
 import { useStripe } from '@stripe/react-stripe-js'
+// Handling Paypal orders
+import paypalOrderScript from '../apis/api'
+import { PayPalButton } from 'react-paypal-button-v2'
+import { ORDER_PAY_RESET } from '../actions/types'
 
 const OrderScreen = ({ history, match }) => {
   const orderId = match.params.id
 
   // State
-  const [message, setMessage] = useState('')
   const [buttonLoading, setButtonLoading] = useState(false)
   const [stripeError, setStripeError] = useState(false)
+  const [sdkReady, setSDKReady] = useState(false)
 
   // Get states from redux
   // Order Reducer
@@ -27,19 +33,56 @@ const OrderScreen = ({ history, match }) => {
 
   // Stripe Order Session
   const checkoutWithStripe = useSelector((state) => state.checkoutWithStripe)
-  const { session, sessionId } = checkoutWithStripe
+  const { session, sessionId, sessionError } = checkoutWithStripe
 
-  // UserAuth Reducer;
+  // UserAuth Reducer
   const userAuth = useSelector((state) => state.userAuth)
   const { userInfo } = userAuth
+
+  // Paypal reducer
+  const orderPay = useSelector((state) => state.orderPay)
+  const { paypalLoading, paypalSuccess, paypalError } = orderPay
 
   const dispatch = useDispatch()
   const stripe = useStripe()
 
   useEffect(() => {
-    if (!order || order._id !== orderId) {
-      dispatch(getOrderDetails(orderId))
+    const addPayPalScript = async () => {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+      const { data: clientId } = await paypalOrderScript.get(
+        '/config/paypal',
+        config,
+      )
+
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=HKD`
+      script.async = true
+      script.onload = () => {
+        setSDKReady(true)
+      }
+      document.body.appendChild(script)
     }
+
+    if (!order || paypalSuccess) {
+      dispatch({ type: ORDER_PAY_RESET })
+      dispatch(getOrderDetails(orderId))
+
+      // after Paypal payment is done and successful, go to the next screen
+      // history.push('/success_page');
+    } else if (!order.isPaid) {
+      if (!window.paypal) {
+        addPayPalScript()
+      } else {
+        setSDKReady(true)
+      }
+    }
+
     if (!orderId) {
       history.push('/place-order')
     }
@@ -50,6 +93,10 @@ const OrderScreen = ({ history, match }) => {
     if (session) {
       setButtonLoading(true)
     }
+
+    if (sessionError) {
+      setButtonLoading(false)
+    }
     if (sessionId) {
       console.log(sessionId)
       const { error } = stripe.redirectToCheckout({
@@ -59,8 +106,26 @@ const OrderScreen = ({ history, match }) => {
         setStripeError(true)
       }
     }
-  }, [dispatch, order, orderId, sessionId, session, userAuth])
+  }, [
+    dispatch,
+    order,
+    orderId,
+    sessionId,
+    session,
+    userInfo,
+    orderDetails,
+    stripe,
+    history,
+    paypalSuccess,
+  ])
 
+  // Paypal payment handler
+  const paypalSuccessPaymentHandler = (paymentResult) => {
+    console.log(paymentResult)
+    dispatch(payOrder(orderId, paymentResult))
+  }
+
+  // Stripe payment handler
   const placeOrderHandler = () => {
     const line_items = order.orderItems.map((item) => {
       return {
@@ -96,6 +161,7 @@ const OrderScreen = ({ history, match }) => {
       {stripeError && (
         <Message variant="danger">Could not create Payment Session</Message>
       )}
+      {sessionError && <Message variant="danger">{sessionError}</Message>}
       <h1>Order Number: #{order._id}</h1>
       <Row>
         <Col md={9}>
@@ -207,20 +273,40 @@ const OrderScreen = ({ history, match }) => {
                   <Col>${addDecimals(order.totalPrice)}</Col>
                 </Row>
               </ListGroup.Item>
+
               <ListGroup.Item>
-                <span className="d-grid gap-2">
-                  <Button
-                    type="button"
-                    disabled={
-                      order.orderItems.length === 0 ||
-                      order.isPaid ||
-                      buttonLoading
-                    }
-                    onClick={placeOrderHandler}
-                  >
-                    {'Proceed to Payment'}
-                  </Button>
-                </span>
+                {!order.isPaid ? (
+                  <div>
+                    {order.paymentMethod === 'PayPal' ? (
+                      <div>
+                        {paypalLoading && <Loader />}
+                        {!sdkReady ? (
+                          <Loader />
+                        ) : (
+                          <PayPalButton
+                            amount={order.totalPrice}
+                            currency={'HKD'}
+                            onSuccess={paypalSuccessPaymentHandler}
+                          />
+                        )}
+                      </div>
+                    ) : (
+                      <span className="d-grid gap-2">
+                        <Button
+                          type="button"
+                          disabled={
+                            order.orderItems.length === 0 ||
+                            order.isPaid ||
+                            buttonLoading
+                          }
+                          onClick={placeOrderHandler}
+                        >
+                          {'Proceed to Payment'}
+                        </Button>
+                      </span>
+                    )}
+                  </div>
+                ) : null}
               </ListGroup.Item>
             </ListGroup>
           </Card>

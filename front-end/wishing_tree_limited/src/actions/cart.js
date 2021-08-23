@@ -35,6 +35,26 @@ export const addToCart = (productId, qty, sizeType, color) => async (
   })
 
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
+
+  // After setting the cart items, the send a post request to the server;
+  console.log(getState().cart.cartItems)
+  const { userInfo } = getState().userAuth
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+    const { data } = await product.post(
+      `/user/${userInfo._id}/cart`,
+      { cartItems: getState().cart.cartItems },
+      config,
+    )
+
+    console.log(data)
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export const updateCart = (
@@ -57,6 +77,7 @@ export const updateCart = (
     },
   })
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
+  console.log(getState().cart.cartItems)
 }
 
 export const removeItemInCart = (productId, size, color) => async (

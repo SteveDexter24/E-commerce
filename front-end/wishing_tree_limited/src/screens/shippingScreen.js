@@ -62,7 +62,7 @@ const ShippingScreen = ({ history }) => {
         setContactNum(userInfo.contactNum ? userInfo.contactNum : '')
       }
     }
-  }, [dispatch, history])
+  }, [dispatch, history, userInfo, shippingAddress, userShippingInfo])
 
   const submitHandler = (e) => {
     e.preventDefault()

@@ -14,6 +14,9 @@ const authRoute = require('./src/routes/authRoute')
 const productRoute = require('./src/routes/productRoute')
 const userRoute = require('./src/routes/userRoute')
 const orderRoute = require('./src/routes/orderRoute')
+const stripeCheckoutRoute = require('./src/routes/stripeCheckoutRoute')
+const paypalCheckoutRoute = require('./src/routes/paypalCheckoutRoute')
+const cartRoute = require('./src/routes/cartRoute')
 
 app.use(cors())
 
@@ -25,5 +28,8 @@ app.use(authRoute)
 app.use(productRoute)
 app.use(userRoute)
 app.use(orderRoute)
+app.use(cartRoute)
+app.use(stripeCheckoutRoute)
+app.use(paypalCheckoutRoute)
 
 module.exports = app

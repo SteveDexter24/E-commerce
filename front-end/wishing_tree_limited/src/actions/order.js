@@ -70,6 +70,7 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
   }
 }
 
+// For paypal
 export const payOrder = (orderId, paymentResult) => async (
   dispatch,
   getState,
@@ -114,22 +115,20 @@ export const createSessionCheckoutWithStripe = (
 
   dispatch({ type: ORDER_SESSION_REQUEST })
 
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  }
-
-  const { data } = await orders.post(
-    `/order/${orderId}/create-checkout-session`,
-    { line_items, email, payment_method_types, shippingCost, tax },
-    config,
-  )
-
-  dispatch({ type: ORDER_SESSION_SUCCESS, payload: data })
-
   try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    const { data } = await orders.post(
+      `/order/${orderId}/create-checkout-session`,
+      { line_items, email, payment_method_types, shippingCost, tax },
+      config,
+    )
+
+    dispatch({ type: ORDER_SESSION_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
       type: ORDER_SESSION_FAIL,

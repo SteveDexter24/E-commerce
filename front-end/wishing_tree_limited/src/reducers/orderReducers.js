@@ -46,11 +46,11 @@ export const orderDetailsReducer = (
 export const orderPayReducer = (state = {}, action) => {
   switch (action.type) {
     case ORDER_PAY_REQUEST:
-      return { loading: true }
+      return { paypalLoading: true }
     case ORDER_PAY_SUCCESS:
-      return { loading: false, success: true }
+      return { paypalLoading: false, paypalSuccess: true }
     case ORDER_PAY_FAIL:
-      return { loading: false, error: action.payload }
+      return { paypalloading: false, paypalError: action.payload }
     case ORDER_PAY_RESET:
       return {}
     default:
@@ -68,7 +68,7 @@ export const checkoutWithStripeReducer = (
     case ORDER_SESSION_SUCCESS:
       return { session: false, sessionId: action.payload }
     case ORDER_SESSION_FAIL:
-      return { session: false, error: action.payload }
+      return { session: false, sessionError: action.payload }
     default:
       return state
   }
