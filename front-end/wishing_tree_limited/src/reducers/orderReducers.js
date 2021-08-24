@@ -50,7 +50,7 @@ export const orderPayReducer = (state = {}, action) => {
     case ORDER_PAY_SUCCESS:
       return { paypalLoading: false, paypalSuccess: true }
     case ORDER_PAY_FAIL:
-      return { paypalloading: false, paypalError: action.payload }
+      return { paypalLoading: false, paypalError: action.payload }
     case ORDER_PAY_RESET:
       return {}
     default:

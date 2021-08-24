@@ -113,7 +113,6 @@ const OrderScreen = ({ history, match }) => {
     sessionId,
     session,
     userInfo,
-    orderDetails,
     stripe,
     history,
     paypalSuccess,
