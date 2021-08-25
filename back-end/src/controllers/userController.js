@@ -14,6 +14,44 @@ module.exports = {
       })
     }
   },
+  async deleteUser(req, res) {
+    const userId = req.params.id
+    try {
+      await User.findByIdAndDelete(userId)
+      res.status(200).send('User removed')
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  },
+  async getUserById(req, res) {
+    const userId = req.params.id
+    try {
+      const user = await User.findById(userId).select(
+        '-password -tokens -location',
+      )
+      res.status(200).send(user)
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  },
+  async updateUser(req, res) {
+    const userId = req.params.id
+    // help the change membership, role
+    const { memberShip, role } = req.body
+    try {
+      const user = await User.findById(userId)
+      if (memberShip) {
+        user.memberShip = memberShip
+      }
+      if (role) {
+        user.role = role
+      }
+      const updatedUser = await user.save()
+      res.send(updatedUser)
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  },
   async getUserAsync(req, res, next) {
     const userId = req.params.id
     try {
@@ -42,7 +80,6 @@ module.exports = {
   },
 
   async editUserAsync(req, res, next) {
-    console.log('edit user')
     const userId = req.params.id
     var itemsToEdit = Object.keys(req.body)
     itemsToEdit = itemsToEdit.filter((x) => x !== 'token')

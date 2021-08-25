@@ -20,6 +20,9 @@ import PlaceOrderScreen from './screens/placeOrderScreen'
 import OrderScreen from './screens/orderScreen'
 import OrderSuccessScreen from './screens/orderSuccessScreen'
 
+// Admin Actions
+import UserListScreen from './screens/Admin/userListScreen'
+
 import './index.css'
 
 const App = () => {
@@ -50,6 +53,8 @@ const App = () => {
             component={OrderSuccessScreen}
           />
           <Route path="/" exact component={HomeScreen} />
+          {/*Admin actions */}
+          <Route path="/admin/userlist" exact component={UserListScreen} />
         </Container>
       </main>
       <Footer />

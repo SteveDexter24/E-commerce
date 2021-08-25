@@ -20,10 +20,19 @@ import {
   USER_UPDATE_PASSWORD_REQUEST,
   USER_UPDATE_PASSWORD_SUCCESS,
   USER_UPDATE_PASSWORD_FAIL,
+  USER_ORDER_RESET,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAIL,
+  USER_LIST_RESET,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAIL,
 } from './types'
 
 import user from '../apis/api'
 import { configUtil } from '../Utils/apiConfig'
+import { errorHandler } from '../Utils/errorHandling'
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -63,15 +72,13 @@ export const logout = (userId) => async (dispatch, getState) => {
       },
       config,
     )
-
     dispatch({ type: USER_LOGOUT, payload: data })
     localStorage.removeItem('userInfo')
+    dispatch({ type: USER_DETAILS_RESET })
     localStorage.removeItem('shippingAddress')
     localStorage.removeItem('paymentMethod')
-
-    dispatch({ type: USER_DETAILS_RESET })
-
-    // history.push('/login')
+    dispatch({ type: USER_ORDER_RESET })
+    dispatch({ type: USER_LIST_RESET })
   } catch (error) {
     console.log(error)
   }
@@ -116,7 +123,6 @@ export const getUserInfo = (id) => async (dispatch, getState) => {
 
     const { data } = await user.get(`/user/${id}`, configUtil(token))
     dispatch({ type: USER_DETAILS_SUCCESS, payload: data })
-    
   } catch (error) {
     dispatch({
       type: USER_DETAILS_FAIL,
@@ -207,10 +213,37 @@ export const updateUserProfile = (
   } catch (error) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: errorHandler(error),
     })
+  }
+}
+
+// Admin Actions
+
+export const listUsers = () => async (dispatch, getState) => {
+  const { userInfo } = getState().userAuth
+  try {
+    dispatch({ type: USER_LIST_REQUEST })
+    const { data } = await user.get(`/users`, configUtil(userInfo.token))
+    dispatch({ type: USER_LIST_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: USER_LIST_FAIL,
+      payload: errorHandler(error),
+    })
+  }
+}
+
+export const deleteUser = (userId) => async (dispatch, getState) => {
+  const { userInfo } = getState().userAuth
+  try {
+    dispatch({ type: USER_DELETE_REQUEST })
+    const { data } = await user.delete(
+      `/user/${userId}/admin`,
+      configUtil(userInfo.token),
+    )
+    dispatch({ type: USER_DELETE_SUCCESS })
+  } catch (error) {
+    dispatch({ type: USER_DELETE_FAIL, payload: errorHandler(error) })
   }
 }
