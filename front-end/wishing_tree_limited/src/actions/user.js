@@ -13,10 +13,17 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
+  USER_UPDATE_LANGUAGE_REQUEST,
+  USER_UPDATE_LANGUAGE_SUCCESS,
+  USER_UPDATE_LANGUAGE_FAIL,
   USER_UPDATE_PROFILE_RESET,
+  USER_UPDATE_PASSWORD_REQUEST,
+  USER_UPDATE_PASSWORD_SUCCESS,
+  USER_UPDATE_PASSWORD_FAIL,
 } from './types'
 
 import user from '../apis/api'
+import { configUtil } from '../Utils/apiConfig'
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -107,15 +114,9 @@ export const getUserInfo = (id) => async (dispatch, getState) => {
     const { userInfo } = getState().userAuth
     const { token } = userInfo
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-    const { data } = await user.get(`/user/${id}`, config)
+    const { data } = await user.get(`/user/${id}`, configUtil(token))
     dispatch({ type: USER_DETAILS_SUCCESS, payload: data })
-    console.log('Function at actions/user.js: getUserInfo ')
+    
   } catch (error) {
     dispatch({
       type: USER_DETAILS_FAIL,
@@ -127,16 +128,59 @@ export const getUserInfo = (id) => async (dispatch, getState) => {
   }
 }
 
+// Update User Language
+export const updateLanguage = (language) => async (dispatch, getState) => {
+  const { userInfo } = getState().userAuth
+  try {
+    dispatch({ type: USER_UPDATE_LANGUAGE_REQUEST })
+    const { data } = await user.patch(
+      `/user/${userInfo._id}`,
+      { language },
+      configUtil(userInfo.token),
+    )
+    dispatch({ type: USER_UPDATE_LANGUAGE_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_LANGUAGE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+// Update User Password
+export const updatePassword = (currentPassword, password) => async (
+  dispatch,
+  getState,
+) => {
+  const { userInfo } = getState().userAuth
+  try {
+    dispatch({ type: USER_UPDATE_PASSWORD_REQUEST })
+    const { data } = await user.patch(
+      `/user/${userInfo._id}`,
+      { currentPassword, password },
+      configUtil(userInfo.token),
+    )
+    dispatch({ type: USER_UPDATE_PASSWORD_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_PASSWORD_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
 // Update user Info
 export const updateUserProfile = (
-  id,
   username,
   email,
   contactNum,
   city,
-  currentPassword,
-  password,
-  language,
   address1,
   address2,
   country,
@@ -145,27 +189,19 @@ export const updateUserProfile = (
   const { token } = userInfo
   try {
     dispatch({ type: USER_UPDATE_PROFILE_REQUEST })
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
+
     const { data } = await user.patch(
-      `/user/${id}`,
+      `/user/${userInfo._id}`,
       {
         username,
         contactNum,
         email,
         city,
-        currentPassword,
-        password,
-        language,
         address1,
         address2,
         country,
       },
-      config,
+      configUtil(token),
     )
     dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data })
   } catch (error) {

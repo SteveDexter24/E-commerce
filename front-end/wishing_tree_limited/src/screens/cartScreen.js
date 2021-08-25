@@ -233,7 +233,7 @@ const CartScreen = ({ match, location, history }) => {
               <span className="d-grid gap-2">
                 <Button
                   type="button"
-                  disabled={cartItems.length === 0}
+                  disabled={cartItems.length === 0 || cartLoading}
                   onClick={checkoutHandler}
                 >
                   PROCEED TO CHECKOUT

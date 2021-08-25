@@ -7,19 +7,19 @@ const matchPassword = async (req, res, next) => {
   console.log('match password middleware')
   console.log(req.body)
 
-  if (currentPassword === '' && password === '') {
+  if (!currentPassword && !password) {
     console.log('user did not update password')
-    delete req.body.currentPassword
-    delete req.body.password
+
     next()
   } else {
-    console.log('user wants update password')
+    console.log('user wants to update password')
     try {
       const user = await User.findById(req.params.id)
       if (!user) {
         throw new Error('User not found')
       }
 
+      // current password === old password
       const tokenPayload = bcrypt.compareSync(currentPassword, user.password)
 
       if (!tokenPayload) {
@@ -27,6 +27,7 @@ const matchPassword = async (req, res, next) => {
       }
 
       // old password is same as the new one
+      // newpassword === old password
       const validPassword = bcrypt.compareSync(password, user.password)
 
       console.log(`Same password as old one: ${validPassword}`)
