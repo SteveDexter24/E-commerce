@@ -105,9 +105,9 @@ module.exports = {
           updateOrder.paidAt = Date.now()
           await updateOrder.save()
 
-          const updateUser = await User.findById(updateOrder.user.userId)
-          updateUser.orderHistory.push(client_reference_id)
-          await updateUser.save()
+          // const updateUser = await User.findById(updateOrder.user.userId)
+          // updateUser.orderHistory.push(client_reference_id)
+          // await updateUser.save()
 
           // Future email support
         } catch (error) {

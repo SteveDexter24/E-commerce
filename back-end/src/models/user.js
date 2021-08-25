@@ -107,12 +107,6 @@ const userSchema = new mongoose.Schema(
         ref: 'orders',
       },
     ],
-    orderHistory: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'orders',
-      },
-    ],
     likedProducts: [
       {
         type: Schema.Types.ObjectId,

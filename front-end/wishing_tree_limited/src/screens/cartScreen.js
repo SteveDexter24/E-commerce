@@ -24,6 +24,7 @@ import {
 } from '../actions/cart'
 import { sizeTypeToInfo } from '../Utils/size'
 import Loader from '../components/loader'
+import { ORDER_CREATE_RESET } from '../actions/types'
 
 const CartScreen = ({ match, location, history }) => {
   const productId = match.params.id
@@ -66,6 +67,8 @@ const CartScreen = ({ match, location, history }) => {
   }
 
   const checkoutHandler = () => {
+    // to make that the order state is reset
+    dispatch({ type: ORDER_CREATE_RESET })
     history.push('/login?redirect=shipping')
   }
 

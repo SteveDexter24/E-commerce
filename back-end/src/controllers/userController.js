@@ -1,4 +1,5 @@
 const { User } = require('../models/user')
+const { Order } = require('../models/orders')
 const jwt = require('jsonwebtoken')
 
 module.exports = {
@@ -83,6 +84,24 @@ module.exports = {
       })
     } catch (error) {
       res.status(409).send({ message: error.message })
+    }
+  },
+  async getUserOrders(req, res) {
+    const userId = req.params.id
+
+    try {
+      // const user = await User.findById(userId)
+      //   .populate('orders')
+      //   .sort({ createdAt: -1 })
+      //   .limit(10)
+
+      const orders = await Order.find({ 'user.userId': userId })
+        .limit(8)
+        .sort({ createdAt: -1 })
+
+      res.send(orders)
+    } catch (error) {
+      res.send({ message: error.message })
     }
   },
 }

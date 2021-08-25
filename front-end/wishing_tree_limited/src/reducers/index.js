@@ -12,7 +12,8 @@ import {
   orderCreateReducer,
   orderDetailsReducer,
   orderPayReducer,
-  checkoutWithStripeReducer
+  checkoutWithStripeReducer,
+  getUserOrdersReducer,
 } from './orderReducers'
 
 export default combineReducers({
@@ -27,7 +28,8 @@ export default combineReducers({
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,
-  checkoutWithStripe: checkoutWithStripeReducer
+  checkoutWithStripe: checkoutWithStripeReducer,
+  userOrders: getUserOrdersReducer,
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')

@@ -1,26 +1,22 @@
-const express = require("express");
+const express = require('express')
 
 // User Controller
-const UserController = require("../controllers/userController");
+const UserController = require('../controllers/userController')
 
 // Auth Middleware
-const auth = require("../middlewares/auth");
+const auth = require('../middlewares/auth')
 
 // Admin Middleware
-const adminAuth = require("../middlewares/adminAuth");
+const adminAuth = require('../middlewares/adminAuth')
 
 //User Middleware
-const { matchPassword } = require("../middlewares/user");
+const { matchPassword } = require('../middlewares/user')
 
-const router = express.Router();
+const router = express.Router()
 
-router.get("/api/users", auth, adminAuth, UserController.listUserAsync);
-router.get("/api/user/:id?", auth, UserController.getUserAsync);
-router.patch(
-    "/api/user/:id",
-    auth,
-    matchPassword,
-    UserController.editUserAsync
-);
+router.get('/api/users', auth, adminAuth, UserController.listUserAsync)
+router.get('/api/user/:id?', auth, UserController.getUserAsync)
+router.patch('/api/user/:id', auth, matchPassword, UserController.editUserAsync)
+router.get('/api/user/:id/orders', auth, UserController.getUserOrders)
 
-module.exports = router;
+module.exports = router

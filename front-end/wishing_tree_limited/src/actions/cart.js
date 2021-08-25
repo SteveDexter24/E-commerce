@@ -20,6 +20,8 @@ import {
   CART_SAVE_USER_SHIPPING_INFO,
 } from './types'
 
+import { configUtil } from '../Utils/apiConfig'
+
 export const addToCartDB = (productId, qty, sizeType, color) => async (
   dispatch,
   getState,
@@ -33,11 +35,11 @@ export const addToCartDB = (productId, qty, sizeType, color) => async (
     const colorRemaining = getSize[0].colors.filter(
       (s) => s.color[getState().settings.language] === color,
     )
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
     dispatch({ type: CART_ADD_ITEM_TO_DB_REQUEST })
     const response = await product.post(
       `/user/${userInfo._id}/cart`,
@@ -54,7 +56,7 @@ export const addToCartDB = (productId, qty, sizeType, color) => async (
           totalSize: colorRemaining ? colorRemaining[0].count : 1,
         },
       },
-      config,
+      configUtil(userInfo.token),
     )
 
     dispatch({ type: CART_ADD_ITEM_TO_DB, payload: response.data })
@@ -116,11 +118,11 @@ export const updateCartToDB = (
   const { userInfo } = getState().userAuth
 
   try {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
     dispatch({ type: UPDATE_CART_ITEM_TO_DB_REQUEST })
     const { data } = await product.patch(
       `/user/${userInfo._id}/update-cart`,
@@ -131,7 +133,7 @@ export const updateCartToDB = (
         color: color,
       },
 
-      config,
+      configUtil(userInfo.token),
     )
     dispatch({ type: UPDATE_CART_ITEM_TO_DB, payload: data })
     localStorage.setItem('cartItems', JSON.stringify(data))
@@ -175,11 +177,11 @@ export const removeCartItemInDB = (productId, size, color) => async (
   const { userInfo } = getState().userAuth
 
   try {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
     dispatch({ type: CART_REMOVE_ITEM_TO_DB_REQUEST })
     const { data } = await product.patch(
       `/user/${userInfo._id}/remove`,
@@ -188,7 +190,7 @@ export const removeCartItemInDB = (productId, size, color) => async (
         size: size,
         color: color,
       },
-      config,
+      configUtil(userInfo.token),
     )
     dispatch({ type: CART_REMOVE_ITEM_TO_DB, payload: data })
     localStorage.setItem('cartItems', JSON.stringify(data))
@@ -221,17 +223,17 @@ export const removeItemInCart = (productId, size, color) => async (
 export const moveCartToDB = (cartItems) => async (dispatch, getState) => {
   const { userInfo } = getState().userAuth
   try {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // }
     dispatch({ type: MOVE_CART_ITEM_TO_DB_REQUEST })
 
     const { data } = await product.post(
       `/user/${userInfo._id}/move-cart-to-db`,
       { cartItems },
-      config,
+      configUtil(userInfo.token),
     )
     console.log(data)
     dispatch({ type: MOVE_CART_ITEM_TO_DB, payload: data })

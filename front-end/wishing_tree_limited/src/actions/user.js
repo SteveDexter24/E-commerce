@@ -17,7 +17,6 @@ import {
 } from './types'
 
 import user from '../apis/api'
-//import history from '../history'
 
 export const login = (email, password) => async (dispatch) => {
   try {

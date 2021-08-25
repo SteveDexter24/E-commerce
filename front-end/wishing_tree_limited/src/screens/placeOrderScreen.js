@@ -36,7 +36,7 @@ const PlaceOrderScreen = ({ history }) => {
     if (success) {
       setTimeout(() => {
         history.push(`/order/${order._id}`)
-      }, 2000)
+      }, 1500)
     }
   }, [
     dispatch,
@@ -49,6 +49,7 @@ const PlaceOrderScreen = ({ history }) => {
   ])
 
   const placeOrderHandler = () => {
+    console.log('ggegegeegg')
     dispatch(
       createOrder({
         user: userShippingInfo,

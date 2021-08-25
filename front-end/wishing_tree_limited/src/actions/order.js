@@ -8,12 +8,15 @@ import {
   ORDER_PAY_REQUEST,
   ORDER_PAY_SUCCESS,
   ORDER_PAY_FAIL,
-  ORDER_PAY_RESET,
   ORDER_SESSION_REQUEST,
   ORDER_SESSION_SUCCESS,
   ORDER_SESSION_FAIL,
+  GET_USER_ORDER_REQUEST,
+  GET_USER_ORDER_SUCCESS,
+  GET_USER_ORDER_FAIL,
 } from './types'
 import orders from '../apis/api'
+import { configUtil } from '../Utils/apiConfig'
 
 // Place Order
 export const createOrder = (cart) => async (dispatch, getState) => {
@@ -21,18 +24,13 @@ export const createOrder = (cart) => async (dispatch, getState) => {
   const { token } = userInfo
   try {
     dispatch({ type: ORDER_CREATE_REQUEST })
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
+
     const { data } = await orders.post(
       `/order`,
       {
         cart,
       },
-      config,
+      configUtil(token),
     )
     dispatch({ type: ORDER_CREATE_SUCCESS, payload: data })
   } catch (error) {
@@ -51,13 +49,8 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
   const { token } = userInfo
   try {
     dispatch({ type: ORDER_DETAILS_REQUEST })
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-    const { data } = await orders.get(`/order/${id}`, config)
+
+    const { data } = await orders.get(`/order/${id}`, configUtil(token))
     dispatch({ type: ORDER_DETAILS_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
@@ -79,16 +72,11 @@ export const payOrder = (orderId, paymentResult) => async (
   const { token } = userInfo
   try {
     dispatch({ type: ORDER_PAY_REQUEST })
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
+
     const { data } = await orders.patch(
       `/order/${orderId}/pay`,
       paymentResult,
-      config,
+      configUtil(token),
     )
     dispatch({ type: ORDER_PAY_SUCCESS, payload: data })
   } catch (error) {
@@ -116,22 +104,40 @@ export const createSessionCheckoutWithStripe = (
   dispatch({ type: ORDER_SESSION_REQUEST })
 
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
     const { data } = await orders.post(
       `/order/${orderId}/create-checkout-session`,
       { line_items, email, payment_method_types, shippingCost, tax },
-      config,
+      configUtil(token),
     )
 
     dispatch({ type: ORDER_SESSION_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
       type: ORDER_SESSION_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+// Get user's orders
+export const getUserOrders = () => async (dispatch, getState) => {
+  const userAuth = getState().userAuth
+  const { userInfo } = userAuth
+
+  try {
+    dispatch({ type: GET_USER_ORDER_REQUEST })
+    const { data } = await orders.get(
+      `/user/${userInfo._id}/orders`,
+      configUtil(userInfo.token),
+    )
+
+    dispatch({ type: GET_USER_ORDER_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: GET_USER_ORDER_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
