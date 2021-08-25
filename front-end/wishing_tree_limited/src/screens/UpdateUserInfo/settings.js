@@ -47,7 +47,7 @@ const Settings = ({ history }) => {
     <>
       <EditProfileNavbar />
       <FormContainer>
-        <h1>CHANGE PASSWORD</h1>
+        <h1>SETTINGS</h1>
         {errorLanguage && <Message variant="danger">{errorLanguage}</Message>}
         {successLanguage && (
           <Message variant="success">{'Language Updated'}</Message>

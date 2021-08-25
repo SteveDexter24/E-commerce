@@ -76,14 +76,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    creditCardNum: {
-      type: String,
-      trim: true,
-    },
-    creditCardName: {
-      type: String,
-      trim: true,
-    },
     contactNum: {
       type: String,
       trim: true,
@@ -107,11 +99,7 @@ const userSchema = new mongoose.Schema(
         ref: 'orders',
       },
     ],
-    likedProducts: [
-      {
-        type: Schema.Types.ObjectId,
-      },
-    ],
+
     createdAt: {
       type: Date,
       default: Date.now(),

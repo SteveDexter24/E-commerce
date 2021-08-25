@@ -10,6 +10,8 @@ import {
   EDIT_PRODUCT,
   DELETE_PRODUCT,
 } from './types'
+import { errorHandler } from '../Utils/errorHandling'
+import { configUtil } from '../Utils/apiConfig'
 
 // Fetch all products
 export const fetchAllProducts = () => async (dispatch) => {
@@ -20,10 +22,7 @@ export const fetchAllProducts = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_LIST_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: errorHandler(error),
     })
   }
 }
@@ -37,10 +36,7 @@ export const listProductDetails = (productId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: FETCH_PRODUCT_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: errorHandler(error),
     })
   }
 }
@@ -50,11 +46,7 @@ export const createProduct = (productObj, token) => async (dispatch) => {
   const { data } = await product.post(
     `/product`,
     { ...productObj },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
+    configUtil(token),
   )
 
   dispatch({ type: CREATE_PRODUCT, payload: data })
@@ -67,14 +59,15 @@ export const editProduct = (productObj, token, productId) => async (
   const { data } = await product.patch(
     `/product/${productId}`,
     { ...productObj },
-    { headers: { Authorization: `Bearer ${token}` } },
+    configUtil(token),
   )
   dispatch({ type: EDIT_PRODUCT, payload: data })
 }
 
 export const deleteProduct = (productId, token) => async (dispatch) => {
-  const { data } = await product.delete(`/product/${productId}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
+  const { data } = await product.delete(
+    `/product/${productId}`,
+    configUtil(token),
+  )
   dispatch({ type: DELETE_PRODUCT, payload: data })
 }

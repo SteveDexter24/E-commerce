@@ -16,6 +16,7 @@ import {
   GET_USER_ORDER_REQUEST,
   GET_USER_ORDER_SUCCESS,
   GET_USER_ORDER_FAIL,
+  USER_ORDER_RESET,
 } from '../actions/types'
 
 export const orderCreateReducer = (state = { success: false }, action) => {
@@ -88,6 +89,8 @@ export const getUserOrdersReducer = (state = { orders: [] }, action) => {
       return { loading: false, orders: action.payload }
     case GET_USER_ORDER_FAIL:
       return { loading: false, error: action.payload }
+    case USER_ORDER_RESET:
+      return { orders: [] }
     default:
       return state
   }

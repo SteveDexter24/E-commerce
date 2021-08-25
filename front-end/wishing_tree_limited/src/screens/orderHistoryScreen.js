@@ -30,21 +30,15 @@ const OrderHistoryScreen = ({ history }) => {
           {orders.length === 0 ? (
             'No order history'
           ) : (
-            <Table
-              striped
-              bordered
-              hover
-              responsive
-              className="table-sm table-light"
-            >
+            <Table striped bordered hover className="table-sm">
               <thead>
                 <tr>
                   <th>Order Number</th>
                   <th>Date</th>
                   <th>Total</th>
                   <th>Paid</th>
-                  <th>Delivered</th>
-                  <th>Go to</th>
+                  <th>Order Status</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -65,20 +59,15 @@ const OrderHistoryScreen = ({ history }) => {
                         )}
                       </td>
                       <td>
-                        {order.isDelivered ? (
-                          order.deliveredAt.substring(0, 10)
-                        ) : (
-                          <i
-                            className="fas fa-times"
-                            style={{ color: 'red' }}
-                          />
-                        )}
+                        {order.isDelivered
+                          ? order.deliveredAt.substring(0, 10)
+                          : 'Not delivered'}
                       </td>
 
                       <LinkContainer to={`/order/${order._id}`}>
-                        <Button className="btn-sm" variant="light">
-                          Show
-                        </Button>
+                        <span className="d-grid gap-2">
+                          <Button className="btn-sm">DETAILS</Button>
+                        </span>
                       </LinkContainer>
                     </tr>
                   )

@@ -62,10 +62,10 @@ module.exports = {
         // shipping_rates: [process.env.STRIPE_SHIPPING_RATE_ID],
         // shipping_address_collection: {
         //   allowed_countries: ['HK', 'JP'],
-        // },
+        // }, /success?session_id={CHECKOUT_SESSION_ID}
         client_reference_id: orderId,
         mode: 'payment',
-        success_url: `${process.env.WEB_APP_URL}/order/${orderId}/success?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${process.env.WEB_APP_URL}/order/${orderId}`,
         cancel_url: `${process.env.WEB_APP_URL}/order/${orderId}`,
       })
       res.status(200).send(session.id)
