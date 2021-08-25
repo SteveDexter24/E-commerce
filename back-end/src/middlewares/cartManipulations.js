@@ -28,14 +28,9 @@ module.exports = {
                         x.color === existItem.color
                 );
 
-                //   console.log('old cart items')
-                //   console.log(cartItems)
-
                 cartItems[existIndex].qty =
                     Number(cartItems[existIndex].qty) + Number(item.qty);
 
-                //   console.log('new cart items')
-                //   console.log(cartItems)
                 req.cartItems = cartItems;
                 next();
             } else {
@@ -43,6 +38,17 @@ module.exports = {
                 req.cartItems = cartItems;
                 next();
             }
+        } catch (error) {
+            res.send({ message: error.message });
+        }
+    },
+    async moveToCartDatabase(req, res, next) {
+        const userId = req.params.id;
+        const { cartItems } = req.body;
+
+        try {
+            req.cartItems = cartItems;
+            next();
         } catch (error) {
             res.send({ message: error.message });
         }

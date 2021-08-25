@@ -14,8 +14,16 @@ import {
   Card,
 } from 'react-bootstrap'
 import Message from '../components/message'
-import { addToCart, updateCart, removeItemInCart } from '../actions/cart'
+import {
+  addToCart,
+  updateCart,
+  removeItemInCart,
+  addToCartDB,
+  updateCartToDB,
+  removeCartItemInDB,
+} from '../actions/cart'
 import { sizeTypeToInfo } from '../Utils/size'
+import Loader from '../components/loader'
 
 const CartScreen = ({ match, location, history }) => {
   const productId = match.params.id
@@ -32,24 +40,71 @@ const CartScreen = ({ match, location, history }) => {
   const dispatch = useDispatch()
 
   const cart = useSelector((state) => state.cart)
-  const { cartItems } = cart
+  const { cartItems, cartLoading, cartError } = cart
+
+  const userAuth = useSelector((state) => state.userAuth)
+  const { userInfo } = userAuth
+  //console.log(userInfo)
 
   useEffect(() => {
     if (productId) {
-      dispatch(addToCart(productId, qty, size, color))
+      if (userInfo) {
+        // Get the cart in database and add the onces from local storage
+        dispatch(addToCartDB(productId, qty, size, color))
+      } else {
+        dispatch(addToCart(productId, qty, size, color))
+      }
     }
-  }, [dispatch, productId, qty, size, color])
+  }, [dispatch, history, productId, qty, size, color, userInfo])
 
   const removeFromCartHandler = (productId, size, color) => {
-    dispatch(removeItemInCart(productId, size, color))
+    if (userInfo) {
+      dispatch(removeCartItemInDB(productId, size, color))
+    } else {
+      dispatch(removeItemInCart(productId, size, color))
+    }
   }
 
   const checkoutHandler = () => {
     history.push('/login?redirect=shipping')
   }
 
+  const quantityOnChangeHandler = (e, item, index) => {
+    if (userInfo) {
+      dispatch(
+        updateCartToDB(
+          item.productId,
+          Number(e.target.value),
+          item.size,
+          item.color,
+          index,
+          item.description,
+        ),
+      )
+    } else {
+      dispatch(
+        updateCart(
+          item.productId,
+          Number(e.target.value),
+          item.size,
+          item.color,
+          index,
+          item.description,
+        ),
+      )
+    }
+  }
+
+  const loaderStyle = {
+    position: 'absolute',
+    top: '40%',
+    left: '40%',
+    zIndex: '4',
+  }
+
   return (
     <Row>
+      {cartError && <Loader />}
       <Col md={8}>
         <h1>SHOPPING CART</h1>
         <p>
@@ -62,7 +117,17 @@ const CartScreen = ({ match, location, history }) => {
             Your cart is empty <Link to="/">Go Back</Link>
           </Message>
         ) : (
-          <ListGroup variant="flush">
+          <ListGroup
+            variant="flush"
+            style={
+              cartLoading ? { opacity: '0.4', backgroundColor: 'grey' } : null
+            }
+          >
+            {cartLoading && (
+              <div style={loaderStyle}>
+                <Loader />
+              </div>
+            )}
             {cartItems.map((item, index) => {
               return (
                 <ListGroup.Item key={`${item.productId}cart${index}`}>
@@ -92,16 +157,7 @@ const CartScreen = ({ match, location, history }) => {
                         <Form.Select
                           value={item.qty}
                           onChange={(e) =>
-                            dispatch(
-                              updateCart(
-                                item.productId,
-                                Number(e.target.value),
-                                item.size,
-                                item.color,
-                                index,
-                                item.description,
-                              ),
-                            )
+                            quantityOnChangeHandler(e, item, index)
                           }
                         >
                           {[...Array(item.totalSize).keys()].map((x) => (
