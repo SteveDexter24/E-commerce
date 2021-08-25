@@ -90,13 +90,8 @@ module.exports = {
     const userId = req.params.id
 
     try {
-      // const user = await User.findById(userId)
-      //   .populate('orders')
-      //   .sort({ createdAt: -1 })
-      //   .limit(10)
-
       const orders = await Order.find({ 'user.userId': userId })
-        .limit(8)
+        .limit(10)
         .sort({ createdAt: -1 })
 
       res.send(orders)
