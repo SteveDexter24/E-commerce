@@ -21,6 +21,8 @@ module.exports = {
 
       res.status(200).send({
         _id: user._id,
+        name: user.name,
+        surname: user.surname,
         username: user.username,
         email: user.email,
         address1: user.address1,
@@ -32,7 +34,7 @@ module.exports = {
         language: user.language,
         orderHistory: user.orderHistory,
         contactNum: user.contactNum,
-        token: user.tokens,
+        token: req.token,
       })
     } catch (error) {
       res.status(404).send({ message: error.message })

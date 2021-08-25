@@ -8,15 +8,18 @@ import ProductScreen from './screens/ProductScreen/productScreen'
 import LoginScreen from './screens/loginScreen'
 import CartScreen from './screens/cartScreen'
 import RegisterScreen from './screens/registerScreen'
-import EditProfile from './screens/editProfile'
+
+import EditProfile from './screens/UpdateUserInfo/editProfile'
+import ChangePassword from './screens/UpdateUserInfo/changePassword'
+import Settings from './screens/UpdateUserInfo/settings'
+
 import OrderHistoryScreen from './screens/orderHistoryScreen'
 import ShippingScreen from './screens/shippingScreen'
 import PaymentScreen from './screens/paymentScreen'
 import PlaceOrderScreen from './screens/placeOrderScreen'
 import OrderScreen from './screens/orderScreen'
 import OrderSuccessScreen from './screens/orderSuccessScreen'
-import ChangePassword from './screens/UpdateUserInfo/changePassword'
-import Settings from './screens/UpdateUserInfo/settings'
+
 import './index.css'
 
 const App = () => {

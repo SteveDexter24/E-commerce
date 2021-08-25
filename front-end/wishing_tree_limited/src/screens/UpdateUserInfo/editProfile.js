@@ -6,12 +6,12 @@ import {
   FormControl,
 } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import FormContainer from '../components/formContainer'
-import Message from '../components/message'
-import Loader from '../components/loader'
-import { getUserInfo, updateUserProfile } from '../actions/user'
-import FormComponent from '../components/formComponent'
-import EditProfileNavbar from '../components/editProfileNavbar'
+import FormContainer from '../../components/formContainer'
+import Message from '../../components/message'
+import Loader from '../../components/loader'
+import { getUserInfo, updateUserProfile } from '../../actions/user'
+import FormComponent from '../../components/formComponent'
+import EditProfileNavbar from '../../components/editProfileNavbar'
 
 const ProfileScreen = ({ history }) => {
   // States: Form items
