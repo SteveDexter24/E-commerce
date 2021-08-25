@@ -15,6 +15,8 @@ import PaymentScreen from './screens/paymentScreen'
 import PlaceOrderScreen from './screens/placeOrderScreen'
 import OrderScreen from './screens/orderScreen'
 import OrderSuccessScreen from './screens/orderSuccessScreen'
+import ChangePassword from './screens/UpdateUserInfo/changePassword'
+import Settings from './screens/UpdateUserInfo/settings'
 import './index.css'
 
 const App = () => {
@@ -26,6 +28,12 @@ const App = () => {
           <Route path="/login" exact component={LoginScreen} />
           <Route path="/register" exact component={RegisterScreen} />
           <Route path="/profile" exact component={EditProfile} />
+          <Route
+            path="/profile/change-password"
+            exact
+            component={ChangePassword}
+          />
+          <Route path="/profile/settings" exact component={Settings} />
           <Route path="/orderHistory" exact component={OrderHistoryScreen} />
           <Route path="/product/:id" exact component={ProductScreen} />
           <Route path="/cart/:id?" exact component={CartScreen} />

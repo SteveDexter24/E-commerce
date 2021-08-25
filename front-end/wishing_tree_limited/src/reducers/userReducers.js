@@ -13,6 +13,12 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
+  USER_UPDATE_PASSWORD_REQUEST,
+  USER_UPDATE_PASSWORD_SUCCESS,
+  USER_UPDATE_PASSWORD_FAIL,
+  USER_UPDATE_LANGUAGE_REQUEST,
+  USER_UPDATE_LANGUAGE_SUCCESS,
+  USER_UPDATE_LANGUAGE_FAIL,
 } from '../actions/types'
 
 export const userAuthenticationReducer = (state = {}, action) => {
@@ -66,6 +72,36 @@ export const userUpdateProfileReducer = (state = {}, action) => {
       return { loading: false, success: true, userInfo: action.payload }
     case USER_UPDATE_PROFILE_FAIL:
       return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const userUpdatePasswordReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER_UPDATE_PASSWORD_REQUEST:
+      return { loading: true }
+    case USER_UPDATE_PASSWORD_SUCCESS:
+      return { loading: false, success: true, userInfo: action.payload }
+    case USER_UPDATE_PASSWORD_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const userUpdateLanguageReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER_UPDATE_LANGUAGE_REQUEST:
+      return { loadingLanguage: true }
+    case USER_UPDATE_LANGUAGE_SUCCESS:
+      return {
+        loadingLanguage: false,
+        successLanguage: true,
+        userInfoLanguage: action.payload,
+      }
+    case USER_UPDATE_LANGUAGE_FAIL:
+      return { loadingLanguage: false, errorLanguage: action.payload }
     default:
       return state
   }
