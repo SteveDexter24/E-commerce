@@ -41,21 +41,19 @@ module.exports = {
             .exec();
     },
     // get product by Id
-    async getProductAsync(req, res, next) {
+    async getProductAsync(req, res) {
         const productId = req.params.id;
-        Product.findById(productId, (err, foundProduct) => {
-            if (err) {
-                res.status(404).send({
-                    message: `error found while looking for product with ID ${productId}`,
-                });
-            }
-            if (foundProduct) {
-                res.status(200).send(foundProduct);
-            }
-        });
+
+        try {
+            const foundProduct = await Product.findById(productId);
+
+            res.status(200).send(foundProduct);
+        } catch (error) {
+            res.status(404).send({ message: error.message });
+        }
     },
     // create a new product
-    async createProductAsync(req, res, next) {
+    async createProductAsync(req, res) {
         const productObject = req.body;
 
         Product.create(productObject, (err, newProduct) => {
@@ -74,6 +72,7 @@ module.exports = {
             }
         });
     },
+    // update product
     async updateProductAsync(req, res, next) {
         const productId = req.params.id;
         const propsToUpdate = Object.keys(req.body);
@@ -98,18 +97,11 @@ module.exports = {
             });
         }
     },
-    async deleteProductAsync(req, res, next) {
+    async deleteProductAsync(req, res) {
         const productId = req.params.id;
         try {
-            const deletedProduct = await Product.deleteOne({ _id: productId });
-            if (deletedProduct.ok) {
-                res.send({
-                    deletedProduct,
-                    message: `successfully deleted ${deletedProduct.deletedCount} product`,
-                });
-            } else {
-                res.send({ message: "failed to delete product" });
-            }
+            await Product.findByIdAndRemove(productId);
+            res.status(200).send({ message: "Product removed" });
         } catch (err) {
             res.send({ message: err.message });
         }

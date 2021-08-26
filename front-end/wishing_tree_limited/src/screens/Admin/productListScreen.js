@@ -88,7 +88,10 @@ const ProductListScreen = ({ history, match }) => {
                                 <tr key={product._id}>
                                     <td>{product._id}</td>
                                     <td>{product.productName[language]}</td>
-                                    <td>{product.price[currency]}</td>
+                                    <td>
+                                        {currency === "hkd" ? "$ " : "¥ "}
+                                        {product.price[currency]}
+                                    </td>
                                     <td>{product.category[language]}</td>
                                     <td>{product.gender}</td>
                                     <td>{product.style[language]}</td>
