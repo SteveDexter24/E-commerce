@@ -27,6 +27,9 @@ import {
     USER_DELETE_REQUEST,
     USER_DELETE_SUCCESS,
     USER_DELETE_FAIL,
+    USER_EDIT_REQUEST,
+    USER_EDIT_SUCCESS,
+    USER_EDIT_FAIL,
 } from "./types";
 
 import user from "../apis/api";
@@ -124,6 +127,7 @@ export const getUserInfo = (id) => async (dispatch, getState) => {
         const { token } = userInfo;
 
         const { data } = await user.get(`/user/${id}`, configUtil(token));
+
         dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
     } catch (error) {
         dispatch({
@@ -227,6 +231,31 @@ export const listUsers = () => async (dispatch, getState) => {
         });
     }
 };
+
+export const adminUpdateUser =
+    (userId, items) => async (dispatch, getState) => {
+        const { userInfo } = getState().userAuth;
+
+        try {
+            dispatch({ type: USER_EDIT_REQUEST });
+
+            const { data } = await user.patch(
+                `/user/${userId}/admin`,
+                { ...items },
+                configUtil(userInfo.token)
+            );
+
+            dispatch({ type: USER_EDIT_SUCCESS, payload: data });
+        } catch (error) {
+            dispatch({
+                type: USER_EDIT_FAIL,
+                payload:
+                    error.response && error.response.data.message
+                        ? error.response.data.message
+                        : error.message,
+            });
+        }
+    };
 
 export const deleteUser = (userId) => async (dispatch, getState) => {
     const { userInfo } = getState().userAuth;

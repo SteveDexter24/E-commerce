@@ -1,4 +1,4 @@
-export const selLang = [
+export const setLang = [
     {
         label: "English",
         lang: "en",

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EditProfileNavbar from "../../components/editProfileNavbar";
 import FormContainer from "../../components/formContainer";
-import { selLang } from "../../Utils/setlang";
+import { setLang } from "../../Utils/setlang";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { updateLanguage, getUserInfo } from "../../actions/user";
 import { useDispatch, useSelector } from "react-redux";
@@ -61,7 +61,7 @@ const Settings = ({ history }) => {
                     <Form.Group controlId={"radio"} className="py-2">
                         <Form.Label>Select preferred langauge: </Form.Label>
                         <Row>
-                            {selLang.map((l) => {
+                            {setLang.map((l) => {
                                 return (
                                     <Col md={4} key={`${l.lang}-radio`}>
                                         <Form.Check
