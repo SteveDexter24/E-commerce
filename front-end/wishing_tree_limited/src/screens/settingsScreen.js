@@ -11,23 +11,35 @@ import { changeSettings } from "../actions/settings";
 
 const SettingsScreen = () => {
     const settings = useSelector((state) => state.settings);
+    const { success } = settings;
 
     const [language, setLanguage] = useState(settings.language);
     const [currency, setCurrency] = useState(settings.currency);
     const [country, setCountry] = useState(settings.country);
     const dispatch = useDispatch();
 
-    const submitHandler = () => {
+    useEffect(() => {
+        if (success) {
+            setTimeout(() => {
+                // after update, reset the success state
+                dispatch({ type: UPDATE_SETTINGS_RESET });
+            }, 1500);
+        }
+    }, [success]);
+
+    const submitHandler = (e) => {
         console.log("change language");
         console.log(language, country, currency);
         dispatch(changeSettings(language, country, currency));
-
-        // after update, reset the success state
-        dispatch({ type: UPDATE_SETTINGS_RESET });
     };
 
     return (
         <>
+            {success && (
+                <Message variant="success">
+                    {"Successfully updated settings"}
+                </Message>
+            )}
             <FormContainer>
                 <h1>SETTINGS</h1>
 
