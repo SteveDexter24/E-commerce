@@ -100,7 +100,9 @@ module.exports = {
     async deleteProductAsync(req, res) {
         const productId = req.params.id;
         try {
-            await Product.findByIdAndRemove(productId);
+            const product = await Product.findById(productId);
+            await product.remove();
+
             res.status(200).send({ message: "Product removed" });
         } catch (err) {
             res.send({ message: err.message });
