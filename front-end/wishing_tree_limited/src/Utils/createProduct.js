@@ -10,11 +10,11 @@ export const productObject = (
   material,
   washing_care,
   discount,
-  sizeArr,
+  sizes,
 ) => {
   return {
     productName: nameObj,
-    category: categoryObj, 
+    category: categoryObj,
     gender: gender,
     image: images,
     feature: featureObj,
@@ -24,20 +24,6 @@ export const productObject = (
     material: material,
     washing_care: washing_care,
     discount: discount,
-    size: sizeArr,
-  }
-}
-
-export const size = (sizeType, colorHex, colorObj, count) => {
-  return {
-    sizeType: sizeType,
-    colors: [
-      {
-        colorHex: colorHex,
-        color: colorObj,
-        count: count,
-        image: colors,
-      },
-    ],
+    size: sizes,
   }
 }

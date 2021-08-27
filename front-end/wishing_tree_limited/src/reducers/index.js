@@ -3,6 +3,8 @@ import {
   productListReducer,
   productDetailsReducer,
   productDeleteReducer,
+  productCreateReducer,
+  productEditReducer,
 } from './productReducers'
 import { cartReducer } from './cartReducers'
 import { changeSettingsReducer } from './settingsReducers'
@@ -30,6 +32,8 @@ export default combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
   productDelete: productDeleteReducer,
+  productCreate: productCreateReducer,
+  productEdit: productEditReducer,
   // Cart
   cart: cartReducer,
   // Settings
