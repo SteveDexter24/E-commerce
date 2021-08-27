@@ -26,6 +26,7 @@ import UserListScreen from './screens/Admin/userListScreen'
 import EditUserScreen from './screens/Admin/userEditScreen'
 import ProductListScreen from './screens/Admin/productListScreen'
 import ProductEditScreen from './screens/Admin/productEditScreen'
+import CreateProduct from './screens/Admin/newProductScreen'
 
 import './index.css'
 
@@ -71,6 +72,7 @@ const App = () => {
             exact
             component={ProductEditScreen}
           />
+          <Route path="/admin/create-product" exact component={CreateProduct} />
         </Container>
       </main>
       <Footer />

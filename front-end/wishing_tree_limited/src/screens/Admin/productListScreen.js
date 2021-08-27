@@ -48,6 +48,7 @@ const ProductListScreen = ({ history, match }) => {
   }
   const createProductHandler = () => {
     console.log('create product')
+    history.push('/admin/create-product')
   }
   return (
     <>

@@ -10,6 +10,8 @@ export const paymentDecode = (payment) => {
       return 'card'
     case 'WeChat Pay':
       return 'wechat_pay'
+    case 'bank transfer':
+      return 'eps'
     default:
       return 'card'
   }

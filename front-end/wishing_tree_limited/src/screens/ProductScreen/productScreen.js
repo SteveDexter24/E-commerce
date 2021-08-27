@@ -122,38 +122,39 @@ const ProductScreen = ({ history, match }) => {
                   <Row>
                     <Col>Status:</Col>
                     <Col>
-                      {product.size[selectedIndex].colors[colorIndex].count > 0
+                      {product.size[selectedIndex].colors.indexOf(colorIndex)
                         ? 'In Stock'
                         : 'Out of Stock'}
                     </Col>
                   </Row>
                 </ListGroup.Item>
-                {product.size[selectedIndex].colors[colorIndex].count > 0 && (
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Quanity</Col>
-                      <Col>
-                        <Form.Select
-                          value={qty}
-                          onChange={(e) => {
-                            setQty(e.target.value)
-                          }}
-                        >
-                          {[
-                            ...Array(
-                              product.size[selectedIndex].colors[colorIndex]
-                                .count,
-                            ).keys(),
-                          ].map((x) => (
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1}
-                            </option>
-                          ))}
-                        </Form.Select>
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                )}
+                {product.size[selectedIndex].colors[colorIndex] !== undefined &&
+                  product.size[selectedIndex].colors[colorIndex].count > 0 && (
+                    <ListGroup.Item>
+                      <Row>
+                        <Col>Quanity</Col>
+                        <Col>
+                          <Form.Select
+                            value={qty}
+                            onChange={(e) => {
+                              setQty(e.target.value)
+                            }}
+                          >
+                            {[
+                              ...Array(
+                                product.size[selectedIndex].colors[colorIndex]
+                                  .count,
+                              ).keys(),
+                            ].map((x) => (
+                              <option key={x + 1} value={x + 1}>
+                                {x + 1}
+                              </option>
+                            ))}
+                          </Form.Select>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  )}
                 <ListGroup.Item>
                   <Row>
                     <Col md={7}>Selected Size:</Col>
@@ -173,8 +174,11 @@ const ProductScreen = ({ history, match }) => {
                       className="btn"
                       type="button"
                       disabled={
-                        product.size[selectedIndex].colors[colorIndex].count <=
-                          0 ||
+                        (product.size[selectedIndex].colors.indexOf(
+                          colorIndex,
+                        ) !== -1 &&
+                          product.size[selectedIndex].colors[colorIndex]
+                            .count <= 0) ||
                         color === 'None' ||
                         selectedSize === 'None'
                       }
