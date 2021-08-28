@@ -143,7 +143,7 @@ const OrderScreen = ({ history, match }) => {
                         description: item.description
                             ? item.description
                             : "No description available",
-                        //images: 'item.image', // need to have a valid image url
+                        images: item.image
                     },
                     unit_amount: item.price * 100,
                 },
@@ -227,7 +227,7 @@ const OrderScreen = ({ history, match }) => {
                                                 <Row>
                                                     <Col md={1}>
                                                         <Image
-                                                            src={item.image}
+                                                            src={item.image[0]}
                                                             alt={item.name}
                                                             fluid
                                                             rounded

@@ -7,8 +7,8 @@ dotenv.config()
 
 const app = express()
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+app.use(express.urlencoded({ limit: '50mb', extended: true }))
+app.use(express.json({ limit: '50mb' }))
 
 const authRoute = require('./src/routes/authRoute')
 const productRoute = require('./src/routes/productRoute')

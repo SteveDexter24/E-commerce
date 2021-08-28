@@ -55,8 +55,8 @@ module.exports = {
     const productObject = req.body
 
     try {
-      const newProduct = await Product.create(productObject)
-      res.status(201).send(newProduct)
+      await Product.create(productObject)
+      res.status(201).send('Successfully created a new product')
     } catch (error) {
       console.log(error.message)
       res.status(400).send({ message: error.message })
@@ -65,8 +65,6 @@ module.exports = {
   // update product
   async updateProductAsync(req, res, next) {
     const productId = req.params.id
-    console.log(req.body.size[0].colors)
-
     const propsToUpdate = Object.keys(req.body)
     try {
       const product = await Product.findById(productId)

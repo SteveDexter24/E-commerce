@@ -43,7 +43,7 @@ const ColorButtons = ({
       <Row>
         {colorObjArr.map((s, i) => {
           return (
-            <Col key={i} md={1} className="mx-2 my-1">
+            <Col key={i} xs={1} md={1} lg={1} className="mx-2 my-1">
               <OverlayTrigger
                 placement="right"
                 overlay={<Tooltip id="button-tooltip">{s[language]}</Tooltip>}

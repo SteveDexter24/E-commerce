@@ -50,9 +50,11 @@ const productSchema = new mongoose.Schema({
   },
   material: {
     type: String,
+    trim: true,
   },
   washing_care: {
     type: String,
+    trim: true,
   },
   discount: {
     hkd: helper.discountObject,
