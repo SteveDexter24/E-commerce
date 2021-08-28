@@ -24,12 +24,12 @@ const Product = ({ product, lang, currency }) => {
       </Link>
       <Card.Body>
         <Row>
-          <Col md={8}>
+          <Col xs={8} sm={8} md={8} lg={8} xl={8} xxl={8}>
             <Link
               to={`/product/${product._id}`}
               style={{ textDecoration: 'none' }}
             >
-              <Card.Title as="div">
+              <Card.Title as="div" className=" d-flex align-items-center">
                 <strong
                   className={textColor}
                   onMouseOver={handleMouseOver}
@@ -40,7 +40,7 @@ const Product = ({ product, lang, currency }) => {
               </Card.Title>
             </Link>
           </Col>
-          <Col md={4}>
+          <Col xs={4} sm={4} md={4} lg={4} xl={4} xxl={4}>
             <Card.Text
               as="h4"
               className=" d-flex align-items-center justify-content-end"

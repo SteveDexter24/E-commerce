@@ -62,126 +62,133 @@ const ProductScreen = ({ history, match }) => {
         Go Back
       </Link>
       {product ? (
-        <Row className="justify-content-md-center">
-          {/* multiple images support */}
-          <Col md={8} lg={5}>
-            <Image
-              width={500}
-              height={500}
-              fluid
-              src={product.image[0]}
-              alt={product.productName[language]}
-            />
-          </Col>
-          <Col md={4} lg={5}>
-            <Card>
-              <ListGroup variant="flush" className="borderless">
-                <ListGroup.Item variant="fluid">
-                  <h2>{product.productName[language]}</h2>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <SizeButtons
-                    product={product}
-                    styles={styles}
-                    buttonClick={setSizeAndSizeIndex}
-                    selectedSize={selectedSize}
-                  />
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <ColorButtons
-                    product={product}
-                    styles={styles}
-                    buttonClick={setColorButton}
-                    language={language}
-                    colors={color}
-                    selectedIndex={selectedIndex}
-                  />
-                </ListGroup.Item>
+        <>
+          <Row className="justify-content-md-center">
+            {/* multiple images support */}
+            <Col md={8} lg={5}>
+              <Image
+                width={500}
+                height={500}
+                src={product.image[0]}
+                alt={product.productName[language]}
+                fluid
+              />
+            </Col>
+            <Col md={4} lg={5}>
+              <Card>
+                <ListGroup variant="flush" className="borderless">
+                  <ListGroup.Item variant="fluid">
+                    <h2>{product.productName[language]}</h2>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <SizeButtons
+                      product={product}
+                      styles={styles}
+                      buttonClick={setSizeAndSizeIndex}
+                      selectedSize={selectedSize}
+                    />
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <ColorButtons
+                      product={product}
+                      styles={styles}
+                      buttonClick={setColorButton}
+                      language={language}
+                      colors={color}
+                      selectedIndex={selectedIndex}
+                    />
+                  </ListGroup.Item>
 
-                <ListGroup.Item>{product.feature[language]}</ListGroup.Item>
+                  <ListGroup.Item>{product.feature[language]}</ListGroup.Item>
 
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Price:</Col>
-                    <Col>
-                      <strong>${product.price[currency]}</strong>
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Status:</Col>
-                    <Col>
-                      {product.size[selectedIndex].colors[colorIndex] !==
-                        undefined &&
-                      product.size[selectedIndex].colors[colorIndex].count > 0
-                        ? 'In Stock'
-                        : 'Out of Stock'}
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-                {product.size[selectedIndex].colors[colorIndex] !== undefined &&
-                  product.size[selectedIndex].colors[colorIndex].count > 0 && (
-                    <ListGroup.Item>
-                      <Row>
-                        <Col>Quanity</Col>
-                        <Col>
-                          <Form.Select
-                            value={qty}
-                            onChange={(e) => {
-                              setQty(e.target.value)
-                            }}
-                          >
-                            {[
-                              ...Array(
-                                product.size[selectedIndex].colors[colorIndex]
-                                  .count,
-                              ).keys(),
-                            ].map((x) => (
-                              <option key={x + 1} value={x + 1}>
-                                {x + 1}
-                              </option>
-                            ))}
-                          </Form.Select>
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                  )}
-                <ListGroup.Item>
-                  <Row>
-                    <Col md={7}>Selected Size:</Col>
-                    <Col md={5}>{sizeTypeToInfo(selectedSize)}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col md={7}>Selected Color:</Col>
-                    <Col md={5}>{color}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item className="d-grid gap-2">
-                  <span className="d-grid gap-2">
-                    <Button
-                      onClick={addToCartHandler}
-                      className="btn"
-                      type="button"
-                      disabled={
-                        product.size[selectedIndex].colors[colorIndex] ===
-                          undefined ||
-                        product.size[selectedIndex].colors[colorIndex].count <=
-                          0 ||
-                        color === 'None' ||
-                        selectedSize === 'None'
-                      }
-                    >
-                      ADD TO CART
-                    </Button>
-                  </span>
-                </ListGroup.Item>
-              </ListGroup>
-            </Card>
-          </Col>
-        </Row>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Price:</Col>
+                      <Col>
+                        <strong>${product.price[currency]}</strong>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Status:</Col>
+                      <Col>
+                        {product.size[selectedIndex].colors[colorIndex] !==
+                          undefined &&
+                        product.size[selectedIndex].colors[colorIndex].count > 0
+                          ? 'In Stock'
+                          : 'Out of Stock'}
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                  {product.size[selectedIndex].colors[colorIndex] !==
+                    undefined &&
+                    product.size[selectedIndex].colors[colorIndex].count >
+                      0 && (
+                      <ListGroup.Item>
+                        <Row>
+                          <Col>Quanity</Col>
+                          <Col>
+                            <Form.Select
+                              value={qty}
+                              onChange={(e) => {
+                                setQty(e.target.value)
+                              }}
+                            >
+                              {[
+                                ...Array(
+                                  product.size[selectedIndex].colors[colorIndex]
+                                    .count,
+                                ).keys(),
+                              ].map((x) => (
+                                <option key={x + 1} value={x + 1}>
+                                  {x + 1}
+                                </option>
+                              ))}
+                            </Form.Select>
+                          </Col>
+                        </Row>
+                      </ListGroup.Item>
+                    )}
+                  <ListGroup.Item>
+                    <Row>
+                      <Col md={7}>Selected Size:</Col>
+                      <Col md={5}>{sizeTypeToInfo(selectedSize)}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col md={7}>Selected Color:</Col>
+                      <Col md={5}>{color}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item className="d-grid gap-2">
+                    <span className="d-grid gap-2">
+                      <Button
+                        onClick={addToCartHandler}
+                        className="btn"
+                        type="button"
+                        disabled={
+                          product.size[selectedIndex].colors[colorIndex] ===
+                            undefined ||
+                          product.size[selectedIndex].colors[colorIndex]
+                            .count <= 0 ||
+                          color === 'None' ||
+                          selectedSize === 'None'
+                        }
+                      >
+                        ADD TO CART
+                      </Button>
+                    </span>
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card>
+            </Col>
+          </Row>
+          <Row className="mt-4">
+            <h2>Product you may like</h2>
+          </Row>
+        </>
       ) : loading ? (
         <Loader />
       ) : error ? (
