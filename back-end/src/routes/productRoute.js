@@ -9,6 +9,9 @@ const auth = require('../middlewares/auth')
 // Admin Access Middleware
 const adminAuth = require('../middlewares/adminAuth')
 
+// Upload image middleware
+const uploadImageMiddleware = require('../middlewares/uploadImage')
+
 const router = express.Router()
 
 // User and Admin access only
@@ -20,12 +23,14 @@ router.post(
   '/api/product',
   auth,
   adminAuth,
+  uploadImageMiddleware,
   productController.createProductAsync,
 )
 router.patch(
   '/api/product/:id',
   auth,
   adminAuth,
+  uploadImageMiddleware,
   productController.updateProductAsync,
 )
 

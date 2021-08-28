@@ -6,6 +6,7 @@ import {
   Col,
   InputGroup,
   FormControl,
+  Image,
 } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../../components/formContainer'
@@ -47,6 +48,11 @@ const ProductEditScreen = ({ match, history }) => {
 
   const [sizes, setSizes] = useState([])
 
+  // file input state
+  const [fileInputState, setFileInputState] = useState('')
+  const [selectedFile, setSelectedFile] = useState('')
+  const [previewSource, setPreviewSource] = useState([])
+
   // product Details Reducers
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, product, error } = productDetails
@@ -76,11 +82,11 @@ const ProductEditScreen = ({ match, history }) => {
         setNameObj(product.productName)
         setCategoryObj(product.category)
         setGender(product.gender)
-        setImages(product.images)
-        setFeatureObj(product.feature)
-        setDescriptionObj(product.description)
-        setStyleObj(product.style)
-        setPriceObj(product.price)
+        setImages(product.image ? product.image : [])
+        setFeatureObj(product.feature ? product.feature : langInit)
+        setDescriptionObj(product.description ? product.description : langInit)
+        setStyleObj(product.style ? product.style : langInit)
+        setPriceObj(product.price ? product.price : currencyInit)
         setMaterial(product.material ? product.material : '')
         setWashing_care(product.washing_care ? product.washing_care : '')
         setDiscount(product.discount ? product.discount : '')
@@ -104,7 +110,7 @@ const ProductEditScreen = ({ match, history }) => {
       }
     }
 
-    console.log('pressed')
+    const base64Image = uploadImage(previewSource)
 
     const productObj = productObject(
       nameObj,
@@ -120,7 +126,7 @@ const ProductEditScreen = ({ match, history }) => {
       discount,
       sizes,
     )
-
+    productObj.newImage = base64Image
     dispatch(editProduct(productObj, productId))
   }
 
@@ -184,8 +190,34 @@ const ProductEditScreen = ({ match, history }) => {
     const sizeIndex = i
     const colorIndex = ind
     let newArr = [...sizes]
-    delete newArr[sizeIndex].colors[colorIndex]
+    var filteredArr = newArr[sizeIndex].colors.filter((value, index) => {
+      return index !== colorIndex
+    })
+    newArr[sizeIndex].colors = filteredArr
+    //console.log(newArr)
     setSizes(newArr)
+  }
+
+  const uploadImage = (base64EncodedImage) => {
+    return base64EncodedImage
+  }
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0]
+    const newImages = [...images]
+    newImages.push(file)
+    setImages(newImages)
+    setSelectedFile(file)
+    previewFile(file)
+  }
+  const previewFile = (file) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = () => {
+      let newPreviewSource = [...previewSource]
+      newPreviewSource.push(reader.result)
+      setPreviewSource(newPreviewSource)
+    }
   }
   return (
     <>
@@ -196,254 +228,303 @@ const ProductEditScreen = ({ match, history }) => {
       <FormContainer>
         <h1>EDIT PRODUCT</h1>
         {error && <Message variant="danger">{error}</Message>}
+        {editError && <Message variant="danger">{editError}</Message>}
         {success && <Message variant="success">{success}</Message>}
         {product ? (
           <Form onSubmit={submitHandler} autoComplete="on">
             <h5 className="mt-4">Product Name</h5>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                English
-              </InputGroup.Text>
-              <FormControl
-                value={nameObj.en}
-                placeholder="Product Name in English"
-                onChange={(e) => setNameObj({ ...nameObj, en: e.target.value })}
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Chinese
-              </InputGroup.Text>
-              <FormControl
-                value={nameObj.cn}
-                placeholder="Product Name in Chinese"
-                onChange={(e) => setNameObj({ ...nameObj, cn: e.target.value })}
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Japanese
-              </InputGroup.Text>
-              <FormControl
-                value={nameObj.jpn}
-                placeholder="Product Name in Japanese"
-                onChange={(e) =>
-                  setCategoryObj({ ...nameObj, jpn: e.target.value })
-                }
-              />
-            </InputGroup>
+            <>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  English
+                </InputGroup.Text>
+                <FormControl
+                  value={nameObj.en}
+                  placeholder="Product Name in English"
+                  onChange={(e) =>
+                    setNameObj({ ...nameObj, en: e.target.value })
+                  }
+                />
+              </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  Chinese
+                </InputGroup.Text>
+                <FormControl
+                  value={nameObj.cn}
+                  placeholder="Product Name in Chinese"
+                  onChange={(e) =>
+                    setNameObj({ ...nameObj, cn: e.target.value })
+                  }
+                />
+              </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  Japanese
+                </InputGroup.Text>
+                <FormControl
+                  value={nameObj.jpn}
+                  placeholder="Product Name in Japanese"
+                  onChange={(e) =>
+                    setCategoryObj({ ...nameObj, jpn: e.target.value })
+                  }
+                />
+              </InputGroup>
 
-            <h5 className="mt-4">Category</h5>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>English</InputGroup.Text>
-              <FormControl
-                value={categoryObj.en}
-                placeholder="Category in English"
-                onChange={(e) =>
-                  setCategoryObj({ ...categoryObj, en: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Chinese
-              </InputGroup.Text>
-              <FormControl
-                value={categoryObj.cn}
-                placeholder="Category in Chinese"
-                onChange={(e) =>
-                  setCategoryObj({ ...categoryObj, cn: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Japanese
-              </InputGroup.Text>
-              <FormControl
-                value={categoryObj.jpn}
-                placeholder="Category in Japanese"
-                onChange={(e) =>
-                  setCategoryObj({ ...categoryObj, en: e.target.value })
-                }
-              />
-            </InputGroup>
+              <h5 className="mt-4">Category</h5>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>English</InputGroup.Text>
+                <FormControl
+                  value={categoryObj.en}
+                  placeholder="Category in English"
+                  onChange={(e) =>
+                    setCategoryObj({ ...categoryObj, en: e.target.value })
+                  }
+                />
+              </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  Chinese
+                </InputGroup.Text>
+                <FormControl
+                  value={categoryObj.cn}
+                  placeholder="Category in Chinese"
+                  onChange={(e) =>
+                    setCategoryObj({ ...categoryObj, cn: e.target.value })
+                  }
+                />
+              </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  Japanese
+                </InputGroup.Text>
+                <FormControl
+                  value={categoryObj.jpn}
+                  placeholder="Category in Japanese"
+                  onChange={(e) =>
+                    setCategoryObj({ ...categoryObj, en: e.target.value })
+                  }
+                />
+              </InputGroup>
 
-            <h5 className="mt-4">Gender</h5>
+              <h5 className="mt-4">Gender</h5>
 
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>Gender</InputGroup.Text>
-              <FormControl
-                value={gender}
-                placeholder="Gender"
-                onChange={(e) => setGender(e.target.value)}
-              />
-            </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>Gender</InputGroup.Text>
+                <FormControl
+                  value={gender}
+                  placeholder="Gender"
+                  onChange={(e) => setGender(e.target.value)}
+                />
+              </InputGroup>
+            </>
 
             <h5 className="mt-4">Image</h5>
             <Form.Group controlId="formFileMultiple" className="mb-3">
-              <Form.Control type="file" multiple />
+              <Form.Control
+                type="file"
+                onChange={handleFileInputChange}
+                value={fileInputState}
+                multiple
+              />
             </Form.Group>
+            <Row>
+              {images.length > 0 &&
+                images.map((source) => {
+                  return (
+                    <Col key={source.toString()} xs={4} md={6} className="p-2">
+                      <Image
+                        className="img-lg"
+                        src={source}
+                        alt=""
+                        fluid
+                      ></Image>
+                    </Col>
+                  )
+                })}
+            </Row>
+
+            <Row>
+              {previewSource.length > 0 &&
+                previewSource.map((source) => {
+                  return (
+                    <Col key={source.toString()} xs={4} md={6} className="p-2">
+                      <Image
+                        className="img-lg"
+                        src={source}
+                        alt=""
+                        fluid
+                      ></Image>
+                    </Col>
+                  )
+                })}
+            </Row>
 
             <h5 className="mt-4">Feature</h5>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>English</InputGroup.Text>
-              <FormControl
-                value={featureObj.en}
-                placeholder="Feature in English"
-                onChange={(e) =>
-                  setFeatureObj({ ...featureObj, en: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>Chinese</InputGroup.Text>
-              <FormControl
-                value={featureObj.cn}
-                placeholder="Feature in Chinese"
-                onChange={(e) =>
-                  setFeatureObj({ ...featureObj, cn: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>Japanese</InputGroup.Text>
-              <FormControl
-                value={featureObj.jpn}
-                placeholder="Feature in Japanese"
-                onChange={(e) =>
-                  setFeatureObj({ ...featureObj, jpn: e.target.value })
-                }
-              />
-            </InputGroup>
+            <>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>English</InputGroup.Text>
+                <FormControl
+                  value={featureObj.en}
+                  placeholder="Feature in English"
+                  onChange={(e) =>
+                    setFeatureObj({ ...featureObj, en: e.target.value })
+                  }
+                />
+              </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>Chinese</InputGroup.Text>
+                <FormControl
+                  value={featureObj.cn}
+                  placeholder="Feature in Chinese"
+                  onChange={(e) =>
+                    setFeatureObj({ ...featureObj, cn: e.target.value })
+                  }
+                />
+              </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>Japanese</InputGroup.Text>
+                <FormControl
+                  value={featureObj.jpn}
+                  placeholder="Feature in Japanese"
+                  onChange={(e) =>
+                    setFeatureObj({ ...featureObj, jpn: e.target.value })
+                  }
+                />
+              </InputGroup>
 
-            <h5 className="mt-4">Description</h5>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>English</InputGroup.Text>
-              <FormControl
-                value={descriptionObj.en}
-                placeholder="Description in English"
-                onChange={(e) =>
-                  setDescriptionObj({ ...descriptionObj, en: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>Chinese</InputGroup.Text>
-              <FormControl
-                value={descriptionObj.cn}
-                placeholder="Description in Chinese"
-                onChange={(e) =>
-                  setDescriptionObj({ ...descriptionObj, cn: e.target.value })
-                }
-              />
-            </InputGroup>
+              <h5 className="mt-4">Description</h5>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>English</InputGroup.Text>
+                <FormControl
+                  value={descriptionObj.en}
+                  placeholder="Description in English"
+                  onChange={(e) =>
+                    setDescriptionObj({ ...descriptionObj, en: e.target.value })
+                  }
+                />
+              </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>Chinese</InputGroup.Text>
+                <FormControl
+                  value={descriptionObj.cn}
+                  placeholder="Description in Chinese"
+                  onChange={(e) =>
+                    setDescriptionObj({ ...descriptionObj, cn: e.target.value })
+                  }
+                />
+              </InputGroup>
 
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>Japanese</InputGroup.Text>
-              <FormControl
-                value={descriptionObj.jpn}
-                placeholder="Description in Japanese"
-                onChange={(e) =>
-                  setDescriptionObj({ ...descriptionObj, jpn: e.target.value })
-                }
-              />
-            </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>Japanese</InputGroup.Text>
+                <FormControl
+                  value={descriptionObj.jpn}
+                  placeholder="Description in Japanese"
+                  onChange={(e) =>
+                    setDescriptionObj({
+                      ...descriptionObj,
+                      jpn: e.target.value,
+                    })
+                  }
+                />
+              </InputGroup>
 
-            <h5 className="mt-4">Style</h5>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>English</InputGroup.Text>
-              <FormControl
-                value={styleObj.en}
-                placeholder="Style in English"
-                onChange={(e) =>
-                  setStyleObj({ ...styleObj, en: e.target.value })
-                }
-              />
-            </InputGroup>
+              <h5 className="mt-4">Style</h5>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>English</InputGroup.Text>
+                <FormControl
+                  value={styleObj.en}
+                  placeholder="Style in English"
+                  onChange={(e) =>
+                    setStyleObj({ ...styleObj, en: e.target.value })
+                  }
+                />
+              </InputGroup>
 
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>Chinese</InputGroup.Text>
-              <FormControl
-                value={styleObj.cn}
-                placeholder="Style in Chinese"
-                onChange={(e) =>
-                  setStyleObj({ ...styleObj, cn: e.target.value })
-                }
-              />
-            </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>Chinese</InputGroup.Text>
+                <FormControl
+                  value={styleObj.cn}
+                  placeholder="Style in Chinese"
+                  onChange={(e) =>
+                    setStyleObj({ ...styleObj, cn: e.target.value })
+                  }
+                />
+              </InputGroup>
 
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>Japanese</InputGroup.Text>
-              <FormControl
-                value={styleObj.jpn}
-                placeholder="Style in Japanese"
-                onChange={(e) =>
-                  setStyleObj({ ...styleObj, jpn: e.target.value })
-                }
-              />
-            </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-1">
+                <InputGroup.Text>Japanese</InputGroup.Text>
+                <FormControl
+                  value={styleObj.jpn}
+                  placeholder="Style in Japanese"
+                  onChange={(e) =>
+                    setStyleObj({ ...styleObj, jpn: e.target.value })
+                  }
+                />
+              </InputGroup>
 
-            <h5 className="mt-4">Price</h5>
-            <InputGroup size="sm" className="mb-3 my-2">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Hong Kong Dollars $
-              </InputGroup.Text>
-              <FormControl
-                placeholder="Price in Hong Kong Dollars"
-                value={priceObj.hkd}
-                onChange={(e) =>
-                  setPriceObj({ ...priceObj, hkd: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-2">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Japanese Yen ¥
-              </InputGroup.Text>
-              <FormControl
-                placeholder="Price in Japanese Yen"
-                value={priceObj.jpn}
-                onChange={(e) =>
-                  setPriceObj({ ...priceObj, jpn: e.target.value })
-                }
-              />
-            </InputGroup>
+              <h5 className="mt-4">Price</h5>
+              <InputGroup size="sm" className="mb-3 my-2">
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  Hong Kong Dollars $
+                </InputGroup.Text>
+                <FormControl
+                  placeholder="Price in Hong Kong Dollars"
+                  value={priceObj.hkd}
+                  onChange={(e) =>
+                    setPriceObj({ ...priceObj, hkd: e.target.value })
+                  }
+                />
+              </InputGroup>
+              <InputGroup size="sm" className="mb-3 my-2">
+                <InputGroup.Text id="inputGroup-sizing-sm">
+                  Japanese Yen ¥
+                </InputGroup.Text>
+                <FormControl
+                  placeholder="Price in Japanese Yen"
+                  value={priceObj.jpn}
+                  onChange={(e) =>
+                    setPriceObj({ ...priceObj, jpn: e.target.value })
+                  }
+                />
+              </InputGroup>
+            </>
+            <>
+              {sizes.length ? <h4 className="mt-4">Sizes</h4> : null}
+              {sizes &&
+                sizes.map((s, i) => {
+                  return (
+                    <div key={`${i}-sizes`} className="my-3">
+                      <Row>
+                        <Col md={6} className="mt-3">
+                          <h6>Colors and sizes for {s.sizeType}</h6>
+                        </Col>
 
-            {sizes.length ? <h4 className="mt-4">Sizes</h4> : null}
-            {sizes &&
-              sizes.map((s, i) => {
-                return (
-                  <div key={i} className="my-3">
-                    <Row>
-                      <Col md={6} className="mt-3">
-                        <h6>Colors and sizes for {s.sizeType}</h6>
-                      </Col>
+                        <Col md={6} className="mt-2">
+                          <div className="d-flex justify-content-end">
+                            <Button
+                              className="align-items-right btn-sm mx-1"
+                              onClick={(e) => addSizeRow(e, i)}
+                            >
+                              <i className="fas fa-plus" />
+                            </Button>
+                            <Button
+                              className="align-items-right btn-sm"
+                              variant="danger"
+                              onClick={() =>
+                                setSizes(
+                                  sizes.filter((_, index) => index !== i),
+                                )
+                              }
+                            >
+                              <i className="fas fa-times" />
+                            </Button>
+                          </div>
+                        </Col>
+                      </Row>
 
-                      <Col md={6} className="mt-2">
-                        <div className="d-flex justify-content-end">
-                          <Button
-                            className="align-items-right btn-sm mx-1"
-                            onClick={(e) => addSizeRow(e, i)}
-                          >
-                            <i className="fas fa-plus" />
-                          </Button>
-                          <Button
-                            className="align-items-right btn-sm"
-                            variant="danger"
-                            onClick={() =>
-                              setSizes(sizes.filter((_, index) => index !== i))
-                            }
-                          >
-                            <i className="fas fa-times" />
-                          </Button>
-                        </div>
-                      </Col>
-                    </Row>
-
-                    {s.colors.map((c, ind) => {
-                      return (
-                        <>
+                      {s.colors.map((c, ind) => {
+                        return (
                           <InputGroup size="sm" className="mb-1 my-2" key={ind}>
                             <InputGroup.Text id="inputGroup-sizing-sm">
                               Color
@@ -494,12 +575,12 @@ const ProductEditScreen = ({ match, history }) => {
                               <i className="fas fa-times" />
                             </Button>
                           </InputGroup>
-                        </>
-                      )
-                    })}
-                  </div>
-                )
-              })}
+                        )
+                      })}
+                    </div>
+                  )
+                })}
+            </>
 
             <div>
               <h4 className="mt-5">Enter new size and colors</h4>
@@ -577,14 +658,12 @@ const ProductEditScreen = ({ match, history }) => {
                   }
                 />
                 <FormControl
-                  defaultValue="#ffffff"
                   value={newColorHex}
                   onChange={(e) => setNewColorHex(e.target.value)}
                 />
                 <FormControl
                   className="py-2"
                   type="color"
-                  defaultValue="#ffffff"
                   value={newColorHex}
                   onChange={(e) => setNewColorHex(e.target.value)}
                 />

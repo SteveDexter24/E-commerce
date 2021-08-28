@@ -39,7 +39,7 @@ const ProductScreen = ({ history, match }) => {
 
   useEffect(() => {
     dispatch(listProductDetails(match.params.id))
-  }, [dispatch, match])
+  }, [dispatch, match, colorIndex, selectedIndex])
 
   const addToCartHandler = () => {
     history.push(
@@ -63,53 +63,46 @@ const ProductScreen = ({ history, match }) => {
         Go Back
       </Link>
       {product ? (
-        <Row>
-          <Col md={6}>
+        <Row className="justify-content-md-center">
+          {/* multiple images support */}
+          <Col md={8} lg={5}>
             <Image
+              width={500}
+              height={500}
+              fluid
               src={product.image[0]}
               alt={product.productName[language]}
-              fluid
             />
           </Col>
-          <Col md={3}>
-            {/*flush takes out the border */}
-            <ListGroup variant="flush">
-              <ListGroup.Item>
-                <h2>{product.productName[language]}</h2>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <SizeButtons
-                  product={product}
-                  styles={styles}
-                  buttonClick={setSizeAndSizeIndex}
-                  selectedSize={selectedSize}
-                />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <ColorButtons
-                  product={product}
-                  styles={styles}
-                  buttonClick={setColorButton}
-                  language={language}
-                  colors={color}
-                  selectedIndex={selectedIndex}
-                />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Rating
-                  value={product.ratings}
-                  text={`${product.ratings} reviews`}
-                />
-              </ListGroup.Item>
-              <ListGroup.Item>Price: ${product.price[currency]}</ListGroup.Item>
-              <ListGroup.Item>
-                Description: {product.feature[language]}
-              </ListGroup.Item>
-            </ListGroup>
-          </Col>
-          <Col md={3}>
+          <Col md={4} lg={5}>
             <Card>
-              <ListGroup variant="flush">
+              <ListGroup variant="flush" className="borderless">
+                <ListGroup.Item variant="fluid">
+                  <h2>Product Name: {product.productName[language]}</h2>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <SizeButtons
+                    product={product}
+                    styles={styles}
+                    buttonClick={setSizeAndSizeIndex}
+                    selectedSize={selectedSize}
+                  />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <ColorButtons
+                    product={product}
+                    styles={styles}
+                    buttonClick={setColorButton}
+                    language={language}
+                    colors={color}
+                    selectedIndex={selectedIndex}
+                  />
+                </ListGroup.Item>
+
+                <ListGroup.Item>
+                  Description: {product.feature[language]}
+                </ListGroup.Item>
+
                 <ListGroup.Item>
                   <Row>
                     <Col>Price:</Col>
@@ -122,7 +115,9 @@ const ProductScreen = ({ history, match }) => {
                   <Row>
                     <Col>Status:</Col>
                     <Col>
-                      {product.size[selectedIndex].colors.indexOf(colorIndex)
+                      {product.size[selectedIndex].colors[colorIndex] !==
+                        undefined &&
+                      product.size[selectedIndex].colors[colorIndex].count > 0
                         ? 'In Stock'
                         : 'Out of Stock'}
                     </Col>
@@ -174,11 +169,10 @@ const ProductScreen = ({ history, match }) => {
                       className="btn"
                       type="button"
                       disabled={
-                        (product.size[selectedIndex].colors.indexOf(
-                          colorIndex,
-                        ) !== -1 &&
-                          product.size[selectedIndex].colors[colorIndex]
-                            .count <= 0) ||
+                        product.size[selectedIndex].colors[colorIndex] ===
+                          undefined ||
+                        product.size[selectedIndex].colors[colorIndex].count <=
+                          0 ||
                         color === 'None' ||
                         selectedSize === 'None'
                       }
