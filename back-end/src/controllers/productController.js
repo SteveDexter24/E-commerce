@@ -19,24 +19,13 @@ module.exports = {
       queries.price = { $gte: minPrice, $lte: maxPrice }
     }
 
-    Product.find(queries, (err, foundProducts) => {
-      if (err) {
-        res.send({
-          message: 'error occurred while fetching products',
-        })
-      }
-      if (foundProducts) {
-        if (page && limit) {
-          res.status(200).send(foundProducts.slice(startIndex, endIndex))
-        } else {
-          res.status(200).send(foundProducts)
-        }
-      } else {
-        res.send({ message: 'no products found' })
-      }
-    })
-      .sort({ createdAt: -1 })
-      .exec()
+    try {
+      const foundProducts = await Product.find({}).sort({ createdAt: -1 })
+
+      res.status(200).send(foundProducts)
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
   },
   // get product by Id
   async getProductAsync(req, res) {
@@ -89,6 +78,41 @@ module.exports = {
       res.status(200).send({ message: 'Product removed' })
     } catch (err) {
       res.send({ message: err.message })
+    }
+  },
+
+  async getMenProduct(req, res) {
+    try {
+      const menProduct = await Product.find({ gender: 'men' })
+      res.status(200).send(menProduct)
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  },
+  async getWomenProduct(req, res) {
+    try {
+      const womenProduct = await Product.find({ gender: 'women' })
+      res.status(200).send(womenProduct)
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  },
+  async getKidsProduct(req, res) {
+    try {
+      const kidsProduct = await Product.find({ 'category.en': 'kids' })
+      res.status(200).send(kidsProduct)
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  },
+  async getNewArrivalsProduct(req, res) {
+    try {
+      const newArrivals = await Product.find({})
+        .sort({ createdAt: -1 })
+        .limit(6)
+      res.status(200).send(newArrivals)
+    } catch (error) {
+      res.status(404).send({ message: error.message })
     }
   },
 }

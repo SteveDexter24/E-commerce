@@ -7,7 +7,6 @@ import Message from '../../components/message'
 import SizeButtons from './sizeButtons'
 import ColorButtons from './colorButtons'
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
-import Rating from '../../components/rating'
 import { sizeTypeToInfo } from '../../Utils/size'
 
 const styles = {
@@ -39,7 +38,7 @@ const ProductScreen = ({ history, match }) => {
 
   useEffect(() => {
     dispatch(listProductDetails(match.params.id))
-  }, [dispatch, match, colorIndex, selectedIndex])
+  }, [dispatch, match])
 
   const addToCartHandler = () => {
     history.push(
@@ -78,7 +77,7 @@ const ProductScreen = ({ history, match }) => {
             <Card>
               <ListGroup variant="flush" className="borderless">
                 <ListGroup.Item variant="fluid">
-                  <h2>Product Name: {product.productName[language]}</h2>
+                  <h2>{product.productName[language]}</h2>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <SizeButtons
@@ -99,9 +98,7 @@ const ProductScreen = ({ history, match }) => {
                   />
                 </ListGroup.Item>
 
-                <ListGroup.Item>
-                  Description: {product.feature[language]}
-                </ListGroup.Item>
+                <ListGroup.Item>{product.feature[language]}</ListGroup.Item>
 
                 <ListGroup.Item>
                   <Row>

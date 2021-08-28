@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Card } from 'react-bootstrap'
+import { Card, Row, Col } from 'react-bootstrap'
 
 const Product = ({ product, lang, currency }) => {
   const [textColor, setTextColor] = useState('text-primary')
@@ -12,30 +12,44 @@ const Product = ({ product, lang, currency }) => {
     setTextColor('text-primary')
   }
   return (
-    <Card className="my-3 p-3 rounded">
+    <Card className="my-2 rounded">
       <Link to={`/product/${product._id}`}>
-        <Card.Img src={product.image[0]} variant="top" />
+        <Card.Img
+          src={product.image[0]}
+          variant="top"
+          height={400}
+          width={400}
+          style={{ objectFit: 'cover' }}
+        />
       </Link>
       <Card.Body>
-        <Link to={`/product/${product._id}`} style={{ textDecoration: 'none' }}>
-          <Card.Title as="div">
-            <strong
-              className={textColor}
-              onMouseOver={handleMouseOver}
-              onMouseLeave={handleOnMouseOut}
+        <Row>
+          <Col md={8}>
+            <Link
+              to={`/product/${product._id}`}
+              style={{ textDecoration: 'none' }}
             >
-              {product.productName[lang]}
-            </strong>
-          </Card.Title>
-        </Link>
-
-        <Card.Text as="div" className="text-secondary">
-          {product.description[lang]}
-        </Card.Text>
-        <Card.Text as="h4">
-          {currency === 'jpn' ? '¥' : '$'}
-          {product.price[currency]}
-        </Card.Text>
+              <Card.Title as="div">
+                <strong
+                  className={textColor}
+                  onMouseOver={handleMouseOver}
+                  onMouseLeave={handleOnMouseOut}
+                >
+                  {product.productName[lang]}
+                </strong>
+              </Card.Title>
+            </Link>
+          </Col>
+          <Col md={4}>
+            <Card.Text
+              as="h4"
+              className=" d-flex align-items-center justify-content-end"
+            >
+              {currency === 'jpn' ? '¥' : '$'}
+              {product.price[currency]}
+            </Card.Text>
+          </Col>
+        </Row>
       </Card.Body>
     </Card>
   )

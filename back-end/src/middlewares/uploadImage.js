@@ -26,7 +26,7 @@ const uploadImageMiddleware = async (req, res, next) => {
     } else {
       req.body.image = images
     }
-    return
+
     next()
   } catch (error) {
     res.status(500).send({ message: 'Failed to upload image(s)' })

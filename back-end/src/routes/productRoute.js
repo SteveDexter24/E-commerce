@@ -18,6 +18,15 @@ const router = express.Router()
 router.get('/api/products', productController.listAllProductsAsync)
 router.get('/api/product/:id', productController.getProductAsync)
 
+// Get Products by category
+router.get('/api/products/men', productController.getMenProduct)
+router.get('/api/products/women', productController.getWomenProduct)
+router.get('/api/products/kids', productController.getKidsProduct)
+router.get(
+  '/api/products/new-arrivals',
+  productController.getNewArrivalsProduct,
+)
+
 // Admin access only
 router.post(
   '/api/product',

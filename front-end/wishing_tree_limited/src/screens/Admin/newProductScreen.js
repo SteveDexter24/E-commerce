@@ -40,7 +40,7 @@ const NewProductScreen = ({ match, history }) => {
   const [stock, setStock] = useState([])
   //
   const [newColor, setNewColor] = useState(langInit)
-  const [newColorHex, setNewColorHex] = useState('')
+  const [newColorHex, setNewColorHex] = useState('#ffffff')
   const [newStock, setNewStock] = useState('')
   const [newSizeType, setNewSizeType] = useState('')
 
@@ -55,8 +55,6 @@ const NewProductScreen = ({ match, history }) => {
   const { loading, error, product: productMessage } = productCreate
 
   // file input state
-  const [fileInputState, setFileInputState] = useState('')
-  const [selectedFile, setSelectedFile] = useState('')
   const [previewSource, setPreviewSource] = useState([])
 
   useEffect(() => {
@@ -175,7 +173,6 @@ const NewProductScreen = ({ match, history }) => {
     const newImages = [...images]
     newImages.push(file)
     setImages(newImages)
-    setSelectedFile(file)
     previewFile(file)
   }
   const previewFile = (file) => {
@@ -267,7 +264,7 @@ const NewProductScreen = ({ match, history }) => {
                 value={categoryObj.jpn}
                 placeholder="Category in Japanese"
                 onChange={(e) =>
-                  setCategoryObj({ ...categoryObj, en: e.target.value })
+                  setCategoryObj({ ...categoryObj, jpn: e.target.value })
                 }
               />
             </InputGroup>
@@ -289,7 +286,6 @@ const NewProductScreen = ({ match, history }) => {
               <Form.Control
                 type="file"
                 onChange={handleFileInputChange}
-                value={fileInputState}
                 multiple
               />
             </Form.Group>
@@ -528,7 +524,7 @@ const NewProductScreen = ({ match, history }) => {
               })}
             </>
             <div>
-              <h4 className="mt-5">Enter new Size and colors</h4>
+              <h4 className="mt-5">Enter new size and colors</h4>
               <InputGroup size="sm" className="mb-3 my-2">
                 <InputGroup.Text id="inputGroup-sizing-sm">
                   Size Type
@@ -563,7 +559,7 @@ const NewProductScreen = ({ match, history }) => {
                           className="btn-sm"
                           variant="danger"
                           onClick={() => {
-                            setColors(colors.filter((_, index) => i != index))
+                            setColors(colors.filter((_, index) => i !== index))
                             setColorsHex(
                               colorsHex.filter((_, index) => i !== index),
                             )
