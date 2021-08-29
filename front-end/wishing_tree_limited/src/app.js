@@ -9,11 +9,17 @@ import LoginScreen from './screens/loginScreen'
 import CartScreen from './screens/cartScreen'
 import RegisterScreen from './screens/registerScreen'
 
+// Navbar menu related screens
+import MenScreen from './screens/menScreen'
+import WomenScreen from './screens/womenScreen'
+
+// User Profile related screens
 import EditProfile from './screens/UpdateUserInfo/editProfile'
 import ChangePassword from './screens/UpdateUserInfo/changePassword'
 import Settings from './screens/UpdateUserInfo/settings'
 import SettingsScreen from './screens/settingsScreen'
 
+// Order related screens
 import OrderHistoryScreen from './screens/orderHistoryScreen'
 import ShippingScreen from './screens/shippingScreen'
 import PaymentScreen from './screens/paymentScreen'
@@ -36,6 +42,7 @@ const App = () => {
       <Header />
       <main className="py-3">
         <Container>
+          {/*User authentication routes*/}
           <Route path="/login" exact component={LoginScreen} />
           <Route path="/register" exact component={RegisterScreen} />
           <Route path="/profile" exact component={EditProfile} />
@@ -45,8 +52,14 @@ const App = () => {
             component={ChangePassword}
           />
           <Route path="/profile/settings" exact component={Settings} />
+
+          {/*Navbar menu routes */}
+          <Route path="/men" exact component={MenScreen} />
+          <Route path="/women" exact component={WomenScreen} />
+
+          {/*Order paths*/}
           <Route path="/orderHistory" exact component={OrderHistoryScreen} />
-          <Route path="/product/:id" exact component={ProductScreen} />
+          <Route path="/product/:id/:menu?" exact component={ProductScreen} />
           <Route path="/cart/:id?" exact component={CartScreen} />
           <Route path="/shipping" exact component={ShippingScreen} />
           <Route path="/payment" exact component={PaymentScreen} />

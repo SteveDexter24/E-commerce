@@ -17,7 +17,7 @@ const PaymentMethods = () => {
     <Row className="mt-2">
       {paymentIcons.map((p, i) => {
         return (
-          <Col md={'auto'}>
+          <Col md={'auto'} xs={2} key={i}>
             <Image width={30} height={20} src={p} />
           </Col>
         )

@@ -76,7 +76,9 @@ module.exports = {
 
   async getMenProduct(req, res) {
     try {
-      const menProduct = await Product.find({ gender: 'men' })
+      const menProduct = await Product.find({ gender: 'men' }).sort({
+        createdAt: -1,
+      })
       res.status(200).send(menProduct)
     } catch (error) {
       res.status(404).send({ message: error.message })
@@ -84,7 +86,9 @@ module.exports = {
   },
   async getWomenProduct(req, res) {
     try {
-      const womenProduct = await Product.find({ gender: 'women' })
+      const womenProduct = await Product.find({ gender: 'women' }).sort({
+        createdAt: -1,
+      })
       res.status(200).send(womenProduct)
     } catch (error) {
       res.status(404).send({ message: error.message })
@@ -92,7 +96,9 @@ module.exports = {
   },
   async getKidsProduct(req, res) {
     try {
-      const kidsProduct = await Product.find({ 'category.en': 'kids' })
+      const kidsProduct = await Product.find({ 'category.en': 'kids' }).sort({
+        createdAt: -1,
+      })
       res.status(200).send(kidsProduct)
     } catch (error) {
       res.status(404).send({ message: error.message })

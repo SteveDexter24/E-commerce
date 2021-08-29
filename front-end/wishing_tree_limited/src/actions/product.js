@@ -15,6 +15,15 @@ import {
   EDIT_PRODUCT_REQUEST,
   EDIT_PRODUCT_SUCCESS,
   EDIT_PRODUCT_FAIL,
+  FETCH_MEN_PRODUCT_REQUEST,
+  FETCH_MEN_PRODUCT_SUCCESS,
+  FETCH_MEN_PRODUCT_FAIL,
+  FETCH_WOMEN_PRODUCT_REQUEST,
+  FETCH_WOMEN_PRODUCT_SUCCESS,
+  FETCH_WOMEN_PRODUCT_FAIL,
+  FETCH_KIDS_PRODUCT_REQUEST,
+  FETCH_KIDS_PRODUCT_SUCCESS,
+  FETCH_KIDS_PRODUCT_FAIL,
 } from './types'
 import { errorHandler } from '../Utils/errorHandling'
 import { configUtil } from '../Utils/apiConfig'
@@ -96,5 +105,45 @@ export const deleteProduct = (productId) => async (dispatch, getState) => {
     dispatch({ type: DELETE_PRODUCT_SUCCESS })
   } catch (error) {
     dispatch({ type: DELETE_PRODUCT_FAIL, payload: errorHandler(error) })
+  }
+}
+
+export const getMenProduct = () => async (dispatch) => {
+  try {
+    dispatch({ type: FETCH_MEN_PRODUCT_REQUEST })
+    const { data } = await product.get('/products/men')
+    console.log(data)
+    dispatch({ type: FETCH_MEN_PRODUCT_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: FETCH_MEN_PRODUCT_FAIL,
+      payload: errorHandler(error),
+    })
+  }
+}
+
+export const getWomenProduct = () => async (dispatch) => {
+  try {
+    dispatch({ type: FETCH_WOMEN_PRODUCT_REQUEST })
+    const { data } = await product.get('/products/women')
+    dispatch({ type: FETCH_WOMEN_PRODUCT_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: FETCH_WOMEN_PRODUCT_FAIL,
+      payload: errorHandler(error),
+    })
+  }
+}
+
+export const getKidsProduct = () => async (dispatch) => {
+  try {
+    dispatch({ type: FETCH_KIDS_PRODUCT_REQUEST })
+    const { data } = await product.get('/products/men')
+    dispatch({ type: FETCH_KIDS_PRODUCT_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: FETCH_KIDS_PRODUCT_FAIL,
+      payload: errorHandler(error),
+    })
   }
 }

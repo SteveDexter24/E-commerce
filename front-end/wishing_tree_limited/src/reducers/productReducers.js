@@ -15,7 +15,16 @@ import {
   EDIT_PRODUCT_SUCCESS,
   EDIT_PRODUCT_FAIL,
   EDIT_PRODUCT_RESET,
-  CREATE_PRODUCT_RESET
+  CREATE_PRODUCT_RESET,
+  FETCH_MEN_PRODUCT_REQUEST,
+  FETCH_MEN_PRODUCT_SUCCESS,
+  FETCH_MEN_PRODUCT_FAIL,
+  FETCH_WOMEN_PRODUCT_REQUEST,
+  FETCH_WOMEN_PRODUCT_SUCCESS,
+  FETCH_WOMEN_PRODUCT_FAIL,
+  FETCH_KIDS_PRODUCT_REQUEST,
+  FETCH_KIDS_PRODUCT_SUCCESS,
+  FETCH_KIDS_PRODUCT_FAIL,
 } from '../actions/types'
 
 export const productListReducer = (state = { products: [] }, action) => {
@@ -82,6 +91,48 @@ export const productEditReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case EDIT_PRODUCT_RESET:
       return {}
+    default:
+      return state
+  }
+}
+
+export const mensProductReducer = (state = {}, action) => {
+  switch (action.type) {
+    case FETCH_MEN_PRODUCT_REQUEST:
+      return { loading: true }
+    case FETCH_MEN_PRODUCT_SUCCESS:
+      return { loading: false, products: action.payload }
+    case FETCH_MEN_PRODUCT_FAIL:
+      return { loading: false, error: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const womenProductReducer = (state = {}, action) => {
+  switch (action.type) {
+    case FETCH_WOMEN_PRODUCT_REQUEST:
+      return { loading: true }
+    case FETCH_WOMEN_PRODUCT_SUCCESS:
+      return { loading: false, products: action.payload }
+    case FETCH_WOMEN_PRODUCT_FAIL:
+      return { loading: false, error: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const kidsProductReducer = (state = {}, action) => {
+  switch (action.type) {
+    case FETCH_KIDS_PRODUCT_REQUEST:
+      return { loading: true }
+    case FETCH_KIDS_PRODUCT_SUCCESS:
+      return { loading: false, products: action.payload }
+    case FETCH_KIDS_PRODUCT_FAIL:
+      return { loading: false, error: action.payload }
+
     default:
       return state
   }

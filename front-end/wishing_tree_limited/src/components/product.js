@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Row, Col } from 'react-bootstrap'
 
-const Product = ({ product, lang, currency }) => {
+const Product = ({ product, lang, currency, menu }) => {
   const [textColor, setTextColor] = useState('text-primary')
 
   const handleMouseOver = () => {
@@ -13,7 +13,7 @@ const Product = ({ product, lang, currency }) => {
   }
   return (
     <Card className="my-2 rounded">
-      <Link to={`/product/${product._id}`}>
+      <Link to={`/product/${product._id}/${menu}?`}>
         <Card.Img
           src={product.image[0]}
           variant="top"
@@ -26,7 +26,7 @@ const Product = ({ product, lang, currency }) => {
         <Row>
           <Col xs={8} sm={8} md={8} lg={8} xl={8} xxl={8}>
             <Link
-              to={`/product/${product._id}`}
+              to={`/product/${product._id}/${menu}?`}
               style={{ textDecoration: 'none' }}
             >
               <Card.Title as="div" className=" d-flex align-items-center">

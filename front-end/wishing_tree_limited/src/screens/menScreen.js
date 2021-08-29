@@ -1,31 +1,34 @@
-import React, { useEffect } from 'react'
-import { Col, Row } from 'react-bootstrap'
-import Product from '../components/product'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllProducts } from '../actions/product'
+import { getMenProduct } from '../actions/product'
+import { Row, Col } from 'react-bootstrap'
 import Loader from '../components/loader'
 import Message from '../components/message'
+import Product from '../components/product'
 
-const HomeScreen = () => {
-  const dispatch = useDispatch()
-  const productList = useSelector((state) => state.productList)
+const MenScreen = () => {
+  const menProduct = useSelector((state) => state.menProduct)
+  const { loading, products, error } = menProduct
+
   const settings = useSelector((state) => state.settings)
   const { language, currency } = settings
-  const { loading, error, products } = productList
+
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    dispatch(fetchAllProducts())
+    dispatch(getMenProduct())
   }, [dispatch])
 
   return (
     <>
-      <h1>Latest Products</h1>
+      <h1>All mens products</h1>
       {products ? (
         <Row>
           {products.map((product, i) => {
             return (
               <Col key={i} sm={12} md={6} lg={4} xl={3}>
                 <Product
-                  menu=""
+                  menu="men"
                   product={product}
                   lang={language}
                   currency={currency}
@@ -43,4 +46,4 @@ const HomeScreen = () => {
   )
 }
 
-export default HomeScreen
+export default MenScreen

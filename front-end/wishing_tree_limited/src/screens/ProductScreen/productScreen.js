@@ -77,7 +77,10 @@ const ProductScreen = ({ history, match }) => {
 
   return (
     <>
-      <Link className="btn my-3" to="/">
+      <Link
+        className="btn my-3"
+        to={match.params.menu ? `/${match.params.menu}` : '/'}
+      >
         Go Back
       </Link>
       {product ? (
