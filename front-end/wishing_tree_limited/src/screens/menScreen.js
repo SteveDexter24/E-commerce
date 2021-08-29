@@ -5,6 +5,7 @@ import { Row, Col } from 'react-bootstrap'
 import Loader from '../components/loader'
 import Message from '../components/message'
 import Product from '../components/product'
+import FilterComponent from '../components/filterComponent'
 
 const MenScreen = () => {
   const menProduct = useSelector((state) => state.menProduct)
@@ -22,6 +23,8 @@ const MenScreen = () => {
   return (
     <>
       <h1>All mens products</h1>
+      {/* Insert filter function */}
+      <FilterComponent />
       {products ? (
         <Row>
           {products.map((product, i) => {
