@@ -198,7 +198,6 @@ const ProductEditScreen = ({ match, history }) => {
       return index !== colorIndex
     })
     newArr[sizeIndex].colors = filteredArr
-    //console.log(newArr)
     setSizes(newArr)
   }
 
