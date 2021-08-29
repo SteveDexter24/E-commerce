@@ -14,7 +14,7 @@ const uploadImageMiddleware = require('../middlewares/uploadImage')
 
 const router = express.Router()
 
-// User and Admin access only
+// Public access
 router.get('/api/products', productController.listAllProductsAsync)
 router.get('/api/product/:id', productController.getProductAsync)
 

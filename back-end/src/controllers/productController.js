@@ -3,25 +3,18 @@ const { Product } = require('../models/products')
 module.exports = {
   // list all product
   async listAllProductsAsync(req, res, next) {
-    const { page, limit } = req.query
-
-    const startIndex = (page - 1) * limit
-    const endIndex = page * limit
-
-    var queries = req.body
-
-    const { minPrice, maxPrice } = req.body
-
-    delete queries.minPrice
-    delete queries.maxPrice
-
-    if (minPrice !== undefined || maxPrice !== undefined) {
-      queries.price = { $gte: minPrice, $lte: maxPrice }
-    }
+    const { category, style, gender } = req.body
+    // console.log(req.body)
+    // let query = [
+    //   { category: { en: category } },
+    //   { style: { en: style } },
+    //   { gender: gender },
+    // ]
 
     try {
-      const foundProducts = await Product.find({}).sort({ createdAt: -1 })
-
+      const foundProducts = await Product.find({}).sort({
+        createdAt: -1,
+      })
       res.status(200).send(foundProducts)
     } catch (error) {
       res.status(404).send({ message: error.message })

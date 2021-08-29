@@ -7,6 +7,7 @@ import {
   Row,
   Col,
   Image,
+  Modal,
 } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../../components/formContainer'
@@ -17,6 +18,13 @@ import { Link } from 'react-router-dom'
 import { productObject } from '../../Utils/createProduct'
 import { createProduct } from '../../actions/product'
 import { CREATE_PRODUCT_RESET } from '../../actions/types'
+import { InputGroupComponent } from '../../Utils/Input Form/inputForm'
+import {
+  formItems,
+  priceItems,
+  colorItems,
+} from '../../Utils/Input Form/formConstants'
+import ShowImageForAdmin from '../../components/showImageForAdmin'
 
 const NewProductScreen = ({ match, history }) => {
   const langInit = { en: '', cn: '', jpn: '' }
@@ -26,7 +34,6 @@ const NewProductScreen = ({ match, history }) => {
   const [nameObj, setNameObj] = useState(langInit)
   const [categoryObj, setCategoryObj] = useState(langInit)
   const [gender, setGender] = useState('')
-  const [images, setImages] = useState([])
   const [featureObj, setFeatureObj] = useState(langInit)
   const [descriptionObj, setDescriptionObj] = useState(langInit)
   const [styleObj, setStyleObj] = useState(langInit)
@@ -79,7 +86,6 @@ const NewProductScreen = ({ match, history }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     console.log('submit')
-    //const imageArr = []
     const base64Image = uploadImage(previewSource)
     const productObj = productObject(
       nameObj,
@@ -97,6 +103,7 @@ const NewProductScreen = ({ match, history }) => {
     )
     //TODO: uncomment the line below
     console.log(productObj.image)
+    console.log(productObj)
     dispatch(createProduct(productObj))
   }
 
@@ -170,9 +177,10 @@ const NewProductScreen = ({ match, history }) => {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0]
-    const newImages = [...images]
-    newImages.push(file)
-    setImages(newImages)
+    if (!file) {
+      return
+    }
+    console.log(file)
     previewFile(file)
   }
   const previewFile = (file) => {
@@ -183,6 +191,20 @@ const NewProductScreen = ({ match, history }) => {
       newPreviewSource.push(reader.result)
       setPreviewSource(newPreviewSource)
     }
+  }
+
+  const handleRemoveImage = (index) => {
+    console.log(index)
+    let newArr = [...previewSource]
+
+    let finalArr = []
+    for (let i = 0; i < newArr.length; i++) {
+      if (index !== i) {
+        finalArr.push(newArr[i])
+      }
+    }
+
+    setPreviewSource(finalArr)
   }
 
   return (
@@ -200,74 +222,40 @@ const NewProductScreen = ({ match, history }) => {
         ) : (
           <Form onSubmit={submitHandler} autoComplete="on">
             <h5 className="mt-4">Product Name</h5>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                English
-              </InputGroup.Text>
-              <FormControl
-                value={nameObj.en}
-                placeholder="Product Name in English"
-                onChange={(e) => setNameObj({ ...nameObj, en: e.target.value })}
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Chinese
-              </InputGroup.Text>
-              <FormControl
-                value={nameObj.cn}
-                placeholder="Product Name in Chinese"
-                onChange={(e) => setNameObj({ ...nameObj, cn: e.target.value })}
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Japanese
-              </InputGroup.Text>
-              <FormControl
-                value={nameObj.jpn}
-                placeholder="Product Name in Japanese"
-                onChange={(e) =>
-                  setNameObj({ ...nameObj, jpn: e.target.value })
-                }
-              />
-            </InputGroup>
+            {formItems('Product Name').map((item) => {
+              return (
+                <InputGroupComponent
+                  key={item.title}
+                  dictKey={item.key}
+                  title={item.title}
+                  placeholder={item.placeholder}
+                  onChangeHandler={(e) =>
+                    setNameObj({ ...nameObj, [item.key]: e.target.value })
+                  }
+                  stateObject={nameObj}
+                />
+              )
+            })}
 
             <h5 className="mt-4">Category</h5>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text>English</InputGroup.Text>
-              <FormControl
-                value={categoryObj.en}
-                placeholder="Category in English"
-                onChange={(e) =>
-                  setCategoryObj({ ...categoryObj, en: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Chinese
-              </InputGroup.Text>
-              <FormControl
-                value={categoryObj.cn}
-                placeholder="Category in Chinese"
-                onChange={(e) =>
-                  setCategoryObj({ ...categoryObj, cn: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup size="sm" className="mb-3 my-1">
-              <InputGroup.Text id="inputGroup-sizing-sm">
-                Japanese
-              </InputGroup.Text>
-              <FormControl
-                value={categoryObj.jpn}
-                placeholder="Category in Japanese"
-                onChange={(e) =>
-                  setCategoryObj({ ...categoryObj, jpn: e.target.value })
-                }
-              />
-            </InputGroup>
+
+            {formItems('Category').map((item) => {
+              return (
+                <InputGroupComponent
+                  key={item.title}
+                  dictKey={item.key}
+                  title={item.title}
+                  placeholder={item.placeholder}
+                  onChangeHandler={(e) =>
+                    setCategoryObj({
+                      ...categoryObj,
+                      [item.key]: e.target.value,
+                    })
+                  }
+                  stateObject={categoryObj}
+                />
+              )
+            })}
 
             <h5 className="mt-4">Gender</h5>
 
@@ -282,157 +270,90 @@ const NewProductScreen = ({ match, history }) => {
 
             {/* Images need to add map funciton */}
             <h5 className="mt-4">Image</h5>
-            <Form.Group controlId="formFileMultiple" className="mb-3">
-              <Form.Control
-                type="file"
-                onChange={handleFileInputChange}
-                multiple
-              />
+            <Form.Group className="mb-3">
+              <Form.Control type="file" onChange={handleFileInputChange} />
             </Form.Group>
-            <Row>
-              {previewSource.length > 0 &&
-                previewSource.map((source) => {
-                  return (
-                    <Col key={source.toString()} xs={4} md={6} className="p-2">
-                      <Image
-                        className="img-lg"
-                        src={source}
-                        alt=""
-                        fluid
-                      ></Image>
-                    </Col>
-                  )
-                })}
-            </Row>
 
+            <ShowImageForAdmin
+              source={previewSource}
+              handleRemoveImage={(index) => handleRemoveImage(index)}
+            />
             <>
               <h5 className="mt-4">Feature</h5>
-              <InputGroup size="sm" className="mb-3 my-1">
-                <InputGroup.Text>English</InputGroup.Text>
-                <FormControl
-                  value={featureObj.en}
-                  placeholder="Feature in English"
-                  onChange={(e) =>
-                    setFeatureObj({ ...featureObj, en: e.target.value })
-                  }
-                />
-              </InputGroup>
-              <InputGroup size="sm" className="mb-3 my-1">
-                <InputGroup.Text>Chinese</InputGroup.Text>
-                <FormControl
-                  value={featureObj.cn}
-                  placeholder="Feature in Chinese"
-                  onChange={(e) =>
-                    setFeatureObj({ ...featureObj, cn: e.target.value })
-                  }
-                />
-              </InputGroup>
-              <InputGroup size="sm" className="mb-3 my-1">
-                <InputGroup.Text>Japanese</InputGroup.Text>
-                <FormControl
-                  value={featureObj.jpn}
-                  placeholder="Feature in Japanese"
-                  onChange={(e) =>
-                    setFeatureObj({ ...featureObj, jpn: e.target.value })
-                  }
-                />
-              </InputGroup>
+
+              {formItems('Feature').map((item) => {
+                return (
+                  <InputGroupComponent
+                    key={item.title}
+                    dictKey={item.key}
+                    title={item.title}
+                    placeholder={item.placeholder}
+                    onChangeHandler={(e) =>
+                      setFeatureObj({
+                        ...featureObj,
+                        [item.key]: e.target.value,
+                      })
+                    }
+                    stateObject={featureObj}
+                  />
+                )
+              })}
 
               <h5 className="mt-4">Description</h5>
-              <InputGroup size="sm" className="mb-3 my-1">
-                <InputGroup.Text>English</InputGroup.Text>
-                <FormControl
-                  value={descriptionObj.en}
-                  placeholder="Description in English"
-                  onChange={(e) =>
-                    setDescriptionObj({ ...descriptionObj, en: e.target.value })
-                  }
-                />
-              </InputGroup>
-              <InputGroup size="sm" className="mb-3 my-1">
-                <InputGroup.Text>Chinese</InputGroup.Text>
-                <FormControl
-                  value={descriptionObj.cn}
-                  placeholder="Description in Chinese"
-                  onChange={(e) =>
-                    setDescriptionObj({ ...descriptionObj, cn: e.target.value })
-                  }
-                />
-              </InputGroup>
-
-              <InputGroup size="sm" className="mb-3 my-1">
-                <InputGroup.Text>Japanese</InputGroup.Text>
-                <FormControl
-                  value={descriptionObj.jpn}
-                  placeholder="Description in Japanese"
-                  onChange={(e) =>
-                    setDescriptionObj({
-                      ...descriptionObj,
-                      jpn: e.target.value,
-                    })
-                  }
-                />
-              </InputGroup>
+              {formItems('Description').map((item) => {
+                return (
+                  <InputGroupComponent
+                    key={item.title}
+                    dictKey={item.key}
+                    title={item.title}
+                    placeholder={item.placeholder}
+                    onChangeHandler={(e) =>
+                      setDescriptionObj({
+                        ...descriptionObj,
+                        [item.key]: e.target.value,
+                      })
+                    }
+                    stateObject={descriptionObj}
+                  />
+                )
+              })}
 
               <h5 className="mt-4">Style</h5>
-              <InputGroup size="sm" className="mb-3 my-1">
-                <InputGroup.Text>English</InputGroup.Text>
-                <FormControl
-                  value={styleObj.en}
-                  placeholder="Style in English"
-                  onChange={(e) =>
-                    setStyleObj({ ...styleObj, en: e.target.value })
-                  }
-                />
-              </InputGroup>
-
-              <InputGroup size="sm" className="mb-3 my-1">
-                <InputGroup.Text>Chinese</InputGroup.Text>
-                <FormControl
-                  value={styleObj.cn}
-                  placeholder="Style in Chinese"
-                  onChange={(e) =>
-                    setStyleObj({ ...styleObj, cn: e.target.value })
-                  }
-                />
-              </InputGroup>
-
-              <InputGroup size="sm" className="mb-3 my-1">
-                <InputGroup.Text>Japanese</InputGroup.Text>
-                <FormControl
-                  value={styleObj.jpn}
-                  placeholder="Style in Japanese"
-                  onChange={(e) =>
-                    setStyleObj({ ...styleObj, jpn: e.target.value })
-                  }
-                />
-              </InputGroup>
+              {formItems('Style').map((item) => {
+                return (
+                  <InputGroupComponent
+                    key={item.title}
+                    dictKey={item.key}
+                    title={item.title}
+                    placeholder={item.placeholder}
+                    onChangeHandler={(e) =>
+                      setStyleObj({
+                        ...styleObj,
+                        [item.key]: e.target.value,
+                      })
+                    }
+                    stateObject={styleObj}
+                  />
+                )
+              })}
 
               <h5 className="mt-4">Price</h5>
-              <InputGroup size="sm" className="mb-3 my-2">
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Hong Kong Dollars $
-                </InputGroup.Text>
-                <FormControl
-                  placeholder="Price in Hong Kong Dollars"
-                  value={priceObj.hkd}
-                  onChange={(e) =>
-                    setPriceObj({ ...priceObj, hkd: e.target.value })
-                  }
-                />
-              </InputGroup>
-              <InputGroup size="sm" className="mb-3 my-2">
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Japanese Yen ¥
-                </InputGroup.Text>
-                <FormControl
-                  placeholder="Price in Japanese Yen"
-                  value={priceObj.jpn}
-                  onChange={(e) =>
-                    setPriceObj({ ...priceObj, jpn: e.target.value })
-                  }
-                />
-              </InputGroup>
+              {priceItems().map((item) => {
+                return (
+                  <InputGroup size="sm" className="mb-3 my-2" key={item.key}>
+                    <InputGroup.Text id="inputGroup-sizing-sm">
+                      {item.title}
+                    </InputGroup.Text>
+                    <FormControl
+                      placeholder={item.placeholder}
+                      value={priceObj[item.key]}
+                      onChange={(e) =>
+                        setPriceObj({ ...priceObj, [item.key]: e.target.value })
+                      }
+                    />
+                  </InputGroup>
+                )
+              })}
 
               {sizes.length ? <h4 className="my-4">Sizes</h4> : null}
               {sizes.map((s, i) => {
@@ -470,24 +391,18 @@ const NewProductScreen = ({ match, history }) => {
                             <InputGroup.Text id="inputGroup-sizing-sm">
                               Color
                             </InputGroup.Text>
-                            <FormControl
-                              value={c.color.en}
-                              onChange={(e) =>
-                                handleColorOnChange(e, i, ind, 'en')
-                              }
-                            />
-                            <FormControl
-                              value={c.color.cn}
-                              onChange={(e) =>
-                                handleColorOnChange(e, i, ind, 'cn')
-                              }
-                            />
-                            <FormControl
-                              value={c.color.jpn}
-                              onChange={(e) =>
-                                handleColorOnChange(e, i, ind, 'jpn')
-                              }
-                            />
+                            {colorItems().map((item, _index) => {
+                              return (
+                                <FormControl
+                                  key={_index}
+                                  value={c.color[item.key]}
+                                  onChange={(e) =>
+                                    handleColorOnChange(e, i, ind, item.key)
+                                  }
+                                />
+                              )
+                            })}
+
                             <FormControl
                               value={c.colorHex}
                               onChange={(e) =>
@@ -577,27 +492,20 @@ const NewProductScreen = ({ match, history }) => {
                 <InputGroup.Text id="inputGroup-sizing-sm">
                   Color
                 </InputGroup.Text>
-                <FormControl
-                  placeholder="english"
-                  value={newColor.en}
-                  onChange={(e) =>
-                    setNewColor({ ...newColor, en: e.target.value })
-                  }
-                />
-                <FormControl
-                  placeholder="chinese"
-                  value={newColor.cn}
-                  onChange={(e) =>
-                    setNewColor({ ...newColor, cn: e.target.value })
-                  }
-                />
-                <FormControl
-                  placeholder="japanese"
-                  value={newColor.jpn}
-                  onChange={(e) =>
-                    setNewColor({ ...newColor, jpn: e.target.value })
-                  }
-                />
+
+                {colorItems().map((item, i) => {
+                  return (
+                    <FormControl
+                      key={i}
+                      placeholder={item.placeholder}
+                      value={newColor[item.key]}
+                      onChange={(e) =>
+                        setNewColor({ ...newColor, [item.key]: e.target.value })
+                      }
+                    />
+                  )
+                })}
+
                 <FormControl
                   value={newColorHex}
                   onChange={(e) => setNewColorHex(e.target.value)}
@@ -611,7 +519,7 @@ const NewProductScreen = ({ match, history }) => {
                 <FormControl
                   className="py-2"
                   placeholder="stock"
-                  value={newStock}
+                  value={Number(newStock)}
                   onChange={(e) => setNewStock(e.target.value)}
                 />
 
@@ -657,30 +565,22 @@ const NewProductScreen = ({ match, history }) => {
               />
 
               <h6 className="my-3">Discount</h6>
-              <InputGroup size="sm" className="mb-3 my-2">
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Hong Kong Dollars $
-                </InputGroup.Text>
-                <FormControl
-                  placeholder="Discounted price in Hong Kong Dollars"
-                  value={discount.hkd}
-                  onChange={(e) =>
-                    setDiscount({ ...discount, hkd: e.target.value })
-                  }
-                />
-              </InputGroup>
-              <InputGroup size="sm" className="mb-3 my-2">
-                <InputGroup.Text id="inputGroup-sizing-sm">
-                  Japanese Yen ¥
-                </InputGroup.Text>
-                <FormControl
-                  placeholder="Discounted price in Japanese Yen"
-                  value={discount.jpn}
-                  onChange={(e) =>
-                    setDiscount({ ...discount, jpn: e.target.value })
-                  }
-                />
-              </InputGroup>
+              {priceItems('Discount').map((item) => {
+                return (
+                  <InputGroup size="sm" className="mb-3 my-2" key={item.key}>
+                    <InputGroup.Text id="inputGroup-sizing-sm">
+                      {item.title}
+                    </InputGroup.Text>
+                    <FormControl
+                      placeholder={item.placeholder}
+                      value={discount[item.key]}
+                      onChange={(e) =>
+                        setDiscount({ ...discount, [item.key]: e.target.value })
+                      }
+                    />
+                  </InputGroup>
+                )
+              })}
 
               <div className="py-4">
                 <Button type="submit" variant="primary">
