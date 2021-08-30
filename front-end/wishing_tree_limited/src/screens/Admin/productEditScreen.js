@@ -131,10 +131,6 @@ const ProductEditScreen = ({ match, history }) => {
       sizes,
     )
 
-    // console.log(productObj.image)
-    // console.log(removedImage)
-    // console.log(base64Image)
-    // TODO: UNCOMMENT THIS
     dispatch(editProduct(productObj, productId, removedImage, base64Image))
   }
 

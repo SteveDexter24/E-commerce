@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import Header from './components/header'
 import Footer from './components/footer'
-import HomeScreen from './screens/homeScreen'
+import NewArrivalsScreen from './screens/newArrivalsScreen'
 import ProductScreen from './screens/ProductScreen/productScreen'
 import LoginScreen from './screens/loginScreen'
 import CartScreen from './screens/cartScreen'
@@ -67,8 +67,8 @@ const App = () => {
           <Route path="/order/:id" exact component={OrderScreen} />
 
           <Route path="/settings" exact component={SettingsScreen} />
-          <Route path="/new-arrivals" exact component={HomeScreen} />
-          <Route path="/search/:keyword" exact component={HomeScreen} />
+          <Route path="/new-arrivals" exact component={NewArrivalsScreen} />
+          {/* <Route path="/search/:keyword" exact component={NewArrivalsScreen} /> */}
 
           {/*Admin actions */}
           <Route path="/admin/userlist" exact component={UserListScreen} />
