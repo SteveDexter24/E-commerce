@@ -8,6 +8,7 @@ import {
     getOrderDetails,
     createSessionCheckoutWithStripe,
     payOrder,
+    deliverOrder,
 } from "../actions/order";
 import { addDecimals } from "../Utils/addDecimals";
 import { paymentDecode } from "../Utils/paymentDecode";
@@ -16,7 +17,9 @@ import { useStripe } from "@stripe/react-stripe-js";
 // Handling Paypal orders
 import paypalOrderScript from "../apis/api";
 import { PayPalButton } from "react-paypal-button-v2";
-import { ORDER_PAY_RESET } from "../actions/types";
+import { ORDER_PAY_RESET, ORDER_DELIVER_RESET } from "../actions/types";
+import { currencyDecoder } from "../Utils/currencyDecoder";
+import { configUtil } from "../Utils/apiConfig";
 
 const OrderScreen = ({ history, match }) => {
     const orderId = match.params.id;
@@ -43,20 +46,22 @@ const OrderScreen = ({ history, match }) => {
     const orderPay = useSelector((state) => state.orderPay);
     const { paypalLoading, paypalSuccess } = orderPay;
 
+    // Settings Reducer
+    const settings = useSelector((state) => state.settings);
+    const { currency } = settings;
+
+    // Order Deliver Reducer
+    const orderDeliver = useSelector((state) => state.orderDeliver);
+    const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
     const dispatch = useDispatch();
     const stripe = useStripe();
 
     useEffect(() => {
         const addPayPalScript = async () => {
-            const config = {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${userInfo.token}`,
-                },
-            };
             const { data: clientId } = await paypalOrderScript.get(
                 "/config/paypal",
-                config
+                configUtil(userInfo.token)
             );
 
             const script = document.createElement("script");
@@ -75,13 +80,10 @@ const OrderScreen = ({ history, match }) => {
             }
         }
 
-        if (!order || paypalSuccess) {
+        if (!order || paypalSuccess || successDeliver) {
             dispatch({ type: ORDER_PAY_RESET });
+            dispatch({ type: ORDER_DELIVER_RESET });
             dispatch(getOrderDetails(orderId));
-            // history.push(`/order/${orderId}/success`);
-
-            // after Paypal payment is done and successful, go to the next screen
-            // history.push('/success_page');
         } else if (!order.isPaid) {
             if (!window.paypal) {
                 addPayPalScript();
@@ -123,6 +125,7 @@ const OrderScreen = ({ history, match }) => {
         stripe,
         paypalSuccess,
         sessionError,
+        successDeliver,
     ]);
 
     // added history and session error to the dependency array, if any bugs occure, remove these two
@@ -137,15 +140,18 @@ const OrderScreen = ({ history, match }) => {
         const line_items = order.orderItems.map((item) => {
             return {
                 price_data: {
-                    currency: "hkd",
+                    currency: currencyDecoder(currency),
                     product_data: {
                         name: item.name,
                         description: item.description
                             ? item.description
                             : "No description available",
-                        images: item.image
+                        images: item.image,
                     },
-                    unit_amount: item.price * 100,
+                    unit_amount:
+                        currency === "hkd"
+                            ? item.price * 100
+                            : item.price * 1000,
                 },
                 quantity: item.qty,
             };
@@ -158,9 +164,17 @@ const OrderScreen = ({ history, match }) => {
                 [paymentDecode(order.paymentMethod)],
                 orderId,
                 order.shippingCost,
-                order.tax
+                order.tax,
+                currencyDecoder(currency)
             )
         );
+    };
+
+    const deliverHandler = (e) => {
+        e.preventDefault();
+        if (window.confirm("Are you sure?")) {
+            dispatch(deliverOrder(order._id || orderId));
+        }
     };
 
     return order ? (
@@ -192,7 +206,10 @@ const OrderScreen = ({ history, match }) => {
                                 {` ${order.shippingAddress.address1}, ${order.shippingAddress.address2}, ${order.shippingAddress.city}, ${order.shippingAddress.country}`}
                             </p>
                             {order.isDelivered ? (
-                                <Message variant="success">{`Paid on ${order.isDelivered}`}</Message>
+                                <Message variant="success">{`Paid on ${order.deliveredAt.substring(
+                                    0,
+                                    10
+                                )}`}</Message>
                             ) : (
                                 <Message variant="danger">
                                     Not delieverd
@@ -207,7 +224,10 @@ const OrderScreen = ({ history, match }) => {
                                 {order.paymentMethod}
                             </p>
                             {order.isPaid ? (
-                                <Message variant="success">{`Paid on ${order.paidAt}`}</Message>
+                                <Message variant="success">{`Paid on ${order.paidAt.substring(
+                                    0,
+                                    10
+                                )}`}</Message>
                             ) : (
                                 <Message variant="danger">Not paid</Message>
                             )}
@@ -313,7 +333,9 @@ const OrderScreen = ({ history, match }) => {
                                                         amount={
                                                             order.totalPrice
                                                         }
-                                                        currency={"HKD"}
+                                                        currency={currencyDecoder(
+                                                            currency
+                                                        )}
                                                         onSuccess={
                                                             paypalSuccessPaymentHandler
                                                         }
@@ -339,6 +361,36 @@ const OrderScreen = ({ history, match }) => {
                                     </div>
                                 ) : null}
                             </ListGroup.Item>
+                            {loadingDeliver && <Loader />}
+                            {userInfo &&
+                                userInfo.role !== undefined &&
+                                userInfo.role === "admin" &&
+                                order.isPaid &&
+                                !order.isDelivered && (
+                                    <ListGroup.Item>
+                                        <span
+                                            className="d-grid gap-2"
+                                            onClick={deliverHandler}
+                                        >
+                                            <Button type="button">
+                                                Mark as delivered
+                                            </Button>
+                                        </span>
+                                    </ListGroup.Item>
+                                )}
+                            {userInfo && order.isPaid && order.isDelivered && (
+                                <ListGroup.Item>
+                                    <span className="d-grid gap-2">
+                                        <Button
+                                            type="button"
+                                            variant="success"
+                                            onClick={deliverHandler}
+                                        >
+                                            Mark as not Delivered
+                                        </Button>
+                                    </span>
+                                </ListGroup.Item>
+                            )}
                         </ListGroup>
                     </Card>
                 </Col>

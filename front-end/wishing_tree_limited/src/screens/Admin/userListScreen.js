@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, ButtonGroup } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/message";
 import Loader from "../../components/loader";
@@ -75,29 +75,32 @@ const UserListScreen = ({ history }) => {
                                     <td>{user.role}</td>
                                     <td>{user.memberShip}</td>
                                     <td>
-                                        <LinkContainer
-                                            to={`/admin/user/${user._id}/edit`}
-                                        >
-                                            <span className="gap-2 px-2">
+                                        <ButtonGroup className="d-flex justify-content-center">
+                                            <LinkContainer
+                                                to={`/admin/user/${user._id}/edit`}
+                                            >
                                                 <Button
                                                     type="button"
-                                                    className="btn-sm"
+                                                    className="m-1 btn-sm"
                                                 >
                                                     <i className="fas fa-edit" />
                                                 </Button>
-                                            </span>
-                                        </LinkContainer>
-                                        {userInfo._id !== user._id && (
-                                            <Button
-                                                variant="danger"
-                                                className="btn-sm"
-                                                onClick={(e) =>
-                                                    deleteHandler(e, user._id)
-                                                }
-                                            >
-                                                <i className="fas fa-trash" />
-                                            </Button>
-                                        )}
+                                            </LinkContainer>
+                                            {userInfo._id !== user._id && (
+                                                <Button
+                                                    variant="danger"
+                                                    className="m-1 btn-sm"
+                                                    onClick={(e) =>
+                                                        deleteHandler(
+                                                            e,
+                                                            user._id
+                                                        )
+                                                    }
+                                                >
+                                                    <i className="fas fa-trash" />
+                                                </Button>
+                                            )}
+                                        </ButtonGroup>
                                     </td>
                                 </tr>
                             );
