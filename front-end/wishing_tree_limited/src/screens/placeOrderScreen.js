@@ -19,11 +19,17 @@ const PlaceOrderScreen = ({ history }) => {
     const orderCreate = useSelector((state) => state.orderCreate);
     const { order, success, error } = orderCreate;
 
+    // Settings
+    const settings = useSelector((state) => state.settings);
+    const { language, currency } = settings;
+
     cart.itemsPrice = Number(
         addDecimals(
             cart.cartItems.reduce((acc, curr) => curr.price * curr.qty + acc, 0)
         )
     );
+
+    // EDIT THE SHIPPING ARRANGEMENT
     cart.shippingCost = Number(addDecimals(100));
     cart.tax = Number(addDecimals(40));
     cart.totalPrice = Number(cart.itemsPrice + cart.shippingCost + cart.tax);
@@ -49,6 +55,7 @@ const PlaceOrderScreen = ({ history }) => {
         order,
     ]);
 
+    // TO: EDIT THE CURRENCY
     const placeOrderHandler = () => {
         dispatch(
             createOrder({
@@ -60,7 +67,7 @@ const PlaceOrderScreen = ({ history }) => {
                 tax: cart.tax,
                 totalPrice: cart.totalPrice,
                 itemsPrice: cart.itemsPrice,
-                currency: "hkd",
+                currency: currency,
             })
         );
     };

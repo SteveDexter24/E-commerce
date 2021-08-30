@@ -33,6 +33,7 @@ const CarouselComponent = () => {
     );
 };
 
+// TODO: REDESIGN THE UI AND MAKE IT MODULAR
 const FilterComponent = () => {
     const [filterCount, setFilterCount] = useState(0);
 
