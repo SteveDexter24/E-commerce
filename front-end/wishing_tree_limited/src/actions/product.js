@@ -29,10 +29,10 @@ import { errorHandler } from '../Utils/errorHandling'
 import { configUtil } from '../Utils/apiConfig'
 
 // Fetch all products
-export const fetchAllProducts = () => async (dispatch) => {
+export const fetchAllProducts = (keyword = '') => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST })
-    const { data } = await product.get(`/products`)
+    const { data } = await product.get(`/products?keyword=${keyword}`)
     dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data })
   } catch (error) {
     dispatch({

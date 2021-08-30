@@ -6,6 +6,7 @@ import Loader from '../components/loader'
 import Message from '../components/message'
 import Product from '../components/product'
 import FilterComponent from '../components/filterComponent'
+import SearchBox from '../components/searchBox'
 
 const MenScreen = () => {
   const menProduct = useSelector((state) => state.menProduct)
@@ -24,6 +25,7 @@ const MenScreen = () => {
     <>
       <h1>All mens products</h1>
       {/* Insert filter function */}
+      {/* <SearchBox history={history}/> */}
       <FilterComponent />
       {products ? (
         <Row>

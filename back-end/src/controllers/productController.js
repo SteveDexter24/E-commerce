@@ -3,18 +3,19 @@ const { Product } = require('../models/products')
 module.exports = {
   // list all product
   async listAllProductsAsync(req, res, next) {
-    const { category, style, gender } = req.body
-    // console.log(req.body)
-    // let query = [
-    //   { category: { en: category } },
-    //   { style: { en: style } },
-    //   { gender: gender },
-    // ]
+    const keyword = req.query.keyword
+      ? {
+          'productName.en': { $regex: req.query.keyword, $options: 'i' },
+        }
+      : {}
 
     try {
-      const foundProducts = await Product.find({}).sort({
-        createdAt: -1,
-      })
+      const foundProducts = await Product.find({ ...keyword })
+        .sort({
+          createdAt: -1,
+        })
+        .select('-size -description -feature -style')
+      console.log(foundProducts)
       res.status(200).send(foundProducts)
     } catch (error) {
       res.status(404).send({ message: error.message })
