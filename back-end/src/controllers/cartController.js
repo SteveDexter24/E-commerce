@@ -100,4 +100,17 @@ module.exports = {
       res.status(400).send({ message: error.message })
     }
   },
+
+  async removeCartItems(req, res) {
+    const userId = req.params.id
+
+    try {
+      const user = await User.findById(userId)
+      user.cart = []
+      await user.save()
+      res.status(200).send('Successfully cleared cart')
+    } catch (error) {
+      res.status(400).send({ message: error.message })
+    }
+  },
 }

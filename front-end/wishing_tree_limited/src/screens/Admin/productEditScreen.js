@@ -6,7 +6,6 @@ import {
   Col,
   InputGroup,
   FormControl,
-  Image,
 } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../../components/formContainer'
@@ -24,6 +23,7 @@ import {
   colorItems,
 } from '../../Utils/Input Form/formConstants'
 import ShowImageForAdmin from '../../components/showImageForAdmin'
+import ShowNewImage from '../../components/showNewImages'
 
 const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
@@ -36,6 +36,7 @@ const ProductEditScreen = ({ match, history }) => {
   const [categoryObj, setCategoryObj] = useState(langInit)
   const [gender, setGender] = useState('')
   const [images, setImages] = useState([])
+  const [newImages, setNewImages] = useState([])
   const [featureObj, setFeatureObj] = useState(langInit)
   const [descriptionObj, setDescriptionObj] = useState(langInit)
   const [styleObj, setStyleObj] = useState(langInit)
@@ -54,6 +55,7 @@ const ProductEditScreen = ({ match, history }) => {
   const [newSizeType, setNewSizeType] = useState('')
 
   const [sizes, setSizes] = useState([])
+  const [removedImage, setRemovedImage] = useState([])
 
   // product Details Reducers
   const productDetails = useSelector((state) => state.productDetails)
@@ -112,13 +114,13 @@ const ProductEditScreen = ({ match, history }) => {
       }
     }
 
-    const base64Image = uploadImage(images)
+    const base64Image = uploadImage(newImages)
 
     const productObj = productObject(
       nameObj,
       categoryObj,
       gender,
-      base64Image,
+      images,
       featureObj,
       descriptionObj,
       styleObj,
@@ -129,9 +131,11 @@ const ProductEditScreen = ({ match, history }) => {
       sizes,
     )
 
-    console.log(productObj.image)
+    // console.log(productObj.image)
+    // console.log(removedImage)
+    // console.log(base64Image)
     // TODO: UNCOMMENT THIS
-    //dispatch(editProduct(productObj))
+    dispatch(editProduct(productObj, productId, removedImage, base64Image))
   }
 
   const handleNewSizeAndColor = (e) => {
@@ -213,15 +217,29 @@ const ProductEditScreen = ({ match, history }) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onloadend = () => {
-      let newPreviewSource = [...images]
+      let newPreviewSource = [...newImages]
       newPreviewSource.push(reader.result)
-      setImages(newPreviewSource)
+      setNewImages(newPreviewSource)
     }
   }
 
+  const handleRemoveNewImage = (index) => {
+    let newArr = [...newImages]
+    let finalArr = []
+    for (let i = 0; i < newArr.length; i++) {
+      if (index !== i) {
+        finalArr.push(newArr[i])
+      }
+    }
+    setNewImages(finalArr)
+  }
+
   const handleRemoveImage = (index) => {
-    console.log(index)
+    //console.log(index)
     let newArr = [...images]
+    let removedArr = [...removedImage]
+    removedArr.push(newArr[index])
+    setRemovedImage(removedArr)
 
     let finalArr = []
     for (let i = 0; i < newArr.length; i++) {
@@ -304,6 +322,11 @@ const ProductEditScreen = ({ match, history }) => {
             <ShowImageForAdmin
               source={images}
               handleRemoveImage={(index) => handleRemoveImage(index)}
+            />
+
+            <ShowNewImage
+              source={newImages}
+              handleRemoveImage={(index) => handleRemoveNewImage(index)}
             />
 
             <h5 className="mt-4">Feature</h5>

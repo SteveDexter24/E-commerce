@@ -4,6 +4,11 @@ const bodyParser = require('body-parser')
 // Import auth middleware
 const auth = require('../middlewares/auth')
 
+// Get Image Middleware
+const {
+  getImageForStripeCheckoutMiddleware,
+} = require('../middlewares/uploadImage')
+
 const router = express.Router()
 
 const stripeCheckoutController = require('../controllers/stripeCheckoutController')
@@ -11,6 +16,7 @@ const stripeCheckoutController = require('../controllers/stripeCheckoutControlle
 router.post(
   '/api/order/:id/create-checkout-session',
   auth,
+  getImageForStripeCheckoutMiddleware,
   stripeCheckoutController.createCheckOutSessionWithStripe,
 )
 // Webhook Endpoint

@@ -10,7 +10,10 @@ const auth = require('../middlewares/auth')
 const adminAuth = require('../middlewares/adminAuth')
 
 // Upload image middleware
-const uploadImageMiddleware = require('../middlewares/uploadImage')
+const {
+  uploadImageMiddleware,
+  editMiddleware,
+} = require('../middlewares/uploadImage')
 
 const router = express.Router()
 
@@ -39,7 +42,7 @@ router.patch(
   '/api/product/:id',
   auth,
   adminAuth,
-  uploadImageMiddleware,
+  editMiddleware,
   productController.updateProductAsync,
 )
 

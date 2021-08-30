@@ -28,5 +28,6 @@ router.post(
 
 router.patch('/api/user/:id/update-cart', auth, cartController.updateCart)
 router.patch('/api/user/:id/remove', auth, cartController.deleteItemInCart)
+router.patch('/api/user/:id/removeAll', auth, cartController.removeCartItems)
 
 module.exports = router

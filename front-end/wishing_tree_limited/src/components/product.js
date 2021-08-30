@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Row, Col } from 'react-bootstrap'
+import { Image } from 'cloudinary-react'
 
 const Product = ({ product, lang, currency, menu }) => {
   const [textColor, setTextColor] = useState('text-primary')
@@ -14,13 +15,15 @@ const Product = ({ product, lang, currency, menu }) => {
   return (
     <Card className="my-2 rounded">
       <Link to={`/product/${product._id}/${menu}?`}>
-        <Card.Img
-          src={product.image[0]}
-          variant="top"
-          height={400}
-          width={400}
-          style={{ objectFit: 'cover' }}
-        />
+        <Card>
+          <Image
+            style={{ objectFit: 'cover' }}
+            cloudName="diqw1axjb"
+            publicId={product.image[0]}
+            height={400}
+            alt=""
+          />
+        </Card>
       </Link>
       <Card.Body>
         <Row>

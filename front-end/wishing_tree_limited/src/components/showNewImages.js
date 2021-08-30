@@ -1,8 +1,7 @@
 import React from 'react'
-import { Row, Col, Button } from 'react-bootstrap'
-import { Image } from 'cloudinary-react'
+import { Row, Col, Button, Image } from 'react-bootstrap'
 
-const ShowImageForAdmin = ({ source, handleRemoveImage }) => {
+const ShowNewImage = ({ source, handleRemoveImage }) => {
   return (
     <Row>
       {source.length > 0 &&
@@ -23,8 +22,7 @@ const ShowImageForAdmin = ({ source, handleRemoveImage }) => {
               >
                 <Image
                   className="img-lg"
-                  cloudName="diqw1axjb"
-                  publicId={source}
+                  src={source}
                   width="400"
                   height="400"
                   style={{ objectFit: 'cover' }}
@@ -50,4 +48,4 @@ const ShowImageForAdmin = ({ source, handleRemoveImage }) => {
   )
 }
 
-export default ShowImageForAdmin
+export default ShowNewImage
