@@ -84,7 +84,6 @@ export const logout = (userId) => async (dispatch, getState) => {
         localStorage.removeItem("shippingAddress");
         localStorage.removeItem("paymentMethod");
         localStorage.removeItem("cartItems");
-        localStorage.removeItem("settings");
         localStorage.removeItem("userShippingInfo");
         dispatch({ type: USER_ORDER_RESET });
         dispatch({ type: USER_LIST_RESET });

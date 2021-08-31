@@ -17,6 +17,8 @@ const ProductListScreen = ({ history, match }) => {
     const settings = useSelector((state) => state.settings);
     const { language, currency } = settings;
 
+    console.log(language);
+
     // Product List
     const productList = useSelector((state) => state.productList);
     const { loading, products, error } = productList;
@@ -88,7 +90,7 @@ const ProductListScreen = ({ history, match }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product) => {
+                        {products?.map((product) => {
                             return (
                                 <tr key={product._id}>
                                     <td>{product._id}</td>
