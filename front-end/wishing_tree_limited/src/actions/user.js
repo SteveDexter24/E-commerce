@@ -220,19 +220,24 @@ export const updateUserProfile =
 
 // Admin Actions
 
-export const listUsers = () => async (dispatch, getState) => {
-    const { userInfo } = getState().userAuth;
-    try {
-        dispatch({ type: USER_LIST_REQUEST });
-        const { data } = await user.get(`/users`, configUtil(userInfo.token));
-        dispatch({ type: USER_LIST_SUCCESS, payload: data });
-    } catch (error) {
-        dispatch({
-            type: USER_LIST_FAIL,
-            payload: errorHandler(error),
-        });
-    }
-};
+export const listUsers =
+    (keyword = "", pageNumber = "") =>
+    async (dispatch, getState) => {
+        const { userInfo } = getState().userAuth;
+        try {
+            dispatch({ type: USER_LIST_REQUEST });
+            const { data } = await user.get(
+                `/users?keyword=${keyword}&pageNumber=${pageNumber}`,
+                configUtil(userInfo.token)
+            );
+            dispatch({ type: USER_LIST_SUCCESS, payload: data });
+        } catch (error) {
+            dispatch({
+                type: USER_LIST_FAIL,
+                payload: errorHandler(error),
+            });
+        }
+    };
 
 export const adminUpdateUser =
     (userId, items) => async (dispatch, getState) => {

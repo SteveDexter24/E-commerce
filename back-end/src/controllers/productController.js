@@ -2,24 +2,32 @@ const { Product } = require("../models/products");
 
 module.exports = {
     // list all product
-    async listAllProductsAsync(req, res, next) {
-        const keyword = req.query.keyword
-            ? {
-                  "productName.en": {
-                      $regex: req.query.keyword,
-                      $options: "i",
-                  },
-              }
-            : {};
+    async listAllProductsAsync(req, res) {
+        const pageSize = 4;
+        const page = Number(req.query.pageNumber) || 1;
+
+        const searchArray = [
+            { "productName.en": { $regex: req.query.keyword, $options: "i" } },
+            { "style.en": { $regex: req.query.keyword, $options: "i" } },
+            { "category.en": { $regex: req.query.keyword, $options: "i" } },
+            { gender: { $regex: req.query.keyword, $options: "i" } },
+        ];
 
         try {
-            const foundProducts = await Product.find({ ...keyword })
+            const count = await Product.countDocuments({ $or: searchArray });
+            const products = await Product.find({ $or: searchArray })
+                .limit(pageSize)
+                .skip(pageSize * (page - 1))
                 .sort({
                     createdAt: -1,
                 })
                 .select("-size -description -feature");
-            console.log(foundProducts);
-            res.status(200).send(foundProducts);
+
+            res.status(200).send({
+                products,
+                page,
+                pages: Math.ceil(count / pageSize),
+            });
         } catch (error) {
             res.status(404).send({ message: error.message });
         }
@@ -114,7 +122,7 @@ module.exports = {
         try {
             const newArrivals = await Product.find({})
                 .sort({ createdAt: -1 })
-                .limit(6);
+                .limit(3);
             res.status(200).send(newArrivals);
         } catch (error) {
             res.status(404).send({ message: error.message });

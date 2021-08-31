@@ -4,9 +4,29 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
     async listUserAsync(req, res, next) {
+        const pageSize = 4;
+        const page = Number(req.query.pageNumber) || 1;
+
+        const searchArray = [
+            { username: { $regex: req.query.keyword, $options: "i" } },
+            { memberShip: { $regex: req.query.keyword, $options: "i" } },
+            { role: { $regex: req.query.keyword, $options: "i" } },
+        ];
+
         try {
-            const users = await User.find({});
-            res.send(users);
+            const count = await User.countDocuments({ $or: searchArray });
+            const users = await User.find({ $or: searchArray })
+                .limit(pageSize)
+                .skip(pageSize * (page - 1))
+                .sort({
+                    createdAt: -1,
+                });
+
+            res.status(200).send({
+                users,
+                page,
+                pages: Math.ceil(count / pageSize),
+            });
         } catch (err) {
             res.status(404).send({
                 error: err.message,

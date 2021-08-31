@@ -152,21 +152,23 @@ export const getUserOrders = () => async (dispatch, getState) => {
 };
 
 // Get All Orders
-export const listAllOrders = () => async (dispatch, getState) => {
-    const { userInfo } = getState().userAuth;
-    try {
-        dispatch({ type: ORDER_LIST_REQUEST });
+export const listAllOrders =
+    (keyword = "", pageNumber = "", orderId = "") =>
+    async (dispatch, getState) => {
+        const { userInfo } = getState().userAuth;
+        try {
+            dispatch({ type: ORDER_LIST_REQUEST });
 
-        const { data } = await orders.get(
-            "/orders",
-            configUtil(userInfo.token)
-        );
+            const { data } = await orders.get(
+                `/orders?keyword=${keyword}&pageNumber=${pageNumber}&orderId=${orderId}`,
+                configUtil(userInfo.token)
+            );
 
-        dispatch({ type: ORDER_LIST_SUCCESS, payload: data });
-    } catch (error) {
-        dispatch({ type: ORDER_LIST_FAIL, payload: errorHandler(error) });
-    }
-};
+            dispatch({ type: ORDER_LIST_SUCCESS, payload: data });
+        } catch (error) {
+            dispatch({ type: ORDER_LIST_FAIL, payload: errorHandler(error) });
+        }
+    };
 
 export const deleteOrder = (id) => async (dispatch, getState) => {
     const { userInfo } = getState().userAuth;

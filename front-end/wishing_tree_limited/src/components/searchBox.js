@@ -1,38 +1,50 @@
-import React, { useState } from 'react'
-import { Form, Button, InputGroup } from 'react-bootstrap'
+import React, { useState } from "react";
+import { Form, Button, InputGroup } from "react-bootstrap";
 
-const SearchBox = ({ history, handleOnSubmit }) => {
-  const [keyword, setKeyword] = useState('')
+const SearchBox = ({ history, user, placeholder, product, order }) => {
+    const [keyword, setKeyword] = useState("");
 
-  // const submitHandler = (e) => {
-  //   e.preventDefault()
+    const submitHandler = (e) => {
+        e.preventDefault();
 
-  //   if (keyword.trim()) {
-  //     history.push(`/search/${keyword}`)
-  //   } else {
-  //     // push to home page or send an alert that the user is not allowed to enter an empty string
-  //     return
-  //   }
-  // }
+        if (keyword.trim()) {
+            if (product) {
+                history.push(`/admin/productlist/search/${keyword}`);
+                return;
+            }
+            if (order) {
+                history.push(`/admin/orderlist/search/${keyword}`);
+                return;
+            }
+            if (!user) {
+                history.push(`/search/${keyword}`);
+            } else {
+                history.push(`/admin/userlist/search/${keyword}`);
+            }
+        }
+    };
 
-  const handleOnChange = (e) => {
-    setKeyword(e.target.value)
-  }
+    const handleOnChange = (e) => {
+        setKeyword(e.target.value);
+    };
 
-  return (
-    <>
-      <Form onSubmit={(e) => handleOnSubmit(e, keyword)}>
-        <InputGroup className="mb-3">
-          <Form.Control placeholder="Search" onChange={handleOnChange} />
-          <Button className="p-2" type="submit">
-            <i className="fas fa-search" />
-          </Button>
-        </InputGroup>
-      </Form>
-    </>
-  )
-}
+    return (
+        <>
+            <Form onSubmit={submitHandler}>
+                <InputGroup className="mb-3">
+                    <Form.Control
+                        placeholder={placeholder}
+                        onChange={handleOnChange}
+                    />
+                    <Button className="p-2" type="submit">
+                        <i className="fas fa-search" />
+                    </Button>
+                </InputGroup>
+            </Form>
+        </>
+    );
+};
 
-export default SearchBox
+export default SearchBox;
 
 //

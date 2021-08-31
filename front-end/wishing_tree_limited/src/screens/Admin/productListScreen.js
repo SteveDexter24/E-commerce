@@ -1,12 +1,18 @@
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
+import { Route } from "react-router-dom";
 import { Table, Button, Row, Col, ButtonGroup } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/message";
 import Loader from "../../components/loader";
 import { deleteProduct, fetchAllProducts } from "../../actions/product";
+import { PaginateProductsAdmin } from "../../components/paginate";
+import SearchBox from "../../components/searchBox";
 
 const ProductListScreen = ({ history, match }) => {
+    const pageNumber = match.params.pageNumber || 1;
+    const keyword = match.params.keyword;
+
     const dispatch = useDispatch();
 
     // User Auth
@@ -21,7 +27,7 @@ const ProductListScreen = ({ history, match }) => {
 
     // Product List
     const productList = useSelector((state) => state.productList);
-    const { loading, products, error } = productList;
+    const { loading, products, error, page, pages } = productList;
 
     // Product Delete
     const productDelete = useSelector((state) => state.productDelete);
@@ -38,9 +44,9 @@ const ProductListScreen = ({ history, match }) => {
             if (userInfo.role !== "admin") {
                 history.push("/");
             }
-            dispatch(fetchAllProducts());
+            dispatch(fetchAllProducts(keyword, pageNumber));
         }
-    }, [dispatch, history, userInfo, successDelete]);
+    }, [dispatch, history, userInfo, successDelete, pageNumber, keyword]);
 
     const deleteHandler = (e, id) => {
         e.preventDefault();
@@ -70,6 +76,15 @@ const ProductListScreen = ({ history, match }) => {
                     </div>
                 </Col>
             </Row>
+            <Route
+                render={({ history }) => (
+                    <SearchBox
+                        history={history}
+                        product
+                        placeholder="Search Product by name, style or category"
+                    />
+                )}
+            />
             {loadingDelete && <Loader />}
             {errorDelete && <Message variant="danger">{errorDelete}</Message>}
             {loading ? (
@@ -77,62 +92,75 @@ const ProductListScreen = ({ history, match }) => {
             ) : error ? (
                 <Message variant="danger">{error}</Message>
             ) : products ? (
-                <Table striped bordered hover responsive className="table-sm">
-                    <thead>
-                        <tr>
-                            <th>Product ID</th>
-                            <th>Product name</th>
-                            <th>Price</th>
-                            <th>Category</th>
-                            <th>Gender</th>
-                            <th>Style</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {products?.map((product) => {
-                            return (
-                                <tr key={product._id}>
-                                    <td>{product._id}</td>
-                                    <td>{product.productName[language]}</td>
-                                    <td>
-                                        {currency === "hkd" ? "$ " : "¥ "}
-                                        {product.price[currency]}
-                                    </td>
-                                    <td>{product.category[language]}</td>
-                                    <td>{product.gender}</td>
-                                    <td>{product.style[language]}</td>
-                                    <td>
-                                        <ButtonGroup className="d-flex justify-content-center">
-                                            <LinkContainer
-                                                to={`/admin/product/${product._id}/edit`}
-                                            >
-                                                <Button
-                                                    type="button"
-                                                    className="m-1 btn-sm"
+                <>
+                    <Table
+                        striped
+                        bordered
+                        hover
+                        responsive
+                        className="table-sm"
+                    >
+                        <thead>
+                            <tr>
+                                <th>Product ID</th>
+                                <th>Product name</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th>Gender</th>
+                                <th>Style</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {products?.map((product) => {
+                                return (
+                                    <tr key={product._id}>
+                                        <td>{product._id}</td>
+                                        <td>{product.productName[language]}</td>
+                                        <td>
+                                            {currency === "hkd" ? "$ " : "¥ "}
+                                            {product.price[currency]}
+                                        </td>
+                                        <td>{product.category[language]}</td>
+                                        <td>{product.gender}</td>
+                                        <td>{product.style[language]}</td>
+                                        <td>
+                                            <ButtonGroup className="d-flex justify-content-center">
+                                                <LinkContainer
+                                                    to={`/admin/product/${product._id}/edit`}
                                                 >
-                                                    <i className="fas fa-edit" />
+                                                    <Button
+                                                        type="button"
+                                                        className="m-1 btn-sm"
+                                                    >
+                                                        <i className="fas fa-edit" />
+                                                    </Button>
+                                                </LinkContainer>
+                                                <Button
+                                                    variant="danger"
+                                                    className="m-1 btn-sm"
+                                                    onClick={(e) =>
+                                                        deleteHandler(
+                                                            e,
+                                                            product._id
+                                                        )
+                                                    }
+                                                >
+                                                    <i className="fas fa-trash" />
                                                 </Button>
-                                            </LinkContainer>
-                                            <Button
-                                                variant="danger"
-                                                className="m-1 btn-sm"
-                                                onClick={(e) =>
-                                                    deleteHandler(
-                                                        e,
-                                                        product._id
-                                                    )
-                                                }
-                                            >
-                                                <i className="fas fa-trash" />
-                                            </Button>
-                                        </ButtonGroup>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
+                                            </ButtonGroup>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
+                    <PaginateProductsAdmin
+                        pages={pages}
+                        page={page}
+                        keyword={keyword}
+                    />
+                </>
             ) : (
                 <></>
             )}

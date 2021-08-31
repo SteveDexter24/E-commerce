@@ -8,6 +8,7 @@ import {
     mensProductReducer,
     womenProductReducer,
     kidsProductReducer,
+    latestProductReducer,
 } from "./productReducers";
 import { cartReducer } from "./cartReducers";
 import { changeSettingsReducer } from "./settingsReducers";
@@ -43,6 +44,7 @@ export default combineReducers({
     menProduct: mensProductReducer,
     womenProduct: womenProductReducer,
     kidsProduct: kidsProductReducer,
+    latestProducts: latestProductReducer,
     // Cart
     cart: cartReducer,
     // Settings
