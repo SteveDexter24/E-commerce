@@ -3,7 +3,7 @@ const { Product } = require("../models/products");
 module.exports = {
     // list all product
     async listAllProductsAsync(req, res) {
-        const pageSize = 4;
+        const pageSize = 10;
         const page = Number(req.query.pageNumber) || 1;
 
         const searchArray = [

@@ -16,9 +16,13 @@ const NewArrivalsScreen = ({ match }) => {
     const dispatch = useDispatch();
     const productList = useSelector((state) => state.productList);
     const settings = useSelector((state) => state.settings);
+
     const { language, currency } = settings;
     const { loading, error, products, page, pages } = productList;
-    console.log(page, pages);
+
+    const { loading: carouselLoaded } = useSelector(
+        (state) => state.latestProducts
+    );
 
     useEffect(() => {
         dispatch(fetchAllProducts(keyword, pageNumber));
@@ -60,7 +64,7 @@ const NewArrivalsScreen = ({ match }) => {
                         keyword={keyword ? keyword : ""}
                     />
                 </>
-            ) : loading ? (
+            ) : !carouselLoaded && loading ? (
                 <Loader />
             ) : error ? (
                 <Message variant="danger">{error}</Message>
