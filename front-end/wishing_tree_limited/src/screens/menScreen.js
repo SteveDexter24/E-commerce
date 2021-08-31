@@ -7,6 +7,7 @@ import Message from '../components/message'
 import Product from '../components/product'
 import FilterComponent from '../components/filterComponent'
 import SearchBox from '../components/searchBox'
+import { Route } from 'react-router-dom'
 
 const MenScreen = () => {
   const menProduct = useSelector((state) => state.menProduct)
@@ -26,22 +27,30 @@ const MenScreen = () => {
       <h1>All mens products</h1>
       {/* Insert filter function */}
       {/* <SearchBox history={history}/> */}
-      <FilterComponent />
+
+      <Route render={({ history }) => <FilterComponent history={history} />} />
       {products ? (
-        <Row>
-          {products.map((product, i) => {
-            return (
-              <Col key={i} sm={12} md={6} lg={4} xl={3}>
-                <Product
-                  menu="men"
-                  product={product}
-                  lang={language}
-                  currency={currency}
-                />
-              </Col>
-            )
-          })}
-        </Row>
+        <>
+          <Row className="py-4">
+            {products.map((product, i) => {
+              return (
+                <Col key={i} sm={12} md={6} lg={4} xl={3}>
+                  <Product
+                    menu="men"
+                    product={product}
+                    lang={language}
+                    currency={currency}
+                  />
+                </Col>
+              )
+            })}
+          </Row>
+          {products.length === 0 && (
+            <h2 className="d-flex align-items-center justify-content-center ">
+              No Products found
+            </h2>
+          )}
+        </>
       ) : loading ? (
         <Loader />
       ) : error ? (

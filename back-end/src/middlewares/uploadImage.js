@@ -28,12 +28,15 @@ const editMiddleware = async (req, res, next) => {
   // we need a deleted array and the new array
   console.log(req.body.newImages)
   console.log(req.body.removedImages)
+  console.log(req.body.image)
   const unchangedImages = req.body.image
   const newImages = req.body.newImages
   const imagesToDelete = req.body.removedImages
   console.log('New Images', newImages)
   console.log('Image to remove', imagesToDelete)
   let newPublicIds = []
+
+  console.log(imagesToDelete.length, newImages.length)
 
   try {
     // to remove the old images
@@ -51,6 +54,7 @@ const editMiddleware = async (req, res, next) => {
     }
 
     req.body.image = unchangedImages.concat(newPublicIds)
+    // console.log(unchangedImages, 'here')
     next()
   } catch (error) {
     res.status(500).send({ message: 'Failed to update the images' })

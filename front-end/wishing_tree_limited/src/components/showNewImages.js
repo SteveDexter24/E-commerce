@@ -13,12 +13,12 @@ const ShowNewImage = ({ source, handleRemoveImage }) => {
               md={12}
               lg={12}
               xl={12}
+              key={index}
               className="p-2 d-flex align-items-center justify-content-center"
             >
               <Col
                 className="d-flex align-items-center justify-content-end"
                 md={11}
-                key={source.toString()}
               >
                 <Image
                   className="img-lg"
@@ -26,7 +26,6 @@ const ShowNewImage = ({ source, handleRemoveImage }) => {
                   width="400"
                   height="400"
                   style={{ objectFit: 'cover' }}
-                  fluid
                 />
               </Col>
               <Col

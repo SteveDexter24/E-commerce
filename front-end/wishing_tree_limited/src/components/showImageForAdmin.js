@@ -9,6 +9,7 @@ const ShowImageForAdmin = ({ source, handleRemoveImage }) => {
         source.map((source, index) => {
           return (
             <Col
+              key={index}
               xs={12}
               s={12}
               md={12}
@@ -19,7 +20,6 @@ const ShowImageForAdmin = ({ source, handleRemoveImage }) => {
               <Col
                 className="d-flex align-items-center justify-content-end"
                 md={11}
-                key={source.toString()}
               >
                 <Image
                   className="img-lg"
@@ -28,7 +28,6 @@ const ShowImageForAdmin = ({ source, handleRemoveImage }) => {
                   width="400"
                   height="400"
                   style={{ objectFit: 'cover' }}
-                  fluid
                 />
               </Col>
               <Col

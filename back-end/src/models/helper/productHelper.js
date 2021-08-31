@@ -33,10 +33,10 @@ module.exports = {
   },
 
   priceObject: {
-    type: String,
+    type: Number,
     required: true,
   },
   discountObject: {
-    type: String,
+    type: Number,
   },
 }

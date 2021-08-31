@@ -87,6 +87,12 @@ const productSchema = new mongoose.Schema({
     },
   ],
 
+  // allColors: [
+  //   {
+  //     type: String,
+  //   },
+  // ],
+
   createdAt: {
     type: Date,
     default: Date.now(),
