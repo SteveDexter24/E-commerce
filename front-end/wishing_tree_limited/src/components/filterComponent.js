@@ -6,6 +6,7 @@ import {
     FloatingLabel,
     Button,
     Carousel,
+    InputGroup,
 } from "react-bootstrap";
 
 // Lastest 3 mens/women/kids product
@@ -81,6 +82,14 @@ const FilterComponent = () => {
                                 <option value="3">Blue</option>
                             </Form.Select>
                         </FloatingLabel>
+
+                        {/*Price from to */}
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text>From $</InputGroup.Text>
+                            <Form.Control aria-label="First name" />
+                            <InputGroup.Text>to $</InputGroup.Text>
+                            <Form.Control aria-label="Last name" />
+                        </InputGroup>
 
                         <Row className="d-flex align-items-center mx-1 my-2">
                             <Button>Apply Filter</Button>
