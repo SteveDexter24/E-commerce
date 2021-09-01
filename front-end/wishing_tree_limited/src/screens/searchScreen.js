@@ -4,7 +4,7 @@ import SearchBox from '../components/searchBox'
 
 const SearchScreen = () => {
   return (
-    <>
+    <div style={{ position: 'relative', top: '3rem' }}>
       <Route
         render={({ history }) => (
           <SearchBox
@@ -13,7 +13,7 @@ const SearchScreen = () => {
           />
         )}
       />
-    </>
+    </div>
   )
 }
 

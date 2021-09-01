@@ -15,6 +15,7 @@ import SearchScreen from './screens/searchScreen'
 // Navbar menu related screens
 import MenScreen from './screens/menScreen'
 import WomenScreen from './screens/womenScreen'
+import KidsScreen from './screens/kidsScreen'
 
 // User Profile related screens
 import EditProfile from './screens/UpdateUserInfo/editProfile'
@@ -55,16 +56,32 @@ const App = () => {
             component={ChangePassword}
           />
           <Route path="/profile/settings" exact component={Settings} />
-          {/*Navbar menu routes */}
+
+          {/*Men's product*/}
           <Route path="/men" exact component={MenScreen} />
           <Route path="/men/:pageNumber" exact component={MenScreen} />
           <Route
-            path="/men/filter/:sort?/:category?/:color?/:priceFrom?/:priceTo?/:pageNumber?"
+            path="/men/:sort/:category/:color/:priceFrom/:priceTo/:pageNumber"
             exact
             component={MenScreen}
           />
-
+          {/*Woman's product*/}
           <Route path="/women" exact component={WomenScreen} />
+          <Route path="/women/:pageNumber" exact component={WomenScreen} />
+          <Route
+            path="/women/:sort/:category/:color/:priceFrom/:priceTo/:pageNumber"
+            exact
+            component={WomenScreen}
+          />
+          {/*Kids's Products*/}
+          <Route path="/kids" exact component={KidsScreen} />
+          <Route path="/kids/:pageNumber" exact component={KidsScreen} />
+          <Route
+            path="/kids/:sort/:category/:color/:priceFrom/:priceTo/:pageNumber"
+            exact
+            component={KidsScreen}
+          />
+
           {/*Order paths*/}
           <Route path="/orderHistory" exact component={OrderHistoryScreen} />
           <Route path="/product/:id/:menu?" exact component={ProductScreen} />

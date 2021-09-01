@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col, Button } from 'react-bootstrap'
 import { Image } from 'cloudinary-react'
 
-const ShowImageForAdmin = ({ source, handleRemoveImage }) => {
+const ShowImageForAdmin = ({ source, handleRemoveImage, create }) => {
   return (
     <Row>
       {source.length > 0 &&
@@ -21,14 +21,24 @@ const ShowImageForAdmin = ({ source, handleRemoveImage }) => {
                 className="d-flex align-items-center justify-content-end"
                 md={11}
               >
-                <Image
-                  className="img-lg"
-                  cloudName="diqw1axjb"
-                  publicId={source}
-                  width="400"
-                  height="400"
-                  style={{ objectFit: 'cover' }}
-                />
+                {create ? (
+                  <Image
+                    className="img-lg"
+                    src={source}
+                    width="400"
+                    height="400"
+                    style={{ objectFit: 'cover' }}
+                  />
+                ) : (
+                  <Image
+                    className="img-lg"
+                    cloudName="diqw1axjb"
+                    publicId={source}
+                    width="400"
+                    height="400"
+                    style={{ objectFit: 'cover' }}
+                  />
+                )}
               </Col>
               <Col
                 md={1}

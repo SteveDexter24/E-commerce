@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getWomenProduct } from '../actions/product'
+import { getKidsProduct } from '../actions/product'
 import { Row, Col } from 'react-bootstrap'
 import Loader from '../components/loader'
 import Message from '../components/message'
@@ -9,12 +9,12 @@ import FilterComponent from '../components/filterComponent'
 import { Route } from 'react-router-dom'
 import { PaginateMenWomenKid } from '../components/paginate'
 
-const WomenScreen = ({ history, match }) => {
+const KidsScreen = ({ history, match }) => {
   const { sort, color, category, priceFrom, priceTo, pageNumber } = match.params
   const num = pageNumber || 1
   // Redux State
-  const womenProduct = useSelector((state) => state.womenProduct)
-  const { loading, products, error, page, pages } = womenProduct
+  const kidsProduct = useSelector((state) => state.kidsProduct)
+  const { loading, products, error, page, pages } = kidsProduct
 
   const settings = useSelector((state) => state.settings)
   const { language, currency } = settings
@@ -22,19 +22,19 @@ const WomenScreen = ({ history, match }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getWomenProduct(sort, category, color, priceFrom, priceTo, num))
+    dispatch(getKidsProduct(sort, category, color, priceFrom, priceTo, num))
   }, [dispatch, history, sort, category, color, priceFrom, priceTo, num])
 
   return (
     <>
-      <h1>All Womens products</h1>
+      <h1>All Kids products</h1>
       <Route
         render={({ history }) => (
           <FilterComponent
             history={history}
             p={match.params}
             num={num}
-            type="women"
+            type="kids"
           />
         )}
       />
@@ -45,7 +45,7 @@ const WomenScreen = ({ history, match }) => {
               return (
                 <Col key={i} sm={12} md={6} lg={4} xl={3}>
                   <Product
-                    menu="women"
+                    menu="kids"
                     product={product}
                     lang={language}
                     currency={currency}
@@ -63,7 +63,7 @@ const WomenScreen = ({ history, match }) => {
             pages={pages}
             page={page}
             p={match.params}
-            type="women"
+            type="kids"
           />
         </>
       ) : loading ? (
@@ -75,4 +75,4 @@ const WomenScreen = ({ history, match }) => {
   )
 }
 
-export default WomenScreen
+export default KidsScreen

@@ -63,10 +63,7 @@ export const addToCartDB = (productId, qty, sizeType, color) => async (
   } catch (error) {
     dispatch({
       type: CART_ADD_ITEM_TO_DB_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: errorHandler(error),
     })
   }
 }
@@ -132,10 +129,7 @@ export const updateCartToDB = (
   } catch (error) {
     dispatch({
       type: UPDATE_CART_ITEM_TO_DB_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: errorHandler(error),
     })
   }
 }
@@ -184,10 +178,7 @@ export const removeCartItemInDB = (productId, size, color) => async (
   } catch (error) {
     dispatch({
       type: CART_REMOVE_ITEM_TO_DB_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: errorHandler(error),
     })
   }
 }
@@ -225,10 +216,7 @@ export const moveCartToDB = (cartItems) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: MOVE_CART_ITEM_TO_DB_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: errorHandler(error),
     })
   }
 }

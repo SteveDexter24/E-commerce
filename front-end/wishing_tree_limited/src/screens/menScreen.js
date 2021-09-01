@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMenProduct } from '../actions/product'
 import { Row, Col } from 'react-bootstrap'
@@ -7,16 +7,16 @@ import Message from '../components/message'
 import Product from '../components/product'
 import FilterComponent from '../components/filterComponent'
 import { Route } from 'react-router-dom'
+import { PaginateMenWomenKid } from '../components/paginate'
 
 const MenScreen = ({ history, match }) => {
   // Params
   const { sort, color, category, priceFrom, priceTo, pageNumber } = match.params
   const num = pageNumber || 1
-  console.log(sort, color, category, priceFrom, priceTo, num)
 
   // Redux State
   const menProduct = useSelector((state) => state.menProduct)
-  const { loading, products, error } = menProduct
+  const { loading, products, error, page, pages } = menProduct
 
   const settings = useSelector((state) => state.settings)
   const { language, currency } = settings
@@ -25,16 +25,21 @@ const MenScreen = ({ history, match }) => {
 
   useEffect(() => {
     dispatch(getMenProduct(sort, category, color, priceFrom, priceTo, num))
-  }, [dispatch, history, match.params])
+  }, [dispatch, history, sort, category, color, priceFrom, priceTo, num])
 
   return (
     <>
       <h1>All mens products</h1>
-      {/* Insert filter function */}
-      {/* <SearchBox history={history}/> */}
 
       <Route
-        render={({ history }) => <FilterComponent history={history} p={match.params} men/>}
+        render={({ history }) => (
+          <FilterComponent
+            history={history}
+            p={match.params}
+            num={num}
+            type="men"
+          />
+        )}
       />
       {products ? (
         <>
@@ -52,11 +57,18 @@ const MenScreen = ({ history, match }) => {
               )
             })}
           </Row>
+
           {products.length === 0 && (
             <h2 className="d-flex align-items-center justify-content-center ">
               No Products found
             </h2>
           )}
+          <PaginateMenWomenKid
+            pages={pages}
+            page={page}
+            p={match.params}
+            type="men"
+          />
         </>
       ) : loading ? (
         <Loader />

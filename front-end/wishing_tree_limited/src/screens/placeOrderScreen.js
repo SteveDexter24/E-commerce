@@ -22,7 +22,7 @@ const PlaceOrderScreen = ({ history }) => {
 
   // Settings
   const settings = useSelector((state) => state.settings)
-  const { language, currency } = settings
+  const { currency } = settings
 
   cart.itemsPrice = Number(
     addDecimals(

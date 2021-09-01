@@ -128,17 +128,17 @@ export const deleteProduct = (productId) => async (dispatch, getState) => {
 
 // ?keyword=${keyword}&pageNumber=${pageNumber}
 export const getMenProduct = (
-  sortBy,
-  category,
-  color,
-  priceFrom,
-  priceTo,
+  sortBy = 'new-arrivals',
+  category = 'all',
+  color = 'all',
+  priceFrom = '0',
+  priceTo = '1000000',
   pageNumber = '',
 ) => async (dispatch) => {
   try {
     dispatch({ type: FETCH_MEN_PRODUCT_REQUEST })
     const { data } = await product.get(
-      `/products/men?sortBy=${sortBy}&category=${category}&color=${color}&priceFrom=${priceFrom}&priceTo=${priceTo}&pageNumber=${pageNumber}`,
+      `/products/men?sortBy=${sortBy}&category=${category}&color=${color}&priceFrom=${priceFrom}&priceTo=${priceTo}&pageNumber=${pageNumber}&gender=men`,
     )
 
     dispatch({ type: FETCH_MEN_PRODUCT_SUCCESS, payload: data })
@@ -151,17 +151,17 @@ export const getMenProduct = (
 }
 
 export const getWomenProduct = (
-  sortBy = '',
-  category = '',
-  color = '',
-  priceFrom = 0,
-  priceTo = 1000000,
+  sortBy = 'new-arrivals',
+  category = 'all',
+  color = 'all',
+  priceFrom = '0',
+  priceTo = '1000000',
   pageNumber = '',
 ) => async (dispatch) => {
   try {
     dispatch({ type: FETCH_WOMEN_PRODUCT_REQUEST })
     const { data } = await product.get(
-      `/products/women?sortBy=${sortBy}&category=${category}&color=${color}&priceFrom=${priceFrom}&priceTo=${priceTo}&pageNumber=${pageNumber}`,
+      `/products/women?sortBy=${sortBy}&category=${category}&color=${color}&priceFrom=${priceFrom}&priceTo=${priceTo}&pageNumber=${pageNumber}&gender=women`,
     )
     dispatch({ type: FETCH_WOMEN_PRODUCT_SUCCESS, payload: data })
   } catch (error) {
@@ -172,10 +172,19 @@ export const getWomenProduct = (
   }
 }
 
-export const getKidsProduct = () => async (dispatch) => {
+export const getKidsProduct = (
+  sortBy = 'new-arrivals',
+  category = 'all',
+  color = 'all',
+  priceFrom = '0',
+  priceTo = '1000000',
+  pageNumber = '',
+) => async (dispatch) => {
   try {
     dispatch({ type: FETCH_KIDS_PRODUCT_REQUEST })
-    const { data } = await product.get('/products/men')
+    const { data } = await product.get(
+      `/products/kids?sortBy=${sortBy}&category=${category}&color=${color}&priceFrom=${priceFrom}&priceTo=${priceTo}&pageNumber=${pageNumber}&gender=kids`,
+    )
     dispatch({ type: FETCH_KIDS_PRODUCT_SUCCESS, payload: data })
   } catch (error) {
     dispatch({

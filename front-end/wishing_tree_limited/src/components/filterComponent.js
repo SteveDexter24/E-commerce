@@ -32,36 +32,33 @@ const CarouselComponent = () => {
 }
 
 // TODO: REDESIGN THE UI AND MAKE IT MODULAR
-const FilterComponent = ({ history, men, women, p }) => {
-  const [sort, setSort] = useState(p?.sort ? p?.sort : 'new-arrivals')
-  const [category, setCategory] = useState(p?.category ? p?.category : 'Shirt')
-  const [color, setColor] = useState(p?.color ? p?.color : 'all')
-  const [priceFrom, setPriceFrom] = useState(p?.priceFrom ? p?.priceFrom : '0')
-  const [priceTo, setPriceTo] = useState(p?.priceTo ? p?.priceTo : '100000')
+const FilterComponent = ({ history, type, p, pageNum }) => {
+  const [sort, setSort] = useState(p?.sort ? p.sort : 'new-arrivals')
+  const [category, setCategory] = useState(p?.category ? p.category : 'all')
+  const [color, setColor] = useState(p?.color ? p.color : 'all')
+  const [priceFrom, setPriceFrom] = useState(p?.priceFrom ? p.priceFrom : '0')
+  const [priceTo, setPriceTo] = useState(p?.priceTo ? p.priceTo : '100000')
 
   const onSelectorHandler = () => {
     // TODO: history push to men with all the states and then get them via match in the men screen and dispatch the api request
 
-    if (men) {
-      history.push(
-        `/men/filter/${sort}/${category}/${color}/${priceFrom}/${priceTo}`,
-      )
-    }
-    if (women) {
-      history.push(
-        `/women/filter/${sort}/${category}/${color}/${priceFrom}/${priceTo}`,
-      )
-    }
+    history.push(
+      `/${type}/${sort}/${category}/${color}/${priceFrom}/${priceTo}/${
+        pageNum ? pageNum : '0'
+      }`,
+    )
   }
 
   const handleFilterReset = (e) => {
     e.preventDefault()
 
     setSort('new-arrivals')
-    setCategory('Shirt')
+    setCategory('all')
     setColor('all')
     setPriceFrom('0')
     setPriceTo('100000')
+
+    history.push(`/${type}`)
   }
 
   const sortOnChangeHandler = (e) => {
@@ -86,7 +83,7 @@ const FilterComponent = ({ history, men, women, p }) => {
 
   return (
     <Row>
-      <Col md={9}>
+      <Col md={8}>
         {/*Put this somewhere else*/}
         <CarouselComponent />
       </Col>
@@ -113,6 +110,7 @@ const FilterComponent = ({ history, men, women, p }) => {
                 value={category}
                 onChange={(e) => categoryOnChangeHandler(e)}
               >
+                <option value="all">All Categories</option>
                 <option value="Shirt">Shirt</option>
                 <option value="Casual">Casual</option>
                 <option value="Long Sleeves">Long Sleeves</option>

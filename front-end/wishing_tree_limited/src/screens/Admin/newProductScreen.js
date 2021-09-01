@@ -6,8 +6,6 @@ import {
   InputGroup,
   Row,
   Col,
-  Image,
-  Modal,
 } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../../components/formContainer'
@@ -275,6 +273,7 @@ const NewProductScreen = ({ match, history }) => {
             </Form.Group>
 
             <ShowImageForAdmin
+              create
               source={previewSource}
               handleRemoveImage={(index) => handleRemoveImage(index)}
             />

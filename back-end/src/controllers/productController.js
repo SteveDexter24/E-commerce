@@ -4,7 +4,7 @@ const { Product } = require('../models/products')
 module.exports = {
   // list all product
   async listAllProductsAsync(req, res) {
-    const pageSize = 5
+    const pageSize = 4
     const page = Number(req.query.pageNumber) || 1
 
     const searchArray = [
@@ -89,64 +89,68 @@ module.exports = {
   },
 
   async getMenProduct(req, res) {
-    const {
-      priceFrom,
-      priceTo,
-      sortBy,
-      category,
-      color,
-      pageNumber,
-    } = req.query
-
-    let sortArr = []
-
-    if (sortBy === 'descending') {
-      sortArr.push(['price.hkd', -1])
-    } else if (sortBy === 'ascending') {
-      sortArr.push(['price.hkd', 1])
-    } else {
-      sortArr.push(['createdAt', -1])
-    }
-
-    const searchArr = [
-      {
-        $and: [
-          { 'price.hkd': { $gte: priceFrom } },
-          { 'price.hkd': { $lte: priceTo } },
-          { 'category.en': { $regex: category, $options: 'i' } },
-          { colors: { $regex: color } },
-        ],
-      },
-      { $or: [{ gender: 'men' }] },
-    ]
+    const searchArr = req.query.searchArr
+    const sortArr = req.query.sortArr
+    const pageSize = 2
+    const page = Number(req.query.pageNumber) || 1
 
     try {
+      const count = await Product.countDocuments({ $and: searchArr })
       const menProduct = await Product.find({
         $and: searchArr,
-      }).sort(sortArr)
-      res.status(200).send(menProduct)
+      })
+        .sort(sortArr)
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+
+      res
+        .status(200)
+        .send({ menProduct, page, pages: Math.ceil(count / pageSize) })
     } catch (error) {
       res.status(404).send({ message: error.message })
     }
   },
   async getWomenProduct(req, res) {
+    const searchArr = req.query.searchArr
+    const sortArr = req.query.sortArr
+    const pageSize = 2
+    const page = Number(req.query.pageNumber) || 1
+
     try {
-      const womenProduct = await Product.find({ gender: 'women' }).sort({
-        createdAt: -1,
+      const count = await Product.countDocuments({ $and: searchArr })
+
+      const womenProducts = await Product.find({
+        $and: searchArr,
       })
-      res.status(200).send(womenProduct)
+        .sort(sortArr)
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+
+      res
+        .status(200)
+        .send({ womenProducts, page, pages: Math.ceil(count / pageSize) })
     } catch (error) {
       res.status(404).send({ message: error.message })
     }
   },
+
   async getKidsProduct(req, res) {
+    const searchArr = req.query.searchArr
+    const sortArr = req.query.sortArr
+    const pageSize = 2
+    const page = Number(req.query.pageNumber) || 1
     try {
-      const kidsProduct = await Product.find({
-        'category.en': 'kids',
-      }).sort({
-        createdAt: -1,
+      const count = await Product.countDocuments({ $and: searchArr })
+      const kidsProducts = await Product.find({
+        $and: searchArr,
       })
-      res.status(200).send(kidsProduct)
+        .sort(sortArr)
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+
+      res
+        .status(200)
+        .send({ kidsProducts, page, pages: Math.ceil(count / pageSize) })
     } catch (error) {
       res.status(404).send({ message: error.message })
     }
