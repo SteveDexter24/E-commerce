@@ -33,7 +33,7 @@ const ProductCarousel = () => {
             pause="hover"
             className="bg-primary"
             indicators={false}
-            controls={false}
+            // controls={false}
         >
             {products.map((product) => {
                 return (
