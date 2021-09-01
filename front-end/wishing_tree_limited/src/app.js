@@ -9,6 +9,9 @@ import LoginScreen from './screens/loginScreen'
 import CartScreen from './screens/cartScreen'
 import RegisterScreen from './screens/registerScreen'
 
+// Home Screen
+import HomeScreen from './screens/homeScreen'
+
 // Search Screen
 import SearchScreen from './screens/searchScreen'
 
@@ -56,6 +59,9 @@ const App = () => {
             component={ChangePassword}
           />
           <Route path="/profile/settings" exact component={Settings} />
+
+          {/* Home Page */}
+          <Route path="/" exact component={HomeScreen} />
 
           {/*Men's product*/}
           <Route path="/men" exact component={MenScreen} />
