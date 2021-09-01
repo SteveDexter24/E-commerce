@@ -128,11 +128,11 @@ export const deleteProduct = (productId) => async (dispatch, getState) => {
 
 // ?keyword=${keyword}&pageNumber=${pageNumber}
 export const getMenProduct = (
-  sortBy = '',
-  category = 'Shirt',
-  color = 'green',
-  priceFrom = 0,
-  priceTo = 100000,
+  sortBy,
+  category,
+  color,
+  priceFrom,
+  priceTo,
   pageNumber = '',
 ) => async (dispatch) => {
   try {

@@ -6,10 +6,15 @@ import Loader from '../components/loader'
 import Message from '../components/message'
 import Product from '../components/product'
 import FilterComponent from '../components/filterComponent'
-import SearchBox from '../components/searchBox'
 import { Route } from 'react-router-dom'
 
-const MenScreen = () => {
+const MenScreen = ({ history, match }) => {
+  // Params
+  const { sort, color, category, priceFrom, priceTo, pageNumber } = match.params
+  const num = pageNumber || 1
+  console.log(sort, color, category, priceFrom, priceTo, num)
+
+  // Redux State
   const menProduct = useSelector((state) => state.menProduct)
   const { loading, products, error } = menProduct
 
@@ -19,8 +24,8 @@ const MenScreen = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getMenProduct())
-  }, [dispatch])
+    dispatch(getMenProduct(sort, category, color, priceFrom, priceTo, num))
+  }, [dispatch, history, match.params])
 
   return (
     <>
@@ -28,7 +33,9 @@ const MenScreen = () => {
       {/* Insert filter function */}
       {/* <SearchBox history={history}/> */}
 
-      <Route render={({ history }) => <FilterComponent history={history} />} />
+      <Route
+        render={({ history }) => <FilterComponent history={history} p={match.params} men/>}
+      />
       {products ? (
         <>
           <Row className="py-4">

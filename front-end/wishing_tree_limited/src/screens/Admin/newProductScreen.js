@@ -85,7 +85,7 @@ const NewProductScreen = ({ match, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    console.log('submit')
+
     const base64Image = uploadImage(previewSource)
     const productObj = productObject(
       nameObj,

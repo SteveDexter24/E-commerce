@@ -12,6 +12,15 @@ export const productObject = (
   discount,
   sizes,
 ) => {
+  let colors = []
+
+  for (let i = 0; i < sizes.length; i++) {
+    for (let j = 0; j < sizes[i].colors.length; j++) {
+      if (!colors.includes(sizes[i].colors[j].color.en)) {
+        colors.push(sizes[i].colors[j].color.en)
+      }
+    }
+  }
   return {
     productName: nameObj,
     category: categoryObj,
@@ -25,5 +34,6 @@ export const productObject = (
     washing_care: washing_care,
     discount: discount,
     size: sizes,
+    colors: colors,
   }
 }

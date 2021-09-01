@@ -4,7 +4,7 @@ const { Product } = require('../models/products')
 module.exports = {
   // list all product
   async listAllProductsAsync(req, res) {
-    const pageSize = 10
+    const pageSize = 5
     const page = Number(req.query.pageNumber) || 1
 
     const searchArray = [
@@ -61,6 +61,7 @@ module.exports = {
   async updateProductAsync(req, res, next) {
     const productId = req.params.id
     const propsToUpdate = Object.keys(req.body)
+
     try {
       const product = await Product.findById(productId)
       propsToUpdate.forEach((prop) => {
@@ -97,22 +98,32 @@ module.exports = {
       pageNumber,
     } = req.query
 
-    // price_from >= price <= price_to
+    let sortArr = []
+
+    if (sortBy === 'descending') {
+      sortArr.push(['price.hkd', -1])
+    } else if (sortBy === 'ascending') {
+      sortArr.push(['price.hkd', 1])
+    } else {
+      sortArr.push(['createdAt', -1])
+    }
+
     const searchArr = [
       {
         $and: [
           { 'price.hkd': { $gte: priceFrom } },
           { 'price.hkd': { $lte: priceTo } },
           { 'category.en': { $regex: category, $options: 'i' } },
+          { colors: { $regex: color } },
         ],
       },
       { $or: [{ gender: 'men' }] },
     ]
 
     try {
-      const menProduct = await Product.find({ $and: searchArr }).sort({
-        createdAt: -1,
-      })
+      const menProduct = await Product.find({
+        $and: searchArr,
+      }).sort(sortArr)
       res.status(200).send(menProduct)
     } catch (error) {
       res.status(404).send({ message: error.message })

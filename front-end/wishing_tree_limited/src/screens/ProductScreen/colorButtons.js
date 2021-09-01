@@ -9,9 +9,6 @@ import {
 } from 'react-bootstrap'
 import { SearchAllColors } from '../../Utils/getAllColors'
 
-// TODO
-// traverse the product object to search all the avaliable colors
-
 const ColorButtons = ({
   product,
   language,

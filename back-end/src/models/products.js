@@ -87,11 +87,7 @@ const productSchema = new mongoose.Schema({
     },
   ],
 
-  // allColors: [
-  //   {
-  //     type: String,
-  //   },
-  // ],
+  colors: [{ type: String }],
 
   createdAt: {
     type: Date,
