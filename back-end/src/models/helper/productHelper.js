@@ -38,5 +38,6 @@ module.exports = {
   },
   discountObject: {
     type: Number,
+    required: true,
   },
 }

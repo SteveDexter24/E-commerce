@@ -39,6 +39,9 @@ const Header = () => {
               <LinkContainer to="/kids">
                 <Nav.Link>KIDS</Nav.Link>
               </LinkContainer>
+              <LinkContainer to="/discount">
+                <Nav.Link>SALE</Nav.Link>
+              </LinkContainer>
             </Nav>
             <Nav className="ms-auto">
               <LinkContainer to="/search">

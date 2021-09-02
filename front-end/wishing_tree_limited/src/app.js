@@ -19,6 +19,7 @@ import SearchScreen from './screens/searchScreen'
 import MenScreen from './screens/menScreen'
 import WomenScreen from './screens/womenScreen'
 import KidsScreen from './screens/kidsScreen'
+import DiscountedProductScreen from './screens/discountedProductScreen'
 
 // User Profile related screens
 import EditProfile from './screens/UpdateUserInfo/editProfile'
@@ -86,6 +87,19 @@ const App = () => {
             path="/kids/:sort/:category/:color/:priceFrom/:priceTo/:pageNumber"
             exact
             component={KidsScreen}
+          />
+
+          {/*Discounted Products*/}
+          <Route path="/discount" exact component={DiscountedProductScreen} />
+          <Route
+            path="/discount/:pageNumber"
+            exact
+            component={DiscountedProductScreen}
+          />
+          <Route
+            path="/discount/:sort/:category/:color/:priceFrom/:priceTo/:pageNumber"
+            exact
+            component={DiscountedProductScreen}
           />
 
           {/*Order paths*/}

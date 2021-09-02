@@ -28,6 +28,9 @@ import {
   FETCH_LATEST_PRODUCT_REQUEST,
   FETCH_LATEST_PRODUCT_SUCCESS,
   FETCH_LATEST_PRODUCT_FAIL,
+  FETCH_DISCOUNTED_PRODUCT_REQUEST,
+  FETCH_DISCOUNTED_PRODUCT_SUCCESS,
+  FETCH_DISCOUNTED_PRODUCT_FAIL,
 } from '../actions/types'
 
 export const productListReducer = (state = { products: [] }, action) => {
@@ -154,6 +157,25 @@ export const kidsProductReducer = (state = {}, action) => {
         pages: action.payload.pages,
       }
     case FETCH_KIDS_PRODUCT_FAIL:
+      return { loading: false, error: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const discountProductReducer = (state = {}, action) => {
+  switch (action.type) {
+    case FETCH_DISCOUNTED_PRODUCT_REQUEST:
+      return { loading: true }
+    case FETCH_DISCOUNTED_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload.discountedProduct,
+        page: action.payload.page,
+        pages: action.payload.pages,
+      }
+    case FETCH_DISCOUNTED_PRODUCT_FAIL:
       return { loading: false, error: action.payload }
 
     default:

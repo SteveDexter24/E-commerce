@@ -31,6 +31,11 @@ router.get(
   productQuery,
   productController.getWomenProduct,
 )
+router.get(
+  '/api/products/discount',
+  productQuery,
+  productController.getDiscountedProduct,
+)
 router.get('/api/products/kids', productQuery, productController.getKidsProduct)
 router.get(
   '/api/products/new-arrivals',

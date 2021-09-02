@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMenProduct } from '../actions/product'
+import { getDiscountedProduct } from '../actions/product'
 import { Row, Col } from 'react-bootstrap'
 import Loader from '../components/loader'
 import Message from '../components/message'
@@ -9,14 +9,14 @@ import FilterComponent from '../components/filterComponent'
 import { Route } from 'react-router-dom'
 import { PaginateMenWomenKid } from '../components/paginate'
 
-const MenScreen = ({ history, match }) => {
+const DiscountedProductScreen = ({ history, match }) => {
   // Params
   const { sort, color, category, priceFrom, priceTo, pageNumber } = match.params
   const num = pageNumber || 1
 
   // Redux State
-  const menProduct = useSelector((state) => state.menProduct)
-  const { loading, products, error, page, pages } = menProduct
+  const discountedProducts = useSelector((state) => state.discountedProducts)
+  const { loading, products, error, page, pages } = discountedProducts
 
   const settings = useSelector((state) => state.settings)
   const { language, currency } = settings
@@ -24,12 +24,14 @@ const MenScreen = ({ history, match }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getMenProduct(sort, category, color, priceFrom, priceTo, num))
+    dispatch(
+      getDiscountedProduct(sort, category, color, priceFrom, priceTo, num),
+    )
   }, [dispatch, history, sort, category, color, priceFrom, priceTo, num])
 
   return (
     <>
-      <h1>All mens products</h1>
+      <h1>All Discounted Products</h1>
 
       <Route
         render={({ history }) => (
@@ -37,19 +39,18 @@ const MenScreen = ({ history, match }) => {
             history={history}
             p={match.params}
             num={num}
-            type="men"
+            type="discount"
           />
         )}
       />
       {products ? (
         <>
-          {console.log(products)}
           <Row className="py-4">
             {products.map((product, i) => {
               return (
                 <Col key={i} sm={12} md={6} lg={4} xl={3}>
                   <Product
-                    menu="men"
+                    menu="discount"
                     product={product}
                     lang={language}
                     currency={currency}
@@ -68,7 +69,7 @@ const MenScreen = ({ history, match }) => {
             pages={pages}
             page={page}
             p={match.params}
-            type="men"
+            type="discount"
           />
         </>
       ) : loading ? (
@@ -82,4 +83,4 @@ const MenScreen = ({ history, match }) => {
   )
 }
 
-export default MenScreen
+export default DiscountedProductScreen

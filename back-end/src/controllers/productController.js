@@ -165,4 +165,23 @@ module.exports = {
       res.status(404).send({ message: error.message })
     }
   },
+
+  async getDiscountedProduct(req, res) {
+    const searchArr = req.query.searchArr
+    const sortArr = req.query.sortArr
+    const pageSize = 2
+    const page = Number(req.query.pageNumber) || 1
+    try {
+      const count = await Product.countDocuments({ $and: searchArr })
+      const discountedProduct = await Product.find({ $and: searchArr })
+        .sort(sortArr)
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+      res
+        .status(200)
+        .send({ discountedProduct, page, pages: Math.ceil(count / pageSize) })
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  },
 }

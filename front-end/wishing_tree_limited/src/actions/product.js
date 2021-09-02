@@ -27,6 +27,9 @@ import {
   FETCH_LATEST_PRODUCT_REQUEST,
   FETCH_LATEST_PRODUCT_SUCCESS,
   FETCH_LATEST_PRODUCT_FAIL,
+  FETCH_DISCOUNTED_PRODUCT_REQUEST,
+  FETCH_DISCOUNTED_PRODUCT_SUCCESS,
+  FETCH_DISCOUNTED_PRODUCT_FAIL,
 } from './types'
 import { errorHandler } from '../Utils/errorHandling'
 import { configUtil } from '../Utils/apiConfig'
@@ -189,6 +192,30 @@ export const getKidsProduct = (
   } catch (error) {
     dispatch({
       type: FETCH_KIDS_PRODUCT_FAIL,
+      payload: errorHandler(error),
+    })
+  }
+}
+
+// /products/discount
+
+export const getDiscountedProduct = (
+  sortBy = 'new-arrivals',
+  category = 'all',
+  color = 'all',
+  priceFrom = '0',
+  priceTo = '1000000',
+  pageNumber = '',
+) => async (dispatch) => {
+  try {
+    dispatch({ type: FETCH_DISCOUNTED_PRODUCT_REQUEST })
+    const { data } = await product.get(
+      `/products/discount?sortBy=${sortBy}&category=${category}&color=${color}&priceFrom=${priceFrom}&priceTo=${priceTo}&pageNumber=${pageNumber}&discount=true`,
+    )
+    dispatch({ type: FETCH_DISCOUNTED_PRODUCT_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: FETCH_DISCOUNTED_PRODUCT_FAIL,
       payload: errorHandler(error),
     })
   }

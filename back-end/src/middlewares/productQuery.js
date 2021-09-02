@@ -1,8 +1,17 @@
 const productQuery = (req, res, next) => {
   // TODO: return a search array
-  const { priceFrom, priceTo, sortBy, category, color, gender } = req.query
-  console.log(req.query.gender)
+  const {
+    priceFrom,
+    priceTo,
+    sortBy,
+    category,
+    color,
+    gender,
+    discount,
+  } = req.query
+  console.log(req.query.discount)
   let sortArr = []
+  let OrArr = discount ? [{ 'discount.hkd': { $gt: 0 } }] : [{ gender: gender }]
 
   if (sortBy === 'descending') {
     sortArr.push(['price.hkd', -1])
@@ -26,7 +35,7 @@ const productQuery = (req, res, next) => {
         { colors: { $regex: color === 'all' ? '' : color, $options: 'i' } },
       ],
     },
-    { $or: [{ gender: gender }] },
+    { $or: OrArr },
   ]
 
   req.query.searchArr = searchArr
