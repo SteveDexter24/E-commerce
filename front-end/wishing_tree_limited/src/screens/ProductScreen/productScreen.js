@@ -21,6 +21,7 @@ import {
 } from "react-bootstrap";
 import { sizeTypeToInfo } from "../../Utils/size";
 import { Image } from "cloudinary-react";
+import { p } from "../../Utils/translateLibrary/productDetails";
 
 const styles = {
     btn_circle: {
@@ -82,7 +83,7 @@ const ProductScreen = ({ history, match }) => {
                 className="btn my-3"
                 to={match.params.menu ? `/${match.params.menu}` : "/"}
             >
-                Go Back
+                {p.goBack[language]}
             </Link>
             {product ? (
                 <>
@@ -154,7 +155,7 @@ const ProductScreen = ({ history, match }) => {
 
                                     <ListGroup.Item>
                                         <Row>
-                                            <Col>Price:</Col>
+                                            <Col>{p.price[language]}:</Col>
                                             <Col>
                                                 <Row>
                                                     {product.discount[
@@ -217,7 +218,7 @@ const ProductScreen = ({ history, match }) => {
                                     </ListGroup.Item>
                                     <ListGroup.Item>
                                         <Row>
-                                            <Col>Status:</Col>
+                                            <Col>{p.status[language]}:</Col>
                                             <Col>
                                                 {product.size[selectedIndex]
                                                     .colors[colorIndex] !==
@@ -238,7 +239,9 @@ const ProductScreen = ({ history, match }) => {
                                         ].count > 0 && (
                                             <ListGroup.Item>
                                                 <Row>
-                                                    <Col>Quanity</Col>
+                                                    <Col>
+                                                        {p.quantity[language]}
+                                                    </Col>
                                                     <Col>
                                                         <Form.Select
                                                             value={qty}
@@ -275,7 +278,9 @@ const ProductScreen = ({ history, match }) => {
                                         )}
                                     <ListGroup.Item>
                                         <Row>
-                                            <Col md={7}>Selected Size:</Col>
+                                            <Col md={7}>
+                                                {p.size[language]}:
+                                            </Col>
                                             <Col md={5}>
                                                 {sizeTypeToInfo(selectedSize)}
                                             </Col>
@@ -283,7 +288,9 @@ const ProductScreen = ({ history, match }) => {
                                     </ListGroup.Item>
                                     <ListGroup.Item>
                                         <Row>
-                                            <Col md={7}>Selected Color:</Col>
+                                            <Col md={7}>
+                                                {p.color[language]}:
+                                            </Col>
                                             <Col md={5}>{color}</Col>
                                         </Row>
                                     </ListGroup.Item>
@@ -304,22 +311,32 @@ const ProductScreen = ({ history, match }) => {
                                                     selectedSize === "None"
                                                 }
                                             >
-                                                ADD TO CART
+                                                {p.addToCart[language]}
                                             </Button>
                                         </span>
                                     </ListGroup.Item>
                                     <ListGroup.Item>
                                         <Row>
                                             <Col className="d-flex justify-content-center">
-                                                <ModalPopup btnTitle="Size Guide" />
+                                                <ModalPopup
+                                                    btnTitle={
+                                                        p.sizeGuide[language]
+                                                    }
+                                                />
                                             </Col>
                                             <Col className="d-flex justify-content-center">
-                                                <ModalPopup btnTitle="Delivery & Return" />
+                                                <ModalPopup
+                                                    btnTitle={
+                                                        p.deliverNReturn[
+                                                            language
+                                                        ]
+                                                    }
+                                                />
                                             </Col>
                                         </Row>
                                     </ListGroup.Item>
                                     <ListGroup.Item>
-                                        Acceptable Payment Methods
+                                        {p.payment[language]}
                                         <PaymentMethods />
                                     </ListGroup.Item>
                                 </ListGroup>

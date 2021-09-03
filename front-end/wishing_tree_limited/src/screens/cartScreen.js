@@ -25,6 +25,7 @@ import {
 import { sizeTypeToInfo } from "../Utils/size";
 import Loader from "../components/loader";
 import { ORDER_CREATE_RESET } from "../actions/types";
+import { c } from "../Utils/translateLibrary/cart";
 
 const CartScreen = ({ match, location, history }) => {
     const productId = match.params.id;
@@ -48,7 +49,7 @@ const CartScreen = ({ match, location, history }) => {
 
     // Settings Reducer
     const settings = useSelector((state) => state.settings);
-    const { currency } = settings;
+    const { currency, language } = settings;
 
     useEffect(() => {
         if (productId) {
@@ -112,7 +113,7 @@ const CartScreen = ({ match, location, history }) => {
         <Row>
             {cartError && <Loader />}
             <Col md={8}>
-                <h1>SHOPPING CART</h1>
+                <h1>{c.shoppingCart[language]}</h1>
                 <p>
                     <i className="fas fa-truck"></i>
                     {` Orders over HKD $500 amount qualifies for
@@ -120,7 +121,8 @@ const CartScreen = ({ match, location, history }) => {
                 </p>
                 {cartItems.length === 0 ? (
                     <Message>
-                        Your cart is empty <Link to="/">Go Back</Link>
+                        {c.emptyCart[language]}{" "}
+                        <Link to="/">{c.goBack[language]}</Link>
                     </Message>
                 ) : (
                     <ListGroup
@@ -242,16 +244,16 @@ const CartScreen = ({ match, location, history }) => {
                     <ListGroup variant="flush">
                         <ListGroup.Item>
                             <h2 style={{ textAlign: "center" }}>
-                                CHECKOUT NOW
+                                {c.checkoutNow[language]}
                             </h2>
                             <Row>
                                 <Col md={8}>
-                                    SUBTOTAL (
+                                    {c.subTotal[language]} (
                                     {cartItems.reduce(
                                         (acc, item) => acc + item.qty,
                                         0
                                     )}
-                                    ) ITEMS
+                                    ) {c.items[language]}
                                 </Col>
                                 <Col md={4} style={{ textAlign: "right" }}>
                                     {currency === "hkd" ? "$" : "¥"}
@@ -276,7 +278,7 @@ const CartScreen = ({ match, location, history }) => {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col md={6}>TOTAL</Col>
+                                <Col md={6}>{c.total[language]}</Col>
                                 <Col md={6} style={{ textAlign: "right" }}>
                                     {currency === "hkd" ? "$" : "¥"}
                                     {/*If discount */}
@@ -309,7 +311,7 @@ const CartScreen = ({ match, location, history }) => {
                                     }
                                     onClick={checkoutHandler}
                                 >
-                                    PROCEED TO CHECKOUT
+                                    {c.proceed[language]}
                                 </Button>
                             </span>
                         </ListGroup.Item>

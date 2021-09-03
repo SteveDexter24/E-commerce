@@ -8,6 +8,8 @@ import Product from "../components/product";
 import FilterComponent from "../components/filterComponent";
 import { Route } from "react-router-dom";
 import { PaginateMenWomenKid } from "../components/paginate";
+import CardComponent from "../components/CardComponent";
+import { women } from "../Utils/translateLibrary/product";
 
 const WomenScreen = ({ history, match }) => {
     const { sort, color, category, priceFrom, priceTo, pageNumber } =
@@ -30,18 +32,29 @@ const WomenScreen = ({ history, match }) => {
 
     return (
         <>
-            <h1>All Womens products</h1>
-            <Route
-                render={({ history }) => (
-                    <FilterComponent
-                        history={history}
-                        p={match.params}
-                        num={num}
-                        type="women"
-                        title="Woman's Fashion"
+            <h1>{women.all[language]}</h1>
+            <Row>
+                <Col md={8}>
+                    <CardComponent
+                        title="Women's Fashion"
+                        text="Checkout our lastest women's fashion"
                     />
-                )}
-            />
+                </Col>
+                <Col>
+                    <Route
+                        render={({ history }) => (
+                            <FilterComponent
+                                history={history}
+                                p={match.params}
+                                num={num}
+                                type="women"
+                                title="Woman's Fashion"
+                            />
+                        )}
+                    />
+                </Col>
+            </Row>
+
             {products ? (
                 <>
                     <Row className="py-4">
