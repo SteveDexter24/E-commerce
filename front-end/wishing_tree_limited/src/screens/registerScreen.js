@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/formContainer";
@@ -15,10 +16,13 @@ const RegisterScreen = ({ location, history }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [passwordMessage, setPasswordMessage] = useState(null);
-    const [passwordErrorMessage, setPasswordErrorMessage] = useState(null);
+    const [passwordMessage, setPasswordMessage] = useState("");
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
     const [validPassword, setValidPassword] = useState(false);
     const [validConfirmPassword, setValidConfirmPassword] = useState(false);
+
+    // ReCaptcha
+    const reRef = useRef();
 
     const redirect = location.search ? location.search.split("=")[1] : "/";
     const dispatch = useDispatch();
@@ -34,15 +38,19 @@ const RegisterScreen = ({ location, history }) => {
         }
     }, [history, userInfo, redirect]);
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
+
+        const token = await reRef.current.executeAsync();
+        reRef.current.reset();
+
         if (
             username !== "" &&
             email !== "" &&
             validPassword &&
             validConfirmPassword
         ) {
-            dispatch(register(username, email, password, language));
+            dispatch(register(username, email, password, language, token));
         }
     };
 
@@ -71,7 +79,7 @@ const RegisterScreen = ({ location, history }) => {
             );
             setValidConfirmPassword(false);
         } else {
-            setPasswordMessage(null);
+            setPasswordMessage("");
             setValidConfirmPassword(true);
         }
     };
@@ -116,9 +124,9 @@ const RegisterScreen = ({ location, history }) => {
                 />
                 <Form.Group controlId={"radio"} className="py-2">
                     <Form.Label>Select preferred langauge: </Form.Label>
-                    {setLang.map((l) => {
+                    {setLang.map((l, idx) => {
                         return (
-                            <Col md={4}>
+                            <Col md={4} key={idx}>
                                 <Form.Check
                                     id={l.lang}
                                     key={`${l.lang}-radio`}
@@ -149,6 +157,12 @@ const RegisterScreen = ({ location, history }) => {
                     </Button>
                 </div>
             </Form>
+
+            <ReCAPTCHA
+                sitekey={process.env.REACT_APP_PUBLIC_RECAPTCHA_SITE_KEY}
+                size="invisible"
+                ref={reRef}
+            />
 
             <Row className="py-3">
                 <Col>

@@ -94,7 +94,7 @@ export const logout = (userId) => async (dispatch, getState) => {
 
 // Register
 export const register =
-    (username, email, password, language) => async (dispatch) => {
+    (username, email, password, language, token) => async (dispatch) => {
         try {
             dispatch({ type: USER_REGISTER_REQUEST });
             const config = {
@@ -104,7 +104,7 @@ export const register =
             };
             const { data } = await user.post(
                 "/signup",
-                { username, email, password, language },
+                { username, email, password, language, token },
                 config
             );
             dispatch({ type: USER_REGISTER_SUCCESS, payload: data });

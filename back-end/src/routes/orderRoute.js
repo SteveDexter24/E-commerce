@@ -9,10 +9,13 @@ const adminAuth = require("../middlewares/adminAuth");
 // Import Order Controller
 const OrderController = require("../controllers/orderController");
 
+// Is Human? Middleware
+const { validateHuman } = require("../middlewares/isHuman");
+
 const router = express.Router();
 
 // User and Admin access only
-router.post("/api/order", auth, OrderController.addOrderItems);
+router.post("/api/order", auth, validateHuman, OrderController.addOrderItems);
 router.get("/api/order/:id", auth, OrderController.getOrder);
 router.delete("/api/order/:id", auth, OrderController.deleteOrder);
 

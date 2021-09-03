@@ -156,11 +156,62 @@ const ProductScreen = ({ history, match }) => {
                                         <Row>
                                             <Col>Price:</Col>
                                             <Col>
-                                                <strong>
-                                                    {currency === "hkd"
-                                                        ? `$ ${product.price[currency]}`
-                                                        : `¥ ${product.price[currency]}`}
-                                                </strong>
+                                                <Row>
+                                                    {product.discount[
+                                                        currency
+                                                    ] > 0 ? (
+                                                        <Col md="auto">
+                                                            <strong className="d-flex justify-content-start">
+                                                                <span className="strikediag withpadding text-danger ml-2">
+                                                                    {currency ===
+                                                                    "jpn"
+                                                                        ? "¥"
+                                                                        : "$"}
+                                                                    {
+                                                                        product
+                                                                            ?.price[
+                                                                            currency
+                                                                        ]
+                                                                    }
+                                                                </span>
+                                                            </strong>
+                                                        </Col>
+                                                    ) : (
+                                                        <Col md="auto">
+                                                            <strong className="d-flex ml-2 justify-content-start">
+                                                                {currency ===
+                                                                "jpn"
+                                                                    ? "¥"
+                                                                    : "$"}
+                                                                {
+                                                                    product
+                                                                        ?.price[
+                                                                        currency
+                                                                    ]
+                                                                }
+                                                            </strong>
+                                                        </Col>
+                                                    )}
+
+                                                    {product?.discount[
+                                                        currency
+                                                    ] > 0 ? (
+                                                        <Col className="d-flex text-success ml-2 justify-content-start">
+                                                            <strong>
+                                                                {currency ===
+                                                                "jpn"
+                                                                    ? " ¥"
+                                                                    : " $"}
+                                                                {
+                                                                    product
+                                                                        ?.discount[
+                                                                        currency
+                                                                    ]
+                                                                }{" "}
+                                                            </strong>
+                                                        </Col>
+                                                    ) : null}
+                                                </Row>
                                             </Col>
                                         </Row>
                                     </ListGroup.Item>

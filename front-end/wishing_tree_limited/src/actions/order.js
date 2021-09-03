@@ -29,9 +29,9 @@ import { configUtil } from "../Utils/apiConfig";
 import { errorHandler } from "../Utils/errorHandling";
 
 // Place Order
-export const createOrder = (cart) => async (dispatch, getState) => {
+export const createOrder = (cart, token) => async (dispatch, getState) => {
     const { userInfo } = getState().userAuth;
-    const { token } = userInfo;
+    const { token: userToken } = userInfo;
     try {
         dispatch({ type: ORDER_CREATE_REQUEST });
 
@@ -39,8 +39,9 @@ export const createOrder = (cart) => async (dispatch, getState) => {
             `/order`,
             {
                 cart,
+                token,
             },
-            configUtil(token)
+            configUtil(userToken)
         );
         dispatch({ type: ORDER_CREATE_SUCCESS, payload: data });
         // if successful order then remove cart items
