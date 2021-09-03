@@ -21,6 +21,9 @@ export const productObject = (
       }
     }
   }
+
+  discount.hkd = Number(discount.hkd)
+  discount.jpn = Number(discount.jpn)
   return {
     productName: nameObj,
     category: categoryObj,

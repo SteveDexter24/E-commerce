@@ -29,7 +29,7 @@ const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
 
   const langInit = { en: '', cn: '', jpn: '' }
-  const currencyInit = { hkd: 0, jpn: 0 }
+  const currencyInit = { hkd: '0', jpn: '0' }
   const colorInit = { colorHex: '', color: langInit, count: 0 }
 
   const [nameObj, setNameObj] = useState(langInit)
@@ -93,7 +93,7 @@ const ProductEditScreen = ({ match, history }) => {
         setPriceObj(product.price ? product.price : {})
         setMaterial(product.material ? product.material : '')
         setWashing_care(product.washing_care ? product.washing_care : '')
-        setDiscount(product.discount ? product.discount : '')
+        setDiscount(product.discount ? product.discount : {})
         setSizes(product.size ? product.size : [])
       }
     }
@@ -115,8 +115,6 @@ const ProductEditScreen = ({ match, history }) => {
     }
 
     const base64Image = uploadImage(newImages)
-
-    console.log(discount)
 
     const productObj = productObject(
       nameObj,
