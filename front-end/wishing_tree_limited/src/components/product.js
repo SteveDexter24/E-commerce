@@ -13,7 +13,7 @@ const Product = ({ product, lang, currency, menu }) => {
         setTextColor("text-primary");
     };
     return (
-        <Card className="my-2 rounded" style={{ border: "none" }}>
+        <Card className="m-2 rounded" style={{ border: "none" }}>
             <Link to={`/product/${product._id}/${menu}?`}>
                 <Card style={{ border: "none" }}>
                     <Image

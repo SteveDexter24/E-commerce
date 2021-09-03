@@ -326,9 +326,15 @@ const ProductScreen = ({ history, match }) => {
                             </Card>
                         </Col>
                     </Row>
-                    <Row className="mt-4">
-                        <OtherProductInfo product={product} />
-                    </Row>
+                    {!loading && (
+                        <Row className="mt-4">
+                            <OtherProductInfo
+                                gender={product?.gender}
+                                price={product?.price[currency]}
+                                pid={product?._id}
+                            />
+                        </Row>
+                    )}
                 </>
             ) : loading ? (
                 <Loader />

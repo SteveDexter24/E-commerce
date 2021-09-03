@@ -15,6 +15,8 @@ module.exports = {
             itemsPrice,
         } = cart;
 
+        console.log(cart);
+
         try {
             if (!orderItems && orderItems.length === 0) {
                 throw new Error("No order items");
@@ -33,13 +35,7 @@ module.exports = {
                 throw new Error("Shipping address is required");
             }
 
-            if (
-                !paymentMethod ||
-                !shippingCost ||
-                !tax ||
-                !totalPrice ||
-                !itemsPrice
-            ) {
+            if (!paymentMethod || !shippingCost || !totalPrice || !itemsPrice) {
                 throw new Error(
                     "Some shipping information such as payment methods, shipping fees are missing"
                 );
