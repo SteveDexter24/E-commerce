@@ -27,11 +27,18 @@ const productQuery = (req, res, next) => {
     let searchArr;
 
     if (currency === "hkd") {
+        OrArr.push();
         searchArr = [
             {
                 $and: [
                     { "price.hkd": { $gte: Number(priceFrom) } },
                     { "price.hkd": { $lte: Number(priceTo) } },
+                    {
+                        $or: [
+                            { "discount.hkd": { $gte: Number(priceFrom) } },
+                            { "discount.hkd": { $lte: Number(priceTo) } },
+                        ],
+                    },
                     {
                         "category.en": {
                             $regex: category === "all" ? "" : category,
@@ -54,6 +61,12 @@ const productQuery = (req, res, next) => {
                 $and: [
                     { "price.jpn": { $gte: Number(priceFrom) } },
                     { "price.jpn": { $lte: Number(priceTo) } },
+                    {
+                        $or: [
+                            { "discount.jpn": { $gte: Number(priceFrom) } },
+                            { "discount.jpn": { $lte: Number(priceTo) } },
+                        ],
+                    },
                     {
                         "category.en": {
                             $regex: category === "all" ? "" : category,

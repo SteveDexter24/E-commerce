@@ -29,11 +29,7 @@ const HomeScreen = ({ history }) => {
                 <Row className="g-4">
                     {socialHandles.map((item, idx) => (
                         <Col key={idx} md={3} xs={6} className="p-4">
-                            <ProductsCardComponent
-                                item={item}
-                                height={120}
-                                social={true}
-                            />
+                            <ProductsCardComponent item={item} height={110} />
                         </Col>
                     ))}
                 </Row>
