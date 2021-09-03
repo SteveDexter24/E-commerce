@@ -1,12 +1,13 @@
 import React from 'react'
-//import { Route } from "react-router-dom";
 import { logout } from '../actions/user'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Nav, Navbar, Container, NavDropdown } from 'react-bootstrap'
-//import SearchBox from "./searchBox";
+import { useTranslation } from 'react-i18next'
 
 const Header = () => {
+  const { t } = useTranslation()
+
   const dispatch = useDispatch()
   const userAuth = useSelector((state) => state.userAuth)
   const { userInfo } = userAuth
@@ -31,7 +32,7 @@ const Header = () => {
                 <Nav.Link>NEW ARRIVALS</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/men">
-                <Nav.Link>MEN</Nav.Link>
+                <Nav.Link>{t('MEN')}</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/women">
                 <Nav.Link>WOMEN</Nav.Link>

@@ -27,7 +27,7 @@ const Product = ({ product, lang, currency, menu }) => {
       </Link>
       <Card.Body>
         <Row>
-          <Col xs={8} sm={8} md={8} lg={8} xl={8} xxl={8}>
+          <Col>
             <Link
               to={`/product/${product._id}/${menu}?`}
               style={{ textDecoration: 'none' }}
@@ -38,36 +38,39 @@ const Product = ({ product, lang, currency, menu }) => {
                   onMouseOver={handleMouseOver}
                   onMouseLeave={handleOnMouseOut}
                 >
-                  {product.productName[lang]}
+                  {product.productName[lang].substring(0, 15)}
                 </strong>
               </Card.Title>
             </Link>
           </Col>
-          <Col xs={4} sm={4} md={4} lg={4} xl={4} xxl={4}>
+
+          <Col>
             <Card.Text
               as="h5"
               className=" d-flex align-items-center justify-content-end"
             >
-              {product.discount[currency] > 0 ? (
-                <>
-                  <del className="text-danger ml-2">
+              <Row>
+                {product.discount[currency] > 0 ? (
+                  <Col className="d-flex justify-content-end">
+                    <del className="text-danger ml-2">
+                      {currency === 'jpn' ? '¥' : '$'}
+                      {product?.price[currency]}
+                    </del>
+                  </Col>
+                ) : (
+                  <Col className="d-flex ml-2 justify-content-end">
                     {currency === 'jpn' ? '¥' : '$'}
                     {product?.price[currency]}
-                  </del>
-                </>
-              ) : (
-                <>
-                  {currency === 'jpn' ? '¥' : '$'}
-                  {product?.price[currency]}
-                </>
-              )}
+                  </Col>
+                )}
 
-              {product?.discount[currency] > 0 ? (
-                <div className="text-success ml-2">
-                  {currency === 'jpn' ? ' ¥' : ' $'}
-                  {product?.discount[currency]}{' '}
-                </div>
-              ) : null}
+                {product?.discount[currency] > 0 ? (
+                  <Col className="d-flex text-success ml-2 justify-content-end">
+                    {currency === 'jpn' ? ' ¥' : ' $'}
+                    {product?.discount[currency]}{' '}
+                  </Col>
+                ) : null}
+              </Row>
             </Card.Text>
           </Col>
         </Row>
