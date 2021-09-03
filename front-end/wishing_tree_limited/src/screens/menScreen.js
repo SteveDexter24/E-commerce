@@ -39,6 +39,7 @@ const MenScreen = ({ history, match }) => {
                         p={match.params}
                         num={num}
                         type="men"
+                        title="Men's Fashion"
                     />
                 )}
             />
