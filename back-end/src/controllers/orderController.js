@@ -15,8 +15,6 @@ module.exports = {
             itemsPrice,
         } = cart;
 
-        console.log(cart);
-
         try {
             if (!orderItems && orderItems.length === 0) {
                 throw new Error("No order items");

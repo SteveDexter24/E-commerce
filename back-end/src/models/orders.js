@@ -15,12 +15,14 @@ const orderSchema = new mongoose.Schema(
 
         orderItems: [
             {
-                name: { type: String, required: true },
+                name: { type: String, required: true, trim: true },
                 qty: { type: Number, required: true },
                 image: [{ type: String, required: true }],
-                size: { type: String, required: true },
-                color: { type: String, required: true },
+                size: { type: String, required: true, trim: true },
+                color: { type: String, required: true, trim: true },
+                colorHex: { type: String, trim: true },
                 price: { type: String, required: true },
+                discount: { type: String },
                 description: { type: String, required: true },
                 productId: {
                     type: Schema.Types.ObjectId,

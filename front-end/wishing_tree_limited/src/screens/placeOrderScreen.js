@@ -28,7 +28,13 @@ const PlaceOrderScreen = ({ history }) => {
 
     cart.itemsPrice = Number(
         addDecimals(
-            cart.cartItems.reduce((acc, curr) => curr.price * curr.qty + acc, 0)
+            cart.cartItems.reduce(
+                (acc, curr) =>
+                    curr.discount > 0
+                        ? curr.discount * curr.qty + acc
+                        : curr.price * curr.qty + acc,
+                0
+            )
         )
     );
 
@@ -149,14 +155,24 @@ const PlaceOrderScreen = ({ history }) => {
                                                         Color: {item.color}
                                                     </Col>
                                                     <Col md={2}>
-                                                        Price: ${item.price}
+                                                        Price:{" "}
+                                                        {currency === "hkd"
+                                                            ? "$"
+                                                            : "¥"}
+                                                        {item.discount > 0
+                                                            ? item.discount
+                                                            : item.price}
                                                     </Col>
                                                     <Col md={1}>
                                                         x{item.qty}
                                                     </Col>
                                                     <Col md={2}>
                                                         = $
-                                                        {item.price * item.qty}
+                                                        {item.discount > 0
+                                                            ? item.discount *
+                                                              item.qty
+                                                            : item.price *
+                                                              item.qty}
                                                     </Col>
                                                 </Row>
                                             </ListGroup.Item>
