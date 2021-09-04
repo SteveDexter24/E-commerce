@@ -51,13 +51,13 @@ export const nav = {
     },
     user: {
         en: "Users",
-        cn: "用戶",
-        jpn: "ユーザー",
+        cn: "所有用戶",
+        jpn: "全てユーザー",
     },
     product: {
         en: "Products",
-        cn: "產品",
-        jpn: "製品",
+        cn: "所有產品",
+        jpn: "全て製品",
     },
     order: {
         en: "Orders",

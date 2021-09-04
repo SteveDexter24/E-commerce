@@ -58,8 +58,6 @@ export const addToCartDB =
 
             dispatch({ type: CART_ADD_ITEM_TO_DB, payload: response.data });
             localStorage.setItem("cartItems", JSON.stringify(response.data));
-
-            console.log(response.data);
         } catch (error) {
             dispatch({
                 type: CART_ADD_ITEM_TO_DB_FAIL,
