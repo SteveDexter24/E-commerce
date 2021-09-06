@@ -9,6 +9,7 @@ import CheckoutSteps from "../components/checkoutSteps";
 import { addDecimals } from "../Utils/addDecimals";
 import { createOrder } from "../actions/order";
 import { currencyDecoder } from "../Utils/currencyDecoder";
+import { summary } from "../Utils/translateLibrary/orderSummary";
 
 const PlaceOrderScreen = ({ history }) => {
     // Get states from redux
@@ -24,7 +25,7 @@ const PlaceOrderScreen = ({ history }) => {
 
     // Settings
     const settings = useSelector((state) => state.settings);
-    const { currency } = settings;
+    const { currency, language } = settings;
 
     cart.itemsPrice = Number(
         addDecimals(
@@ -100,25 +101,25 @@ const PlaceOrderScreen = ({ history }) => {
                 </Message>
             )}
             <Row>
-                <h1>Order Summary</h1>
+                <h1>{summary.title[language]}</h1>
                 <Col md={9}>
                     <ListGroup variant="flush">
                         <ListGroup.Item>
-                            <h2>Shipping</h2>
+                            <h2>{summary.shipping[language]}</h2>
                             <p>
-                                <strong>Address:</strong>
+                                <strong>{summary.address[language]}:</strong>
                                 {` ${address1}, ${address2}, ${city}, ${country}`}
                             </p>
                         </ListGroup.Item>
 
                         <ListGroup.Item>
-                            <h2>Payment Method</h2>
-                            <strong>Method: </strong>
+                            <h2>{summary.payment[language]}</h2>
+                            <strong>{summary.method[language]}: </strong>
                             {paymentMethod}
                         </ListGroup.Item>
 
                         <ListGroup.Item>
-                            <h2>Order Items</h2>
+                            <h2>{summary.orderItems[language]}</h2>
                             {cartItems.length === 0 ? (
                                 <Message variant="danger">
                                     Your cart is empty
@@ -149,13 +150,24 @@ const PlaceOrderScreen = ({ history }) => {
                                                         </Link>
                                                     </Col>
                                                     <Col md={2}>
-                                                        Size: {item.size}
+                                                        {summary.size[language]}
+                                                        : {item.size}
                                                     </Col>
                                                     <Col md={2}>
-                                                        Color: {item.color}
+                                                        {
+                                                            summary.color[
+                                                                language
+                                                            ]
+                                                        }
+                                                        : {item.color}
                                                     </Col>
                                                     <Col md={2}>
-                                                        Price:{" "}
+                                                        {
+                                                            summary.price[
+                                                                language
+                                                            ]
+                                                        }
+                                                        :{" "}
                                                         {currency === "hkd"
                                                             ? "$"
                                                             : "¥"}
@@ -188,29 +200,29 @@ const PlaceOrderScreen = ({ history }) => {
                     <Card>
                         <ListGroup variant="flush">
                             <ListGroup.Item>
-                                <h2>Order Summary</h2>
+                                <h2>{summary.title[language]}</h2>
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <Row>
-                                    <Col>Items</Col>
+                                    <Col>{summary.items[language]}</Col>
                                     <Col>${cart.itemsPrice}</Col>
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <Row>
-                                    <Col>Shipping</Col>
+                                    <Col>{summary.shippingFee[language]}</Col>
                                     <Col>${cart.shippingCost}</Col>
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <Row>
-                                    <Col>Tax</Col>
+                                    <Col>{summary.tax[language]}</Col>
                                     <Col>${cart.tax}</Col>
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <Row>
-                                    <Col>Total</Col>
+                                    <Col>{summary.total[language]}</Col>
                                     <Col>${cart.totalPrice}</Col>
                                 </Row>
                             </ListGroup.Item>
@@ -223,7 +235,7 @@ const PlaceOrderScreen = ({ history }) => {
                                         }
                                         onClick={placeOrderHandler}
                                     >
-                                        Proceed to Payment
+                                        {summary.pay[language]}
                                     </Button>
                                 </span>
                             </ListGroup.Item>

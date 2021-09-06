@@ -1,4 +1,3 @@
-const { search } = require("../db/cloudinary");
 const { Product } = require("../models/products");
 
 module.exports = {
@@ -7,12 +6,20 @@ module.exports = {
         const pageSize = 8;
         const page = Number(req.query.pageNumber) || 1;
 
-        const searchArray = [
-            { "productName.en": { $regex: req.query.keyword, $options: "i" } },
-            { "style.en": { $regex: req.query.keyword, $options: "i" } },
-            { "category.en": { $regex: req.query.keyword, $options: "i" } },
-            { gender: { $regex: req.query.keyword, $options: "i" } },
-        ];
+        const keyword = req.query.keyword
+            ? {
+                  "productName.en": {
+                      $regex: req.query.keyword,
+                      $options: "i",
+                  },
+
+                  "style.en": { $regex: req.query.keyword, $options: "i" },
+                  "category.en": { $regex: req.query.keyword, $options: "i" },
+                  gender: { $regex: req.query.keyword, $options: "i" },
+              }
+            : {};
+
+        const searchArray = [{ ...keyword }];
 
         try {
             const count = await Product.countDocuments({ $or: searchArray });

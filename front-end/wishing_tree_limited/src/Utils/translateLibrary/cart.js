@@ -1,12 +1,12 @@
 export const c = {
     shoppingCart: {
         en: "SHOPPING CART",
-        cn: "購物袋",
+        cn: "購物車",
         jpn: "ショッピングバッグ",
     },
     emptyCart: {
         en: "Your cart is empty",
-        cn: "購物袋內沒有商品",
+        cn: "購物車內沒有商品",
         jpn: "ショッピングバッグ",
     },
     goBack: {
@@ -16,8 +16,8 @@ export const c = {
     },
     checkoutNow: {
         en: "CHECKOUT NOW",
-        cn: "結算",
-        jpn: "決済",
+        cn: "訂單摘要",
+        jpn: "注文の概要",
     },
     subTotal: {
         en: "SUBTOTAL",
