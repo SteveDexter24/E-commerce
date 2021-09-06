@@ -11,6 +11,7 @@ const app = express();
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
 }
+//let __dirname = path.resolve();
 
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json({ limit: "50mb" }));

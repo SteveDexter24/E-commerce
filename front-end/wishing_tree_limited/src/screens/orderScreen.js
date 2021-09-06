@@ -52,7 +52,7 @@ const OrderScreen = ({ history, match }) => {
 
     // Settings Reducer
     const settings = useSelector((state) => state.settings);
-    const { currency } = settings;
+    const { currency, language } = settings;
 
     // Order Deliver Reducer
     const orderDeliver = useSelector((state) => state.orderDeliver);
@@ -204,7 +204,7 @@ const OrderScreen = ({ history, match }) => {
                                 {` ${order.user.name} ${order.user.surname}`}
                             </p>
                             <p>
-                                <strong>Email address:</strong>
+                                <strong>{"Email Address"}:</strong>
                                 <a
                                     href={`mailto:${order.user.email}`}
                                 >{` ${order.user.email}`}</a>

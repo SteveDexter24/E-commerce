@@ -14,6 +14,7 @@ import FormComponent from "../components/formComponent";
 import CheckoutSteps from "../components/checkoutSteps";
 import Loader from "../components/loader";
 import { getUserInfo } from "../actions/user";
+import { shippingTranslate } from "../Utils/translateLibrary/shipping";
 
 const ShippingScreen = ({ history }) => {
     // Local states
@@ -33,6 +34,10 @@ const ShippingScreen = ({ history }) => {
 
     const userDetails = useSelector((state) => state.userDetails);
     const { user, loading } = userDetails;
+
+    // Settings Reducers
+    const settings = useSelector((state) => state.settings);
+    const { language } = settings;
 
     const dispatch = useDispatch();
 
@@ -86,7 +91,7 @@ const ShippingScreen = ({ history }) => {
     return (
         <FormContainer>
             <CheckoutSteps step1 step2 />
-            <h1>Shipping</h1>
+            <h1>{shippingTranslate.title[language]}</h1>
             {loading ? (
                 <Loader />
             ) : (
@@ -94,7 +99,7 @@ const ShippingScreen = ({ history }) => {
                     <Row>
                         <Col md={6}>
                             <FormComponent
-                                label="Given Name"
+                                label={shippingTranslate.givenName[language]}
                                 type="text"
                                 value={name}
                                 required={true}
@@ -104,7 +109,7 @@ const ShippingScreen = ({ history }) => {
                         </Col>
                         <Col md={6}>
                             <FormComponent
-                                label="Surname"
+                                label={shippingTranslate.surname[language]}
                                 type="text"
                                 value={surname}
                                 required={true}
@@ -114,7 +119,7 @@ const ShippingScreen = ({ history }) => {
                         </Col>
                     </Row>
                     <FormComponent
-                        label="Email"
+                        label={shippingTranslate.email[language]}
                         type="email"
                         value={email}
                         required={true}
@@ -123,7 +128,7 @@ const ShippingScreen = ({ history }) => {
                     />
 
                     <FormComponent
-                        label="Address Line 1"
+                        label={shippingTranslate.addressLine1[language]}
                         type="text"
                         value={address1}
                         required={true}
@@ -131,7 +136,7 @@ const ShippingScreen = ({ history }) => {
                         onChange={(e) => setAddress1(e.target.value)}
                     />
                     <FormComponent
-                        label="Address Line 2"
+                        label={shippingTranslate.addressLine2[language]}
                         type="text"
                         value={address2}
                         required={true}
@@ -139,7 +144,9 @@ const ShippingScreen = ({ history }) => {
                         onChange={(e) => setAddress2(e.target.value)}
                     />
                     <Form.Group className="py-2">
-                        <Form.Label>Country or Region</Form.Label>
+                        <Form.Label>
+                            {shippingTranslate.country[language]}
+                        </Form.Label>
                         <Form.Select
                             onChange={(e) => setCountry(e.target.value)}
                             required
@@ -152,14 +159,16 @@ const ShippingScreen = ({ history }) => {
                     </Form.Group>
                     <FormComponent
                         required={true}
-                        label="City"
+                        label={shippingTranslate.city[language]}
                         type="text"
                         placeholder={"Enter City"}
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                     />
                     <Form.Group className="py-2">
-                        <Form.Label>{"Contact Number"}</Form.Label>
+                        <Form.Label>
+                            {shippingTranslate.contact[language]}
+                        </Form.Label>
                         <InputGroup className="mb-3">
                             <InputGroup.Text>
                                 {country === "Hong Kong" ? "+852" : "+81"}
@@ -185,7 +194,7 @@ const ShippingScreen = ({ history }) => {
                                 city === ""
                             }
                         >
-                            Proceed to Payment
+                            {shippingTranslate.continue[language]}
                         </Button>
                     </div>
                 </Form>
