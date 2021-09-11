@@ -433,6 +433,17 @@ const orderSchema = new mongoose.Schema(
 
 ### Other Information
 
+#### Setup Webhook for listening to payments via stripe
+
+Please refer to [this documentation on installing Stripe CLI](https://github.com/stripe/stripe-cli)
+Once you installed the Stripe CLI, run this command:
+
+```
+stripe listen --forward-to localhost:3001/webhook
+```
+
+Then, you shall see your webhook signing secret. Please add your secret to your .env (environment file).
+
 #### For all api routes EXCEPT login and signup
 
 HTTP Request Header:
