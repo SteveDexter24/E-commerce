@@ -1,0 +1,29 @@
+{
+    "name": "back-end",
+    "version": "1.0.0",
+    "description": "Online shop",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Wishing Tree Limited",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "bcrypt": "^5.0.1",
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "cloudinary": "^1.26.3",
+        "cors": "^2.8.5",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "https": "^1.0.0",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.13.5",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.3",
+        "nodemon": "^2.0.12",
+        "stripe": "^8.170.0"
+    }
+}
