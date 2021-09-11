@@ -43,9 +43,9 @@ E-commerce web app build with React.js, Node.js, Express.js, MongoDB (MERN Stack
 
 ## Frontend
 
-To Start the frontend, please check out the frontend [README.md](/frontend/README.md)
+To Start the frontend, please check out the [frontend README](/frontend/README.md)
 
 
 ## Backend
 
-To Start the backend, please check out the backend [README.md](/backend/README.md)
+To Start the backend, please check out the [backend README](/backend/README.md)
