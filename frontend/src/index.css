@@ -1,0 +1,68 @@
+main {
+    min-height: 80vh;
+}
+
+h3 {
+    padding: 1rem 0;
+}
+
+.rating span {
+    margin: 0.1rem;
+}
+
+h1 {
+    font-size: 1.8rem;
+    padding: 1rem 0;
+}
+
+h2 {
+    font-size: 1.4rem;
+    padding: 0.5rem 0;
+}
+
+/* Carousel*/
+.carousel-item-next,
+.carousel-item-prev,
+.carousel-item.active {
+    display: flex;
+}
+.carousel-caption {
+    position: absolute;
+    bottom: 0;
+}
+.carousel-caption h2 {
+    color: "black";
+}
+
+.carousel-img {
+    height: 400px;
+    padding: 30px;
+    margin: 40px;
+    /* border-radius: 50; */
+    object-fit: cover;
+}
+
+.carousel a {
+    margin: 0 auto;
+}
+
+.strikediag {
+    display: inline-block;
+    position: relative;
+}
+.strikediag::before {
+    content: "";
+    position: absolute;
+    left: -0.1em;
+    right: -0.1em;
+    top: 0.38em;
+    bottom: 0.38em;
+    background: linear-gradient(
+        to left top,
+        transparent 45.5%,
+        currentColor 47.5%,
+        currentColor 52.5%,
+        transparent 54.5%
+    );
+    pointer-events: none;
+}
