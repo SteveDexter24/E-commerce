@@ -7,7 +7,7 @@
         "start": "node index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "author": "Wishing Tree Limited",
+    "author": "Steve Tamang",
     "license": "ISC",
     "dependencies": {
         "axios": "^0.21.1",

@@ -1,4 +1,4 @@
-# Wishing Tree Limited Online Store API
+# E-Commerce Online Store API
 
 ## Prerequisites
 

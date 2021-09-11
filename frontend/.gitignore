@@ -13,7 +13,7 @@
 
 # production
 /build
-/../front-end/wishing_tree_limited/build
+/../frontend/build
 
 # misc
 .DS_Store
