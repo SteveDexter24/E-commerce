@@ -443,11 +443,3 @@ stripe listen --forward-to localhost:3001/webhook
 ```
 
 Then, you shall see your webhook signing secret. Please add your secret to your .env (environment file).
-
-#### For all api routes EXCEPT login and signup
-
-HTTP Request Header:
-
-```
-Authorization: Bearer <token>
-```
