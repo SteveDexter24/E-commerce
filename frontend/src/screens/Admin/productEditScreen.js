@@ -235,7 +235,6 @@ const ProductEditScreen = ({ match, history }) => {
     };
 
     const handleRemoveImage = (index) => {
-        //console.log(index)
         let newArr = [...images];
         let removedArr = [...removedImage];
         removedArr.push(newArr[index]);
