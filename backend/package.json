@@ -25,7 +25,7 @@
         "mpath": "^0.8.4",
         "multer": "^1.4.3",
         "nodemon": "^2.0.12",
-        "stripe": "^8.170.0"
+        "stripe": "^8.170.0",
         "follow-redirects": ">=1.14.7"
     }
 }
