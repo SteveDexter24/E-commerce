@@ -28,7 +28,8 @@
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
     "universal-cookie": "^4.0.4",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "follow-redirects": ">=1.14.7"
   },
   "scripts": {
     "start": "react-scripts start",
